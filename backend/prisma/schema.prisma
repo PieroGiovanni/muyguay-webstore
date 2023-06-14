@@ -7,6 +7,7 @@ generator client {
 
 generator typegraphql {
   provider = "typegraphql-prisma"
+  emitOnly = "models"
 }
 
 datasource db {
@@ -75,6 +76,8 @@ model OrderItems {
   orderId   Int
   product   Product @relation(fields: [productId], references: [id])
   productId Int
+  quantity  Int
+  price     Decimal
 }
 
 model Stock {
