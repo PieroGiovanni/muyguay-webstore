@@ -27,6 +27,11 @@ export class CustomerResolver {
     return await prisma.customer.findUnique({ where: { id } });
   }
 
+  @Query(() => [Customer])
+  async getCustomers() {
+    return await prisma.customer.findMany();
+  }
+
   @Mutation(() => Customer)
   async createCustomer(
     @Arg("input") input: CustomerInput

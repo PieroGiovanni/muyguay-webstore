@@ -31,7 +31,7 @@ model Product {
   color       Color?       @relation(fields: [colorId], references: [id])
   colorId     Int?
   createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  updatedAt   DateTime     @default(now()) @updatedAt
 }
 
 model Brand {
@@ -39,7 +39,7 @@ model Brand {
   name      String
   Product   Product[]
   createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  updatedAt DateTime  @default(now()) @updatedAt
 }
 
 model Category {
@@ -47,7 +47,7 @@ model Category {
   name      String
   Product   Product[]
   createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  updatedAt DateTime  @default(now()) @updatedAt
 }
 
 model Customer {
@@ -59,7 +59,7 @@ model Customer {
   phoneNumber String
   Order       Order[]
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  updatedAt   DateTime @default(now()) @updatedAt
 }
 
 model Order {
@@ -71,7 +71,7 @@ model Order {
   shippingStatus String?
   OrderItems     OrderItems[]
   createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  updatedAt      DateTime      @default(now()) @updatedAt
 }
 
 enum PaymentSatus {
@@ -90,7 +90,7 @@ model OrderItems {
   quantity  Int
   price     Decimal
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Stock {
@@ -98,7 +98,7 @@ model Stock {
   productId     Int
   stockQuantity Int
   createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  updatedAt     DateTime @default(now()) @updatedAt
 
   @@id([productId, stockQuantity])
 }
@@ -109,5 +109,5 @@ model Color {
   hexCode   String
   Product   Product[]
   createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  updatedAt DateTime  @default(now()) @updatedAt
 }
