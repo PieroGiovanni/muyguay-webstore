@@ -16,23 +16,22 @@ datasource db {
 }
 
 model Product {
-  id          Int          @id @default(autoincrement())
-  name        String
-  price       Decimal
-  description String?
-  brand       Brand        @relation(fields: [brandId], references: [id])
-  brandId     Int
-  category    Category     @relation(fields: [categoryId], references: [id])
-  categoryId  Int
-  tags        Int[]
-  imgUrl      String?
-  OrderItems  OrderItems[]
-  Stock       Stock[]
-
+  id            Int             @id @default(autoincrement())
+  name          String
+  price         Decimal
+  description   String?
+  brand         Brand           @relation(fields: [brandId], references: [id])
+  brandId       Int
+  category      Category        @relation(fields: [categoryId], references: [id])
+  categoryId    Int
+  tags          Int[]
+  OrderItems    OrderItems[]
+  Stock         Stock[]
   isFeatured    Boolean         @default(false)
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @default(now()) @updatedAt
   Product_Color Product_Color[]
+  Image         Image[]
 }
 
 model Brand {
@@ -103,13 +102,13 @@ model Stock {
 }
 
 model Color {
-  id      Int    @id @default(autoincrement())
-  name    String
-  hexCode String
-
+  id            Int             @id @default(autoincrement())
+  name          String
+  hexCode       String?
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @default(now()) @updatedAt
   Product_Color Product_Color[]
+  Image         Image[]
 }
 
 model Product_Color {
@@ -121,4 +120,15 @@ model Product_Color {
   updatedAt DateTime @default(now()) @updatedAt
 
   @@id([productId, colorId])
+}
+
+model Image {
+  id        Int      @id @default(autoincrement())
+  productId Int
+  colorId   Int?
+  imageUrl  String
+  product   Product  @relation(fields: [productId], references: [id])
+  color     Color?   @relation(fields: [colorId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
