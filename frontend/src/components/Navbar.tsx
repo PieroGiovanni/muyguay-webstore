@@ -26,15 +26,14 @@ export const Navbar = ({}: NavbarProps) => {
         </button>
 
         {/* Logo */}
-        {/* <Link href="/" className="ml-2 text-lg font-semibold">
+        <Link href="/" className="ml-2 text-lg font-semibold">
           <Image
             src={"/logomuyguay.webp"}
             alt="Logo MuyGuay"
             width={150}
             height={40}
           ></Image>
-        </Link> */}
-        <div className="font-medium">testing fontaaa</div>
+        </Link>
 
         {/* Shopping Cart Icon */}
         <button className="focus:outline-none">

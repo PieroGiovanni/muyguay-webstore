@@ -3,5 +3,9 @@ import { Button } from "./ui/button";
 interface VerProdcutsButtonProps {}
 
 export const VerProdcutsButton = ({}: VerProdcutsButtonProps) => {
-  return <Button className="">VER PRODUCTOS aaaa</Button>;
+  return (
+    <Button className="font-sans border-[1px] border-white text-sm">
+      VER PRODUCTOS
+    </Button>
+  );
 };
