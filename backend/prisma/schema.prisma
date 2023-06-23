@@ -28,11 +28,11 @@ model Product {
   imgUrl      String?
   OrderItems  OrderItems[]
   Stock       Stock[]
-  color       Color?       @relation(fields: [colorId], references: [id])
-  colorId     Int?
-  isFeatured  Boolean      @default(false)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @default(now()) @updatedAt
+
+  isFeatured    Boolean         @default(false)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @default(now()) @updatedAt
+  Product_Color Product_Color[]
 }
 
 model Brand {
@@ -96,19 +96,29 @@ model OrderItems {
 
 model Stock {
   product       Product  @relation(fields: [productId], references: [id])
-  productId     Int
+  productId     Int      @id
   stockQuantity Int
   createdAt     DateTime @default(now())
   updatedAt     DateTime @default(now()) @updatedAt
-
-  @@id([productId, stockQuantity])
 }
 
 model Color {
-  id        Int       @id @default(autoincrement())
-  name      String
-  hexCode   String
-  Product   Product[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now()) @updatedAt
+  id      Int    @id @default(autoincrement())
+  name    String
+  hexCode String
+
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @default(now()) @updatedAt
+  Product_Color Product_Color[]
+}
+
+model Product_Color {
+  productId Int
+  colorId   Int
+  product   Product  @relation(fields: [productId], references: [id])
+  color     Color    @relation(fields: [colorId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@id([productId, colorId])
 }
