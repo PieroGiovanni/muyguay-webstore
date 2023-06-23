@@ -22,8 +22,8 @@ model Product {
   description   String?
   brand         Brand           @relation(fields: [brandId], references: [id])
   brandId       Int
-  category      Category        @relation(fields: [categoryId], references: [id])
-  categoryId    Int
+  productTypeID Int
+  productType   ProductType     @relation(fields: [productTypeID], references: [id])
   tags          Int[]
   OrderItems    OrderItems[]
   Stock         Stock[]
@@ -42,12 +42,22 @@ model Brand {
   updatedAt DateTime  @default(now()) @updatedAt
 }
 
-model Category {
-  id        Int       @id @default(autoincrement())
-  name      String
-  Product   Product[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now()) @updatedAt
+model ProductCategory {
+  id          Int           @id @default(autoincrement())
+  name        String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt
+  ProductType ProductType[]
+}
+
+model ProductType {
+  id                Int             @id @default(autoincrement())
+  name              String
+  productCategoryId Int
+  productCategory   ProductCategory @relation(fields: [productCategoryId], references: [id])
+  Product           Product[]
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @default(now()) @updatedAt
 }
 
 model Customer {
