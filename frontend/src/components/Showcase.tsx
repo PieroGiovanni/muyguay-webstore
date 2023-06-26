@@ -1,8 +1,17 @@
+import { useQuery } from "urql";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import {
+  GetProductsDocument,
+  GetProductsQuery,
+} from "../generated/graphql/graphql";
 
 interface ShowcaseProps {}
 
 export const Showcase = ({}: ShowcaseProps) => {
+  const [{ data }] = useQuery({
+    query: GetProductsDocument,
+  });
+
   return (
     <Tabs defaultValue="featured" className="w-[400px]">
       <TabsList className="grid w-full grid-cols-3">
@@ -11,7 +20,7 @@ export const Showcase = ({}: ShowcaseProps) => {
         <TabsTrigger value="mostSold">Lo más vendido</TabsTrigger>
       </TabsList>
       <TabsContent value="featured">
-        Make changes to your account here.
+        {data?.getProducts.map((p) => p.name)}
       </TabsContent>
       <TabsContent value="new">Change your password here.</TabsContent>
     </Tabs>
