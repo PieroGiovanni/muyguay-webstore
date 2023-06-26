@@ -16,38 +16,38 @@ datasource db {
 }
 
 model Product {
-  id            Int             @id @default(autoincrement())
+  id            Int            @id @default(autoincrement())
   name          String
   price         Decimal
   description   String?
-  brand         Brand           @relation(fields: [brandId], references: [id])
+  brand         Brand          @relation(fields: [brandId], references: [id])
   brandId       Int
-  productTypeID Int
-  productType   ProductType     @relation(fields: [productTypeID], references: [id])
+  productTypeId Int
+  productType   ProductType    @relation(fields: [productTypeId], references: [id])
   tags          Int[]
-  OrderItems    OrderItems[]
-  Stock         Stock[]
-  isFeatured    Boolean         @default(false)
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @default(now()) @updatedAt
-  Product_Color Product_Color[]
-  Image         Image[]
+  orderItems    OrderItem[]
+  stock         Stock?
+  isFeatured    Boolean        @default(false)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @default(now()) @updatedAt
+  productColor  ProductColor[]
+  images        Image[]
 }
 
 model Brand {
   id        Int       @id @default(autoincrement())
   name      String
-  Product   Product[]
+  products  Product[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now()) @updatedAt
 }
 
 model ProductCategory {
-  id          Int           @id @default(autoincrement())
-  name        String
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @default(now()) @updatedAt
-  ProductType ProductType[]
+  id           Int           @id @default(autoincrement())
+  name         String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @default(now()) @updatedAt
+  productTypes ProductType[]
 }
 
 model ProductType {
@@ -55,7 +55,7 @@ model ProductType {
   name              String
   productCategoryId Int
   productCategory   ProductCategory @relation(fields: [productCategoryId], references: [id])
-  Product           Product[]
+  Products          Product[]
   createdAt         DateTime        @default(now())
   updatedAt         DateTime        @default(now()) @updatedAt
 }
@@ -67,7 +67,7 @@ model Customer {
   email       String
   address     String?
   phoneNumber String
-  Order       Order[]
+  orders      Order[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now()) @updatedAt
 }
@@ -79,7 +79,7 @@ model Order {
   totalAmount    Decimal
   paymentStatus  PaymentSatus?
   shippingStatus String?
-  OrderItems     OrderItems[]
+  orderItems     OrderItem[]
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @default(now()) @updatedAt
 }
@@ -91,7 +91,7 @@ enum PaymentSatus {
   REFUNDED
 }
 
-model OrderItems {
+model OrderItem {
   id        Int      @id @default(autoincrement())
   order     Order    @relation(fields: [orderId], references: [id])
   orderId   Int
@@ -104,24 +104,24 @@ model OrderItems {
 }
 
 model Stock {
-  product       Product  @relation(fields: [productId], references: [id])
   productId     Int      @id
-  stockQuantity Int
+  product       Product  @relation(fields: [productId], references: [id])
+  stockQuantity Int      @default(1)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @default(now()) @updatedAt
 }
 
 model Color {
-  id            Int             @id @default(autoincrement())
-  name          String
-  hexCode       String?
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @default(now()) @updatedAt
-  Product_Color Product_Color[]
-  Image         Image[]
+  id           Int            @id @default(autoincrement())
+  name         String
+  hexCode      String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @default(now()) @updatedAt
+  productColor ProductColor[]
+  Image        Image[]
 }
 
-model Product_Color {
+model ProductColor {
   productId Int
   colorId   Int
   product   Product  @relation(fields: [productId], references: [id])
