@@ -1,0 +1,10 @@
+query GetImages {
+  getImages {
+    id
+    productId
+    colorId
+    imageUrl
+    createdAt
+    updatedAt
+  }
+}

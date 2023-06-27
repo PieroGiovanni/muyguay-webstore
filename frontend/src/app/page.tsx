@@ -1,9 +1,23 @@
 import { Navbar } from "../components/Navbar";
 import { Showcase } from "../components/Showcase";
 import { VerProdcutsButton } from "../components/VerProdcutsButton";
+import {
+  GetImagesDocument,
+  GetProductsDocument,
+} from "../generated/graphql/graphql";
+import { getClient } from "../lib/client";
 
-export default function Home() {
-  return (
+export default async function Home() {
+  const { data: products } = await getClient().query({
+    query: GetProductsDocument,
+  });
+  const { data: images } = await getClient().query({
+    query: GetImagesDocument,
+  });
+
+  console.log("home component rendered");
+
+  return images && products ? (
     <>
       <div className="flex flex-col bg-[url('/4.webp')] h-screen bg-cover max-h-screen">
         <Navbar />
@@ -14,8 +28,8 @@ export default function Home() {
         </div>
       </div>
       <div className="flex h-screen bg-white">
-        <Showcase />
+        <Showcase images={images} />
       </div>
     </>
-  );
+  ) : null;
 }
