@@ -48,6 +48,16 @@ export type CustomerInput = {
   phoneNumber: Scalars['String']['input'];
 };
 
+export type Image = {
+  __typename?: 'Image';
+  colorId?: Maybe<Scalars['Int']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['Int']['output'];
+  imageUrl: Scalars['String']['output'];
+  productId: Scalars['Int']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createCategory: ProductCategory;
@@ -102,10 +112,16 @@ export type Query = {
   getCategories: Array<ProductCategory>;
   getCustomer: Customer;
   getCustomers: Array<Customer>;
+  getImages: Array<Image>;
   getProduct: Product;
   getProducts: Array<Product>;
   hello: Scalars['String']['output'];
 };
+
+export type GetImagesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetImagesQuery = { __typename?: 'Query', getImages: Array<{ __typename?: 'Image', id: number, productId: number, colorId?: number | null, imageUrl: string, createdAt: any, updatedAt: any }> };
 
 export type GetProductsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -113,4 +129,5 @@ export type GetProductsQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetProductsQuery = { __typename?: 'Query', getProducts: Array<{ __typename?: 'Product', id: number, name: string, price: any, description?: string | null, brandId: number, productTypeId: number, tags: Array<number>, isFeatured: boolean, createdAt: any, updatedAt: any, brand: { __typename?: 'Brand', name: string }, productType: { __typename?: 'ProductType', name: string } }> };
 
 
+export const GetImagesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetImages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getImages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"productId"}},{"kind":"Field","name":{"kind":"Name","value":"colorId"}},{"kind":"Field","name":{"kind":"Name","value":"imageUrl"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<GetImagesQuery, GetImagesQueryVariables>;
 export const GetProductsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetProducts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getProducts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"price"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"brandId"}},{"kind":"Field","name":{"kind":"Name","value":"productTypeId"}},{"kind":"Field","name":{"kind":"Name","value":"tags"}},{"kind":"Field","name":{"kind":"Name","value":"isFeatured"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"brand"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"productType"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<GetProductsQuery, GetProductsQueryVariables>;
