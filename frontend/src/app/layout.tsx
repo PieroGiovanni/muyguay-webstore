@@ -1,3 +1,4 @@
+import { ApolloWrapper } from "../lib/apolloWrapper";
 import "../styles/globals.css";
 
 export const metadata = {
@@ -15,7 +16,9 @@ export default function RootLayout({
       <head>
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
       </head>
-      <body className="font-sans">{children}</body>
+      <body className="font-sans">
+        <ApolloWrapper>{children}</ApolloWrapper>
+      </body>
     </html>
   );
 }
