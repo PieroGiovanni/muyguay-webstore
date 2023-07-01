@@ -1,5 +1,7 @@
+import { GetProductQuery } from "../generated/graphql/graphql";
 import { ApolloWrapper } from "../lib/apolloWrapper";
 import "../styles/globals.css";
+import { getProducts } from "./api/queries";
 
 export const metadata = {
   title: "Create Next App",
@@ -14,7 +16,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+        <link
+          rel="stylesheet"
+          href="https://rsms.me/inter/inter.css"
+          as="style"
+        />
       </head>
       <body className="font-sans">
         <ApolloWrapper>{children}</ApolloWrapper>

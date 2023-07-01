@@ -1,0 +1,22 @@
+fragment ProductProps on Product {
+  id
+  name
+  price
+  description
+  brandId
+  productTypeId
+  tags
+  isFeatured
+  createdAt
+  updatedAt
+  brand {
+    name
+  }
+  productType {
+    name
+  }
+  images {
+    imageUrl
+    cloudinaryPublicId
+  }
+}

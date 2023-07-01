@@ -1,20 +1,5 @@
 query GetProducts {
   getProducts {
-    id
-    name
-    price
-    description
-    brandId
-    productTypeId
-    tags
-    isFeatured
-    createdAt
-    updatedAt
-    brand {
-      name
-    }
-    productType {
-      name
-    }
+    ...ProductProps
   }
 }

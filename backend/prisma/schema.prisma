@@ -133,12 +133,13 @@ model ProductColor {
 }
 
 model Image {
-  id        Int      @id @default(autoincrement())
-  productId Int
-  colorId   Int?
-  imageUrl  String
-  product   Product  @relation(fields: [productId], references: [id])
-  color     Color?   @relation(fields: [colorId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  id                 Int      @id @default(autoincrement())
+  productId          Int
+  colorId            Int?
+  imageUrl           String
+  cloudinaryPublicId String?
+  product            Product  @relation(fields: [productId], references: [id])
+  color              Color?   @relation(fields: [colorId], references: [id])
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @default(now()) @updatedAt
 }

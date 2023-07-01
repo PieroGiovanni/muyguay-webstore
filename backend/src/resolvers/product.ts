@@ -1,5 +1,5 @@
-import { Resolver, Query, FieldResolver, Root } from "type-graphql";
-import { Product, ProductType, Brand } from "@generated/type-graphql";
+import { Resolver, Query, FieldResolver, Root, Arg, Int } from "type-graphql";
+import { Product, ProductType, Brand, Image } from "@generated/type-graphql";
 import { prisma } from "..";
 
 @Resolver(Product)
@@ -24,7 +24,16 @@ export class ProductResolver {
   }
 
   @Query(() => Product)
-  async getProduct() {
-    return await prisma.product.findFirst();
+  async getProduct(@Arg("id", () => Int) id: number) {
+    return await prisma.product.findUnique({ where: { id } });
+  }
+
+  @FieldResolver(() => [Image])
+  async images(@Root() product: Product): Promise<Image[]> {
+    return await prisma.image.findMany({
+      where: {
+        productId: product.id,
+      },
+    });
   }
 }
