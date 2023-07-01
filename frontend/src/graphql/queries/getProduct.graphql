@@ -1,0 +1,5 @@
+query GetProduct($getProductId: Int!) {
+  getProduct(id: $getProductId) {
+    ...ProductProps
+  }
+}

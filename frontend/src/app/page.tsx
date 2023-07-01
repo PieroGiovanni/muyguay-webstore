@@ -1,6 +1,6 @@
+import { useState } from "react";
 import { Navbar } from "../components/Navbar";
 import { Showcase } from "../components/Showcase";
-import { Test } from "../components/Test";
 import { VerProdcutsButton } from "../components/VerProdcutsButton";
 import {
   GetImagesDocument,
@@ -12,11 +12,10 @@ export default async function Home() {
   const { data: products } = await getClient().query({
     query: GetProductsDocument,
   });
-  const { data: images } = await getClient().query({
-    query: GetImagesDocument,
-  });
 
-  return images && products ? (
+  // console.log("FROM PAGE: ", products.getProducts);
+
+  return products ? (
     <>
       <div className="flex flex-col bg-[url('/4.webp')] h-screen bg-cover max-h-screen">
         <Navbar />
@@ -27,7 +26,7 @@ export default async function Home() {
         </div>
       </div>
       <div className="flex h-screen bg-white">
-        <Showcase images={images} />
+        <Showcase getProducts={products.getProducts} />
       </div>
     </>
   ) : null;

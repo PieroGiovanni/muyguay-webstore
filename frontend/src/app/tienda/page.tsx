@@ -1,37 +1,31 @@
-import { ProductsSearchBar } from "../../components/ProductsSearchBar";
-import { useFragment } from "../../generated/graphql/fragment-masking";
+import { Shop } from "../../components/Shop";
 import {
   GetProductsDocument,
-  Product,
   ProductPropsFragment,
-  ProductPropsFragmentDoc,
 } from "../../generated/graphql/graphql";
 import { getClient } from "../../lib/client";
 
 interface PageProps {}
 
 const Page = async ({}: PageProps) => {
-  const {
-    data: { getProducts },
-  } = await getClient().query({
-    query: GetProductsDocument,
-  });
-
-  const products = useFragment(ProductPropsFragmentDoc, getProducts);
-
-  const handleOnchangeFilterProducts = async (filter: string) => {
+  const searchProducts = async (searchText: string) => {
     "use server";
-    console.log(filter);
+    const {
+      data: { getProducts },
+    } = await getClient().query({
+      query: GetProductsDocument,
+    });
+
+    const products = getProducts as ProductPropsFragment[];
+
+    console.log(searchText);
     return products.filter((p) =>
-      p.name.toLowerCase().includes(filter.toLowerCase())
+      p.name.toLowerCase().includes(searchText.toLowerCase())
     );
   };
   return (
     <div>
-      <ProductsSearchBar handleOnChange={handleOnchangeFilterProducts} />
-      {products.map((p) => (
-        <div key={p.id}>{p.name}</div>
-      ))}
+      <Shop searchProducts={searchProducts} />
     </div>
   );
 };
