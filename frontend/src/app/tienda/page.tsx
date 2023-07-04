@@ -1,32 +1,30 @@
 import { Shop } from "../../components/Shop";
-import {
-  GetProductsDocument,
-  ProductPropsFragment,
-} from "../../generated/graphql/graphql";
-import { getClient } from "../../lib/client";
+import { GetProductCategories, GetProducts } from "../api/queries";
 
 interface PageProps {}
 
 const Page = async ({}: PageProps) => {
-  const searchProducts = async (searchText: string) => {
-    "use server";
-    const {
-      data: { getProducts },
-    } = await getClient().query({
-      query: GetProductsDocument,
-    });
+  const products = await GetProducts();
+  // const SearchProducts = async (searchText: string, categoryId?: number) => {
+  //   "use server";
+  //   const products = await GetProducts();
 
-    const products = getProducts as ProductPropsFragment[];
+  //   const filteredByName = products.filter((p) =>
+  //     p.name.toLowerCase().includes(searchText.toLowerCase())
+  //   );
 
-    console.log(searchText);
-    return products.filter((p) =>
-      p.name.toLowerCase().includes(searchText.toLowerCase())
-    );
-  };
-  return (
+  //   return !categoryId
+  //     ? filteredByName
+  //     : filteredByName.filter(
+  //         (p) => p.productType.productCategoryId === categoryId
+  //       );
+  // };
+  const categories = await GetProductCategories();
+
+  return categories ? (
     <div>
-      <Shop searchProducts={searchProducts} />
+      <Shop categories={categories} products={products} />
     </div>
-  );
+  ) : null;
 };
 export default Page;

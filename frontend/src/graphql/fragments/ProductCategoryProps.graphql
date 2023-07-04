@@ -1,0 +1,6 @@
+fragment ProductCategoryProps on ProductCategory {
+  id
+  name
+  createdAt
+  updatedAt
+}

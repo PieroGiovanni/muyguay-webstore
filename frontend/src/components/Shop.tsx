@@ -1,38 +1,62 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ProductPropsFragment } from "../generated/graphql/graphql";
+import {
+  ProductCategoryPropsFragment,
+  ProductPropsFragment,
+} from "../generated/graphql/graphql";
 import { Input } from "./ui/input";
+import { FilterButton } from "./FilterButton";
 
 interface ShopProps {
-  searchProducts: (searchText: string) => Promise<ProductPropsFragment[]>;
+  categories: readonly ProductCategoryPropsFragment[];
+  products: readonly ProductPropsFragment[];
 }
 
-export const Shop = ({ searchProducts }: ShopProps) => {
-  const [products, setProducts] = useState<ProductPropsFragment[]>();
+export const Shop = ({ categories, products }: ShopProps) => {
+  const [filteredProducts, setFilteredProducts] =
+    useState<readonly ProductPropsFragment[]>(products);
   const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
-    searchProducts("").then((products) => setProducts(products));
-  }, [searchProducts]);
-
-  useEffect(() => {
     const getProducts = setTimeout(async () => {
-      setProducts(await searchProducts(searchText));
+      setFilteredProducts(
+        products.filter((p) =>
+          p.name.toLowerCase().includes(searchText.toLowerCase())
+        )
+      );
     }, 600);
 
     return () => clearTimeout(getProducts);
-  }, [searchText, searchProducts]);
+  }, [searchText, products]);
 
-  return (
+  const handleCategory = (category: string) => {
+    if (category !== "all") {
+      const categoryId = categories.find((c) => c.name === category)?.id;
+
+      setFilteredProducts(
+        products.filter((p) => p.productType.productCategoryId === categoryId)
+      );
+    } else {
+      setFilteredProducts(products);
+    }
+  };
+
+  useEffect(() => {
+    console.log(filteredProducts);
+  }, [filteredProducts]);
+
+  return products && categories ? (
     <div>
-      <Input onChange={(e) => setSearchText(e.target.value)} />
-      <button>buscar</button>
+      <div className="flex w-full">
+        <Input onChange={(e) => setSearchText(e.target.value)} />
+        <FilterButton handleCategory={handleCategory} categories={categories} />
+      </div>
       <div>
-        {products?.map((p) => (
+        {filteredProducts?.map((p) => (
           <div key={p.name}>{p.name}</div>
         ))}
       </div>
     </div>
-  );
+  ) : null;
 };

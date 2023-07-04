@@ -13,7 +13,9 @@ fragment ProductProps on Product {
     name
   }
   productType {
+    id
     name
+    productCategoryId
   }
   images {
     imageUrl
