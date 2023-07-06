@@ -1,38 +1,94 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ProductPropsFragment } from "../generated/graphql/graphql";
+import {
+  ProductCategoryPropsFragment,
+  ProductPropsFragment,
+} from "../generated/graphql/graphql";
 import { Input } from "./ui/input";
+import { FilterButton } from "./FilterButton";
 
 interface ShopProps {
-  searchProducts: (searchText: string) => Promise<ProductPropsFragment[]>;
+  categories: readonly ProductCategoryPropsFragment[];
+  products: readonly ProductPropsFragment[];
 }
 
-export const Shop = ({ searchProducts }: ShopProps) => {
-  const [products, setProducts] = useState<ProductPropsFragment[]>();
+export const Shop = ({ categories, products }: ShopProps) => {
+  const [filteredProducts, setFilteredProducts] =
+    useState<readonly ProductPropsFragment[]>(products);
   const [searchText, setSearchText] = useState("");
+  const [orderBy, setOrderBy] = useState("new");
+  const [category, setCategory] = useState("all");
 
-  useEffect(() => {
-    searchProducts("").then((products) => setProducts(products));
-  }, [searchProducts]);
+  //FILTER BY NAME
 
   useEffect(() => {
     const getProducts = setTimeout(async () => {
-      setProducts(await searchProducts(searchText));
+      setFilteredProducts(
+        products.filter((p) =>
+          p.name.toLowerCase().includes(searchText.toLowerCase())
+        )
+      );
     }, 600);
 
     return () => clearTimeout(getProducts);
-  }, [searchText, searchProducts]);
+  }, [searchText, products]);
 
-  return (
+  //ORDER BY CATEGORY
+
+  const handleCategory = (category: string) => {
+    setCategory(category);
+  };
+
+  useEffect(() => {
+    if (category !== "all") {
+      const categoryId = categories.find((c) => c.name === category)?.id;
+
+      setFilteredProducts(
+        products.filter((p) => p.productType.productCategoryId === categoryId)
+      );
+    } else {
+      setFilteredProducts(products);
+    }
+  }, [category, categories, products]);
+
+  //ORDER BY NEW, CHEAPEST OR MOST EXPENSIVE
+
+  const handleOrderBy = (order: string) => {
+    setOrderBy(order);
+  };
+
+  useEffect(() => {
+    if (orderBy === "cheap") {
+      setFilteredProducts((filteredProducts) =>
+        [...filteredProducts].sort((a, b) => a.price - b.price)
+      );
+    } else if (orderBy === "expensive") {
+      setFilteredProducts((filteredProducts) =>
+        [...filteredProducts].sort((a, b) => b.price - a.price)
+      );
+    } else {
+      setFilteredProducts((filteredProducts) =>
+        [...filteredProducts].sort((a, b) => a.updatedAt - b.updatedAt)
+      );
+    }
+  }, [orderBy]);
+
+  return filteredProducts && categories ? (
     <div>
-      <Input onChange={(e) => setSearchText(e.target.value)} />
-      <button>buscar</button>
+      <div className="flex w-full">
+        <Input onChange={(e) => setSearchText(e.target.value)} />
+        <FilterButton
+          handleCategory={handleCategory}
+          handleOrderBy={handleOrderBy}
+          categories={categories}
+        />
+      </div>
       <div>
-        {products?.map((p) => (
+        {filteredProducts?.map((p) => (
           <div key={p.name}>{p.name}</div>
         ))}
       </div>
     </div>
-  );
+  ) : null;
 };

@@ -2,29 +2,24 @@
 
 import { extractPublicId } from "cloudinary-build-url";
 import { CldImage } from "next-cloudinary";
-import {
-  GetProductsDocument,
-  GetProductsQuery,
-  ProductPropsFragmentDoc,
-  ProductPropsFragment,
-} from "../generated/graphql/graphql";
-import { Card, CardContent } from "./ui/card";
-import { Label } from "./ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import Link from "next/link";
-import { getProducts } from "../app/api/queries";
 import {
   FragmentType,
   useFragment,
 } from "../generated/graphql/fragment-masking";
+import {
+  ProductPropsFragment,
+  ProductPropsFragmentDoc,
+} from "../generated/graphql/graphql";
+import { Card } from "./ui/card";
+import { Label } from "./ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 
 interface ShowcaseProps {
-  getProducts: FragmentType<typeof ProductPropsFragmentDoc>[];
+  products: readonly ProductPropsFragment[];
 }
 
-export const Showcase = ({ getProducts }: ShowcaseProps) => {
-  const products = useFragment(ProductPropsFragmentDoc, getProducts);
-
+export const Showcase = ({ products }: ShowcaseProps) => {
   return (
     <div>
       <Tabs defaultValue="featured" className="w-full">

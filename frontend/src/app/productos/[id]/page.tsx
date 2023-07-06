@@ -1,16 +1,13 @@
-import { GetProductDocument } from "../../../generated/graphql/graphql";
-import { getClient } from "../../../lib/client";
+import { GetProduct } from "../../api/queries";
 
 interface pageProps {
   params: { id: string };
 }
 
 const Page = async ({ params }: pageProps) => {
-  const { data: product } = await getClient().query({
-    query: GetProductDocument,
-    variables: { getProductId: parseInt(params.id) },
-  });
-  return <div>{product.getProduct.name}</div>;
+  const product = await GetProduct(parseInt(params.id));
+
+  return product ? <div>{product.name}</div> : null;
 };
 
 export default Page;

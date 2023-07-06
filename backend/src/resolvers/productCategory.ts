@@ -3,14 +3,16 @@ import { ProductCategory } from "@generated/type-graphql";
 import { prisma } from "..";
 
 @Resolver()
-export class CategoryResolver {
+export class ProductCategoryResolver {
   @Mutation(() => ProductCategory)
-  async createCategory(@Arg("name") name: string): Promise<ProductCategory> {
+  async createProductCategory(
+    @Arg("name") name: string
+  ): Promise<ProductCategory> {
     return await prisma.productCategory.create({ data: { name } });
   }
 
   @Query(() => [ProductCategory])
-  async getCategories() {
+  async getProductCategories() {
     return await prisma.productCategory.findMany();
   }
 }

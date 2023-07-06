@@ -1,19 +1,10 @@
-import { useState } from "react";
 import { Navbar } from "../components/Navbar";
 import { Showcase } from "../components/Showcase";
 import { VerProdcutsButton } from "../components/VerProdcutsButton";
-import {
-  GetImagesDocument,
-  GetProductsDocument,
-} from "../generated/graphql/graphql";
-import { getClient } from "../lib/client";
+import { GetProducts } from "./api/queries";
 
 export default async function Home() {
-  const { data: products } = await getClient().query({
-    query: GetProductsDocument,
-  });
-
-  // console.log("FROM PAGE: ", products.getProducts);
+  const products = await GetProducts();
 
   return products ? (
     <>
@@ -26,7 +17,7 @@ export default async function Home() {
         </div>
       </div>
       <div className="flex h-screen bg-white">
-        <Showcase getProducts={products.getProducts} />
+        <Showcase products={products} />
       </div>
     </>
   ) : null;
