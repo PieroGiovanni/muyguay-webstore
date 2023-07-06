@@ -23,11 +23,13 @@ import { capitalizeFirstLetter } from "../app/utils/stringUtils";
 interface FilterButtonProps {
   categories: readonly ProductCategoryPropsFragment[];
   handleCategory: (category: string) => void;
+  handleOrderBy: (order: string) => void;
 }
 
 export const FilterButton = ({
   categories,
   handleCategory,
+  handleOrderBy,
 }: FilterButtonProps) => {
   return (
     <div className="text-xs">
@@ -46,7 +48,10 @@ export const FilterButton = ({
             <AccordionItem value="item-1" className="w-full">
               <AccordionTrigger>Ordenar por:</AccordionTrigger>
               <AccordionContent>
-                <RadioGroup defaultValue="new">
+                <RadioGroup
+                  defaultValue="new"
+                  onValueChange={(value) => handleOrderBy(value)}
+                >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="new" id="new" />
                     <Label htmlFor="new">Lo más nuevo</Label>
