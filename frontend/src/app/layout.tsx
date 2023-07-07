@@ -1,7 +1,8 @@
-import { GetProductQuery } from "../generated/graphql/graphql";
+import { AuthProvider } from "../components/AuthProvider";
+import { Navbar } from "../components/Navbar";
 import { ApolloWrapper } from "../lib/apolloWrapper";
 import "../styles/globals.css";
-import { getProducts } from "./api/queries";
+import { BagContextProvider } from "./context/bagContext";
 
 export const metadata = {
   title: "Create Next App",
@@ -23,7 +24,14 @@ export default function RootLayout({
         />
       </head>
       <body className="font-sans">
-        <ApolloWrapper>{children}</ApolloWrapper>
+        <AuthProvider>
+          <ApolloWrapper>
+            <BagContextProvider>
+              <Navbar />
+              <main className="">{children}</main>
+            </BagContextProvider>
+          </ApolloWrapper>
+        </AuthProvider>
       </body>
     </html>
   );
