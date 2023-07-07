@@ -22,7 +22,7 @@ const Page = async ({}: PageProps) => {
   const categories = await GetProductCategories();
 
   return categories ? (
-    <div>
+    <div className="pt-16">
       <Shop categories={categories} products={products} />
     </div>
   ) : null;
