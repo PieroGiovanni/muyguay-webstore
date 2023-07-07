@@ -8,14 +8,29 @@ interface BagContextProviderProps {
 }
 
 interface BagContextType {
-  bagProducts: ProductPropsFragment[];
-  setBagProducts: React.Dispatch<React.SetStateAction<ProductPropsFragment[]>>;
+  bagProducts: {
+    bagProduct: ProductPropsFragment;
+    quantity: number;
+  }[];
+  setBagProducts: React.Dispatch<
+    React.SetStateAction<
+      {
+        bagProduct: ProductPropsFragment;
+        quantity: number;
+      }[]
+    >
+  >;
 }
 
 const BagContext = createContext({});
 
 export const BagContextProvider = ({ children }: BagContextProviderProps) => {
-  const [bagProducts, setBagProducts] = useState<ProductPropsFragment[]>([]);
+  const [bagProducts, setBagProducts] = useState<
+    {
+      bagProduct: ProductPropsFragment;
+      quantity: number;
+    }[]
+  >([]);
 
   return (
     <BagContext.Provider value={{ bagProducts, setBagProducts }}>

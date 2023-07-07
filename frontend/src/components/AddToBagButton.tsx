@@ -13,10 +13,7 @@ export const AddToBagButton = ({ product }: AddToBagButtonProps) => {
   const { bagProducts, setBagProducts } = useBagContext();
 
   const OnClick = () => {
-    setBagProducts((bp) => [...bp, product]);
-    console.log(bagProducts);
-
-    // console.log("WTF");
+    setBagProducts((bp) => [...bp, { bagProduct: product, quantity: 1 }]);
   };
 
   useEffect(() => {
