@@ -5,7 +5,7 @@ interface NavbarProps {}
 
 export const Navbar = ({}: NavbarProps) => {
   return (
-    <nav className="flex items-center justify-between text-white px-3 py-2 ">
+    <nav className="flex items-center justify-between text-white px-3 pt-1 fixed top-0 w-full bg-white">
       <div className="flex items-center flex-grow justify-between text-black pt-1 pb-2 border-b-[2px] border-black px-2">
         <button className="focus:outline-none">
           {/* Hamburger Icon */}
