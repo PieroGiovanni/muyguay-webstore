@@ -10,14 +10,11 @@ interface AddToBagButtonProps {
 }
 
 export const AddToBagButton = ({ product }: AddToBagButtonProps) => {
-  const { bagProducts, setBagProducts } = useBagContext();
+  const { setBagProducts } = useBagContext();
 
   const OnClick = () => {
-    setBagProducts((bp) => [...bp, { bagProduct: product, quantity: 1 }]);
+    setBagProducts((bp) => [...bp, { ...product, quantity: 1 }]);
   };
 
-  useEffect(() => {
-    console.log(bagProducts);
-  }, [bagProducts]);
   return <Button onClick={() => OnClick()}>Agregar a la bolsa</Button>;
 };

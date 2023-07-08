@@ -16,11 +16,34 @@ import {
 import { useBagContext } from "../app/context/bagContext";
 import { CldImage } from "next-cloudinary";
 import { extractPublicId } from "cloudinary-build-url";
+import { Separator } from "./ui/separator";
 
 interface ShoppingBagSheetProps {}
 
 export const ShoppingBagSheet = ({}: ShoppingBagSheetProps) => {
   const { bagProducts, setBagProducts } = useBagContext();
+
+  const addQuantity = (productId: number) => {
+    setBagProducts(
+      bagProducts.map((p) => {
+        if (p.id === productId) {
+          return { ...p, quantity: p.quantity + 1 };
+        }
+        return p;
+      })
+    );
+  };
+
+  const subtractQuantity = (productId: number) => {
+    setBagProducts(
+      bagProducts.map((p) => {
+        if (p.id === productId) {
+          return { ...p, quantity: p.quantity - 1 };
+        }
+        return p;
+      })
+    );
+  };
 
   return (
     <Sheet>
@@ -50,21 +73,28 @@ export const ShoppingBagSheet = ({}: ShoppingBagSheetProps) => {
           <div>No hay productos en la cartera</div>
         ) : (
           bagProducts.map((bp) => (
-            <div key={bp.bagProduct.id} className="flex">
-              <CldImage
-                src={
-                  bp.bagProduct.images[0].cloudinaryPublicId
-                    ? bp.bagProduct.images[0].cloudinaryPublicId
-                    : extractPublicId(bp.bagProduct.images[0].imageUrl)
-                }
-                alt={bp.bagProduct.name}
-                width={120}
-                height={120}
-              />
-              <div className="flex flex-col text-sm">
-                <text>{bp.bagProduct.name}</text>
-                <text>s/. {bp.bagProduct.price}</text>
-                <text>{bp.quantity}</text>
+            <div key={bp.id}>
+              <Separator />
+              <div className="flex">
+                <CldImage
+                  src={
+                    bp.images[0].cloudinaryPublicId
+                      ? bp.images[0].cloudinaryPublicId
+                      : extractPublicId(bp.images[0].imageUrl)
+                  }
+                  alt={bp.name}
+                  width={120}
+                  height={120}
+                />
+                <div className="flex flex-col text-sm">
+                  <Label>{bp.name}</Label>
+                  <Label>s/. {bp.price}</Label>
+                  <div className="flex flex-row">
+                    <Button onClick={() => subtractQuantity(bp.id)}>-</Button>
+                    <Button>{bp.quantity}</Button>
+                    <Button onClick={() => addQuantity(bp.id)}>+</Button>
+                  </div>
+                </div>
               </div>
             </div>
           ))
