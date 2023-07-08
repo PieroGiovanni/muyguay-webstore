@@ -17,6 +17,7 @@ import { useBagContext } from "../app/context/bagContext";
 import { CldImage } from "next-cloudinary";
 import { extractPublicId } from "cloudinary-build-url";
 import { Separator } from "./ui/separator";
+import { Trash2 } from "lucide-react";
 
 interface ShoppingBagSheetProps {}
 
@@ -37,12 +38,16 @@ export const ShoppingBagSheet = ({}: ShoppingBagSheetProps) => {
   const subtractQuantity = (productId: number) => {
     setBagProducts(
       bagProducts.map((p) => {
-        if (p.id === productId) {
+        if (p.id === productId && p.quantity > 1) {
           return { ...p, quantity: p.quantity - 1 };
         }
         return p;
       })
     );
+  };
+
+  const deleteProduct = (productId: number) => {
+    setBagProducts(bagProducts.filter((p) => p.id !== productId));
   };
 
   return (
@@ -95,6 +100,9 @@ export const ShoppingBagSheet = ({}: ShoppingBagSheetProps) => {
                     <Button onClick={() => addQuantity(bp.id)}>+</Button>
                   </div>
                 </div>
+                <button onClick={() => deleteProduct(bp.id)}>
+                  <Trash2 />
+                </button>
               </div>
             </div>
           ))
