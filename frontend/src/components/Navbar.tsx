@@ -33,6 +33,7 @@ export const Navbar = ({}: NavbarProps) => {
             alt="Logo MuyGuay"
             width={150}
             height={40}
+            priority
           ></Image>
         </Link>
 
