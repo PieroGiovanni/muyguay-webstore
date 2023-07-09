@@ -19,5 +19,7 @@ export default async function Home() {
         <Showcase products={products} />
       </div>
     </>
-  ) : null;
+  ) : (
+    <div>loading...</div>
+  );
 }

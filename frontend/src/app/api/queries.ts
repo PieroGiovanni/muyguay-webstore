@@ -20,11 +20,8 @@ export const GetProducts = async (): Promise<
 };
 
 export const GetProduct = async (id: number): Promise<ProductPropsFragment> => {
-  const { data } = await getClient().query({
-    query: GetProductDocument,
-    variables: { getProductId: id },
-  });
-  return useFragment(ProductPropsFragmentDoc, data.getProduct);
+  const products = await GetProducts();
+  return products.find((p) => p.id === id)!;
 };
 
 export const GetProductCategories = async (): Promise<

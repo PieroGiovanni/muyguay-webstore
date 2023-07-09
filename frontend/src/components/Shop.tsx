@@ -7,6 +7,11 @@ import {
 } from "../generated/graphql/graphql";
 import { Input } from "./ui/input";
 import { FilterButton } from "./FilterButton";
+import { CldImage } from "next-cloudinary";
+import { extractPublicId } from "cloudinary-build-url";
+import { Label } from "@radix-ui/react-label";
+import { Card } from "./ui/card";
+import Link from "next/link";
 
 interface ShopProps {
   categories: readonly ProductCategoryPropsFragment[];
@@ -54,8 +59,8 @@ export const Shop = ({ categories, products }: ShopProps) => {
 
   //ORDER BY NEW, CHEAPEST OR MOST EXPENSIVE
 
-  const handleOrderBy = (order: string) => {
-    setOrderBy(order);
+  const handleOrderBy = (orderBy: string) => {
+    setOrderBy(orderBy);
   };
 
   useEffect(() => {
@@ -75,7 +80,7 @@ export const Shop = ({ categories, products }: ShopProps) => {
   }, [orderBy]);
 
   return filteredProducts && categories ? (
-    <div>
+    <div className="">
       <div className="flex w-full">
         <Input onChange={(e) => setSearchText(e.target.value)} />
         <FilterButton
@@ -84,9 +89,21 @@ export const Shop = ({ categories, products }: ShopProps) => {
           categories={categories}
         />
       </div>
-      <div>
-        {filteredProducts?.map((p) => (
-          <div key={p.name}>{p.name}</div>
+      <div className="grid grid-cols-2 gap-4 px-4">
+        {filteredProducts.map((p) => (
+          <Link key={p.name} href={`/productos/${p.id}`}>
+            <Card className="flex flex-col items-center rounded-sm">
+              <Label className="">{p.name}</Label>
+              <CldImage
+                src={extractPublicId(p.images[0].imageUrl)}
+                alt={p.name}
+                width={300}
+                height={300}
+                // sizes="(max-width: 768px) 30vw"
+              />
+              <Label className="">S/. {p.price}</Label>
+            </Card>
+          </Link>
         ))}
       </div>
     </div>
