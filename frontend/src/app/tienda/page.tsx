@@ -1,5 +1,7 @@
+import { useSession } from "next-auth/react";
 import { Shop } from "../../components/Shop";
 import { GetProductCategories, GetProducts } from "../api/queries";
+import { redirect } from "next/dist/server/api-utils";
 
 interface PageProps {}
 

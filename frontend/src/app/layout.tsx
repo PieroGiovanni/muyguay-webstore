@@ -1,8 +1,8 @@
-import { AuthProvider } from "../components/AuthProvider";
 import { Navbar } from "../components/Navbar";
 import { ApolloWrapper } from "../lib/apolloWrapper";
 import "../styles/globals.css";
 import { BagContextProvider } from "./context/bagContext";
+import { AuthProvider } from "./prodivers/AuthProvider";
 
 export const metadata = {
   title: "Create Next App",
