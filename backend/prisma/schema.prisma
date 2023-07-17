@@ -60,28 +60,29 @@ model ProductType {
   updatedAt         DateTime        @default(now()) @updatedAt
 }
 
-model Customer {
+model User {
   id          Int      @id @default(autoincrement())
-  name        String
-  lastName    String
-  email       String
+  displayName String
+  password    String?
+  email       String   @unique
   address     String?
-  phoneNumber String
+  phoneNumber String?
+  userType    UserType @default(CLIENT)
   orders      Order[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now()) @updatedAt
 }
 
 model Order {
-  id             Int           @id @default(autoincrement())
-  customer       Customer      @relation(fields: [customerId], references: [id])
-  customerId     Int
+  id             Int          @id @default(autoincrement())
+  User           User         @relation(fields: [UserId], references: [id])
+  UserId         Int
   totalAmount    Decimal
-  paymentStatus  PaymentSatus?
+  paymentStatus  PaymentSatus @default(PENDING)
   shippingStatus String?
   orderItems     OrderItem[]
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @default(now()) @updatedAt
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @default(now()) @updatedAt
 }
 
 enum PaymentSatus {
@@ -89,6 +90,11 @@ enum PaymentSatus {
   PAID
   FAILED
   REFUNDED
+}
+
+enum UserType {
+  ADMIN
+  CLIENT
 }
 
 model OrderItem {

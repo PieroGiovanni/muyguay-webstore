@@ -1,38 +1,19 @@
 "use client";
 
 import { History, Home, LogIn, LogOut, Menu, Shirt, User } from "lucide-react";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "./ui/sheet";
-import { DropdownMenuItem } from "./ui/dropdown-menu";
-import { Button } from "./ui/button";
-import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Button } from "./ui/button";
+import { Sheet, SheetClose, SheetContent, SheetTrigger } from "./ui/sheet";
 
 interface HamburguerButtonProps {}
 
 export const HamburguerButton = ({}: HamburguerButtonProps) => {
-  const pathname = usePathname();
+  // const pathname = usePathname();
 
-  console.log(pathname);
-  const { data: session } =
-    useSession();
-    //     {
-    //     required: false,
-    //     onUnauthenticated() {
-    //       redirect(`/signin?callbackUrl=${pathname}`);
-    //     },
-    //   }
-
+  // console.log(pathname);
+  const { data: session } = useSession();
   return (
     <Sheet>
       <SheetTrigger asChild>
