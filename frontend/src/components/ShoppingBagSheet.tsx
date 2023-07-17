@@ -18,11 +18,13 @@ import { CldImage } from "next-cloudinary";
 import { extractPublicId } from "cloudinary-build-url";
 import { Separator } from "./ui/separator";
 import { Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface ShoppingBagSheetProps {}
 
 export const ShoppingBagSheet = ({}: ShoppingBagSheetProps) => {
   const { bagProducts, setBagProducts } = useBagContext();
+  const [total, setTotal] = useState(0);
 
   const addQuantity = (productId: number) => {
     setBagProducts(
@@ -49,6 +51,14 @@ export const ShoppingBagSheet = ({}: ShoppingBagSheetProps) => {
   const deleteProduct = (productId: number) => {
     setBagProducts(bagProducts.filter((p) => p.id !== productId));
   };
+
+  useEffect(() => {
+    let total = 0;
+    bagProducts.map((p) => {
+      total = total + p.price * p.quantity;
+    });
+    setTotal(total);
+  }, [bagProducts]);
 
   return (
     <Sheet>
@@ -80,35 +90,38 @@ export const ShoppingBagSheet = ({}: ShoppingBagSheetProps) => {
         {bagProducts.length === 0 ? (
           <div>No hay productos en la cartera</div>
         ) : (
-          bagProducts.map((bp) => (
-            <div key={bp.id}>
-              <Separator />
-              <div className="flex">
-                <CldImage
-                  src={
-                    bp.images[0].cloudinaryPublicId
-                      ? bp.images[0].cloudinaryPublicId
-                      : extractPublicId(bp.images[0].imageUrl)
-                  }
-                  alt={bp.name}
-                  width={120}
-                  height={120}
-                />
-                <div className="flex flex-col text-sm">
-                  <Label>{bp.name}</Label>
-                  <Label>s/. {bp.price}</Label>
-                  <div className="flex flex-row">
-                    <Button onClick={() => subtractQuantity(bp.id)}>-</Button>
-                    <Button>{bp.quantity}</Button>
-                    <Button onClick={() => addQuantity(bp.id)}>+</Button>
+          <>
+            {bagProducts.map((bp) => (
+              <div key={bp.id}>
+                <Separator />
+                <div className="flex">
+                  <CldImage
+                    src={
+                      bp.images[0].cloudinaryPublicId
+                        ? bp.images[0].cloudinaryPublicId
+                        : extractPublicId(bp.images[0].imageUrl)
+                    }
+                    alt={bp.name}
+                    width={120}
+                    height={120}
+                  />
+                  <div className="flex flex-col text-sm">
+                    <Label>{bp.name}</Label>
+                    <Label>s/. {bp.price * bp.quantity}</Label>
+                    <div className="flex flex-row">
+                      <Button onClick={() => subtractQuantity(bp.id)}>-</Button>
+                      <Button>{bp.quantity}</Button>
+                      <Button onClick={() => addQuantity(bp.id)}>+</Button>
+                    </div>
                   </div>
+                  <button onClick={() => deleteProduct(bp.id)}>
+                    <Trash2 />
+                  </button>
                 </div>
-                <button onClick={() => deleteProduct(bp.id)}>
-                  <Trash2 />
-                </button>
               </div>
-            </div>
-          ))
+            ))}
+            <div>TOTAL: S/. {total}</div>
+          </>
         )}
         <SheetFooter>
           <SheetClose asChild>
