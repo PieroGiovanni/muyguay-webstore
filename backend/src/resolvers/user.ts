@@ -76,12 +76,11 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   async register(@Arg("input") input: Input): Promise<UserResponse> {
     const hashedPassword = await hash(input.password);
-
+    let user;
     try {
-      const user = await prisma.user.create({
+      user = await prisma.user.create({
         data: { ...input, password: hashedPassword },
       });
-      return { user };
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
         if (err.code === "P2002") {
@@ -95,8 +94,8 @@ export class UserResolver {
           };
         }
       }
-      throw err;
     }
+    return { user };
   }
 
   @Mutation(() => UserResponse)
