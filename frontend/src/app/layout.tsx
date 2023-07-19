@@ -25,12 +25,12 @@ export default function RootLayout({
       </head>
       <body className="font-sans">
         <ApolloWrapper>
-          <AuthProvider>
-            <BagContextProvider>
+          <BagContextProvider>
+            <AuthProvider>
               <Navbar />
               <main>{children}</main>
-            </BagContextProvider>
-          </AuthProvider>
+            </AuthProvider>
+          </BagContextProvider>
         </ApolloWrapper>
       </body>
     </html>
