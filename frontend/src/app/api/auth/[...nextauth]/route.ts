@@ -1,18 +1,8 @@
 import { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
-import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { getClient } from "../../../../lib/client";
-import {
-  GetProductDocument,
-  GetProductsDocument,
-  LoginDocument,
-  RegularUserInfoFragmentDoc,
-  User,
-  UserInfo,
-} from "../../../../generated/graphql/graphql";
+import GoogleProvider from "next-auth/providers/google";
 import { Login } from "../../queries";
-import { useFragment } from "../../../../generated/graphql";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -52,13 +42,12 @@ export const authOptions: NextAuthOptions = {
           };
         } else {
           return null;
-
           // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
         }
       },
     }),
   ],
-  // pages: { signIn: "/signin" },
+  pages: { signIn: "/signin" },
 };
 
 const handler = NextAuth(authOptions);
