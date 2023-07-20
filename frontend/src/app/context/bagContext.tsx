@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { ProductPropsFragment } from "../../generated/graphql/graphql";
 
 interface BagContextProviderProps {
@@ -20,6 +20,17 @@ const BagContext = createContext({});
 
 export const BagContextProvider = ({ children }: BagContextProviderProps) => {
   const [bagProducts, setBagProducts] = useState<ProductWithQuantity[]>([]);
+
+  useEffect(() => {
+    const savedBagProducts = localStorage.getItem("bagProducts");
+    if (savedBagProducts) {
+      setBagProducts(JSON.parse(savedBagProducts));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("bagProducts", JSON.stringify(bagProducts));
+  }, [bagProducts]);
 
   return (
     <BagContext.Provider value={{ bagProducts, setBagProducts }}>
