@@ -1,5 +1,5 @@
 import { extractPublicId } from "cloudinary-build-url";
-import { AddToBagButton } from "../../../components/AddToBagButton";
+import { AddToBagButton } from "../../../components/Buttons/AddToBagButton";
 import { GetProduct } from "../../api/queries";
 import { ProductImage } from "../../../components/ProductImage";
 import { Card } from "../../../components/ui/card";

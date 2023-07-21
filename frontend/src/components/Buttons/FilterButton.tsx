@@ -1,5 +1,5 @@
 import { SlidersHorizontal } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuSeparator,
@@ -8,17 +8,17 @@ import {
   DropdownMenuContent,
   DropdownMenuRadioItem,
   DropdownMenuRadioGroup,
-} from "./ui/dropdown-menu";
+} from "../ui/dropdown-menu";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "./ui/accordion";
-import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
-import { Label } from "./ui/label";
-import { ProductCategoryPropsFragment } from "../generated/graphql/graphql";
-import { capitalizeFirstLetter } from "../app/utils/stringUtils";
+} from "../ui/accordion";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import { Label } from "../ui/label";
+import { ProductCategoryPropsFragment } from "../../generated/graphql/graphql";
+import { capitalizeFirstLetter } from "../../app/utils/stringUtils";
 
 interface FilterButtonProps {
   categories: readonly ProductCategoryPropsFragment[];

@@ -6,7 +6,7 @@ import {
   ProductPropsFragment,
 } from "../generated/graphql/graphql";
 import { Input } from "./ui/input";
-import { FilterButton } from "./FilterButton";
+import { FilterButton } from "./Buttons/FilterButton";
 import { CldImage } from "next-cloudinary";
 import { extractPublicId } from "cloudinary-build-url";
 import { Label } from "@radix-ui/react-label";

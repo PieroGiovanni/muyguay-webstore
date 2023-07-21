@@ -1,6 +1,5 @@
-import { Navbar } from "../components/Navbar";
+import { VerProdcutsButton } from "../components/Buttons/VerProdcutsButton";
 import { Showcase } from "../components/Showcase";
-import { VerProdcutsButton } from "../components/VerProdcutsButton";
 import { GetProducts } from "./api/queries";
 
 export default async function Home() {

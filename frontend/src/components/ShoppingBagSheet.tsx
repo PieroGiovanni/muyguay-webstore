@@ -19,6 +19,7 @@ import { extractPublicId } from "cloudinary-build-url";
 import { Separator } from "./ui/separator";
 import { Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 interface ShoppingBagSheetProps {}
 
@@ -127,7 +128,9 @@ export const ShoppingBagSheet = ({}: ShoppingBagSheetProps) => {
         )}
         <SheetFooter>
           <SheetClose asChild>
-            <Button type="submit">Comprar</Button>
+            <Link href="/confirmar-pedido">
+              <Button>Comprar</Button>
+            </Link>
           </SheetClose>
         </SheetFooter>
       </SheetContent>
