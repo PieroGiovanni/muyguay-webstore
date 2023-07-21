@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ShoppingBagSheet } from "./ShoppingBagSheet";
-import { HamburguerButton } from "./HamburguerButton";
+import { HamburguerButton } from "./Buttons/HamburguerButton";
 
 interface NavbarProps {}
 

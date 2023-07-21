@@ -7,7 +7,7 @@ interface BagContextProviderProps {
   children: React.ReactNode;
 }
 
-interface ProductWithQuantity extends ProductPropsFragment {
+export interface ProductWithQuantity extends ProductPropsFragment {
   quantity: number;
 }
 
