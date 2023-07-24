@@ -2,6 +2,7 @@ import { useFragment } from "../../generated/graphql/fragment-masking";
 import {
   GetProductCategoriesDocument,
   GetProductsDocument,
+  GetUserByEmailDocument,
   LoginDocument,
   ProductCategoryPropsFragment,
   ProductCategoryPropsFragmentDoc,
@@ -12,8 +13,23 @@ import {
   RegularUserInfoFragment,
   RegularUserInfoFragmentDoc,
   RegularUserResponseFragmentDoc,
+  User,
+  UserInfo,
 } from "../../generated/graphql/graphql";
 import { getClient } from "../../lib/client";
+
+export const GetUserByEmail = async (
+  email: string
+): Promise<UserInfo | undefined | null> => {
+  const { data } = await getClient().query({
+    query: GetUserByEmailDocument,
+    variables: {
+      email,
+    },
+  });
+
+  return useFragment(RegularUserInfoFragmentDoc, data.getUserByEmail);
+};
 
 export const GetProducts = async (): Promise<
   readonly ProductPropsFragment[]
@@ -39,26 +55,4 @@ export const GetProductCategories = async (): Promise<
   });
 
   return useFragment(ProductCategoryPropsFragmentDoc, getProductCategories);
-};
-
-export const Login = async (
-  email: string,
-  password: string
-): Promise<{
-  user: RegularUserInfoFragment | null | undefined;
-  errors: readonly RegularErrorFragment[] | null | undefined;
-}> => {
-  const { data } = await getClient().mutate({
-    mutation: LoginDocument,
-    variables: {
-      email,
-      password,
-    },
-  });
-
-  const login = useFragment(RegularUserResponseFragmentDoc, data!.login);
-  const user = useFragment(RegularUserInfoFragmentDoc, login.user);
-  const errors = useFragment(RegularErrorFragmentDoc, login.errors);
-
-  return { user, errors };
 };
