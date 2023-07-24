@@ -1,0 +1,5 @@
+mutation AddGoogleUser($input: UserInput!) {
+  addGoogleUser(input: $input) {
+    ...RegularUserInfo
+  }
+}

@@ -1,7 +1,10 @@
 "use client";
 
-import { useContext, useEffect, useState } from "react";
-import { useBagContext } from "../context/bagContext";
+import { getSession, useSession } from "next-auth/react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Button } from "../../components/ui/button";
 import {
   Card,
   CardContent,
@@ -9,10 +12,7 @@ import {
   CardTitle,
 } from "../../components/ui/card";
 import { Separator } from "../../components/ui/separator";
-import Link from "next/link";
-import { Button } from "../../components/ui/button";
-import { text } from "stream/consumers";
-import { useRouter } from "next/navigation";
+import { useBagContext } from "../context/bagContext";
 
 interface PageProps {}
 
@@ -21,6 +21,9 @@ const Page = ({}: PageProps) => {
   const [total, setTotal] = useState(0);
   const [text, setText] = useState(" ");
   const router = useRouter();
+  const { data } = useSession({ required: true });
+
+  const data2 = getSession();
 
   useEffect(() => {
     let total = 0;
@@ -45,6 +48,12 @@ const Page = ({}: PageProps) => {
   const whatsappURL = `https://wa.me/51948614445?text=${encodeURIComponent(
     text
   )}`;
+
+  const handleOnClick = async () => {
+    // () => router.push("/tienda");
+
+    console.log("USER: ", data);
+  };
 
   return bagProducts ? (
     <Card className="pt-20 flex flex-col gap-3">
@@ -71,11 +80,9 @@ const Page = ({}: PageProps) => {
         </div>
       </CardContent>
       <CardFooter className="flex flex-row justify-center gap-3">
-        <a href={whatsappURL}>
-          <Button onClick={() => router.push("/tienda")}>
-            Confirmar Pedido
-          </Button>
-        </a>
+        {/* <a href={whatsappURL}> */}
+        <Button onClick={handleOnClick}>Confirmar Pedido</Button>
+        {/* </a> */}
 
         <Link href="/tienda">
           <Button>Seguir Comprando</Button>

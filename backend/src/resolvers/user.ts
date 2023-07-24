@@ -14,7 +14,7 @@ import { prisma } from "..";
 import { Prisma } from "@prisma/client";
 
 @InputType()
-class Input {
+class UserInput {
   @Field()
   displayName: string;
 
@@ -63,9 +63,37 @@ class UserResponse {
 
 @Resolver()
 export class UserResolver {
-  @Query(() => User)
-  async getUser(id: number) {
-    return await prisma.user.findUnique({ where: { id } });
+  @Query(() => UserInfo, { nullable: true })
+  async getUserById(
+    @Arg("id", () => Int) id: number
+  ): Promise<UserInfo | null> {
+    const user = await prisma.user.findUnique({ where: { id } });
+    // if (user) {
+    //   const { password, ...userWithoutPassword } = user;
+    //   return userWithoutPassword;
+    // }
+    return user;
+  }
+
+  @Query(() => UserInfo, { nullable: true })
+  async getUserByEmail(@Arg("email") email: string): Promise<UserInfo | null> {
+    const user = await prisma.user.findUnique({ where: { email } });
+
+    // if (user) {
+    //   const { password, ...userWithoutPassword } = user;
+    //   return userWithoutPassword;
+    // }
+    return user;
+  }
+
+  @Mutation(() => UserInfo)
+  async addGoogleUser(@Arg("input") input: UserInput): Promise<UserInfo> {
+    return await prisma.user.create({
+      data: {
+        email: input.email,
+        displayName: input.displayName,
+      },
+    });
   }
 
   @Query(() => [User])
@@ -74,7 +102,7 @@ export class UserResolver {
   }
 
   @Mutation(() => UserResponse)
-  async register(@Arg("input") input: Input): Promise<UserResponse> {
+  async register(@Arg("input") input: UserInput): Promise<UserResponse> {
     const hashedPassword = await hash(input.password);
     let user;
     try {
