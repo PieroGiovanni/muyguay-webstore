@@ -1,0 +1,14 @@
+fragment OrderProps on Order {
+  id
+  userId
+  paymentStatus
+  shippingStatus
+  products {
+    id
+    name
+    quantity
+    price
+  }
+  updatedAt
+  createdAt
+}

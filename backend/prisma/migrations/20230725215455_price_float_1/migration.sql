@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Product" ADD COLUMN     "priceFloat" DOUBLE PRECISION,
+ALTER COLUMN "price" DROP NOT NULL;
