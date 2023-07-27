@@ -4,8 +4,8 @@ mutation CreateOrder($input: OrderInput!) {
     userId
     paymentStatus
     shippingStatus
-    items {
-      productId
+    products {
+      id
       quantity
     }
     updatedAt

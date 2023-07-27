@@ -1,5 +1,6 @@
 "use client";
 
+import { useMutation } from "@apollo/client";
 import { getSession, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -13,6 +14,8 @@ import {
 } from "../../components/ui/card";
 import { Separator } from "../../components/ui/separator";
 import { useBagContext } from "../context/bagContext";
+import { CreateOrderDocument } from "../../generated/graphql/graphql";
+import { number } from "zod";
 
 interface PageProps {}
 
@@ -22,12 +25,12 @@ const Page = ({}: PageProps) => {
   const [text, setText] = useState(" ");
   const router = useRouter();
   const { data } = useSession({ required: true });
-
-  const data2 = getSession();
+  const [createOrder] = useMutation(CreateOrderDocument);
 
   useEffect(() => {
     let total = 0;
     let text = "LISTA DE PRODUCTOS: \n\n";
+
     bagProducts.map((p) => {
       total = total + p.price * p.quantity;
       text =
@@ -39,10 +42,9 @@ const Page = ({}: PageProps) => {
         p.price * p.quantity +
         " \n";
     });
+
     setTotal(total);
     setText(text + "\n" + "TOTAL: S/. " + total);
-
-    bagProducts.forEach((p) => {});
   }, [bagProducts]);
 
   const whatsappURL = `https://wa.me/51948614445?text=${encodeURIComponent(
@@ -50,9 +52,24 @@ const Page = ({}: PageProps) => {
   )}`;
 
   const handleOnClick = async () => {
-    // () => router.push("/tienda");
-
-    console.log("USER: ", data);
+    let products: { id: number; quantity: number }[] = [];
+    bagProducts.map((p) => {
+      products.push({ id: p.id, quantity: p.quantity });
+    });
+    try {
+      await createOrder({
+        variables: {
+          input: {
+            productWithQuantity: products,
+            userId: data?.user.id!,
+          },
+        },
+      });
+    } catch (err) {
+      console.log(err);
+    }
+    setBagProducts([]);
+    router.push("/tienda");
   };
 
   return bagProducts ? (

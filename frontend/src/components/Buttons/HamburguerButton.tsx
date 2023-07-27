@@ -40,10 +40,10 @@ export const HamburguerButton = ({}: HamburguerButtonProps) => {
         </SheetClose>
         {session ? (
           <SheetClose asChild>
-            <Link href="/cliente/id/hisorial">
+            <Link href="/pedidos">
               <Button>
                 <History />
-                Historial
+                Mis Pedidos
               </Button>
             </Link>
           </SheetClose>
