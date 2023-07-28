@@ -12,6 +12,7 @@ import {
 
 import { getDateFromTimteStamp } from "../app/utils/dateUtils";
 import { getFragmentData } from "../graphql/generated/fragment-masking";
+import { LoadingSkeleton } from "./LoadingSkeleton";
 import {
   Accordion,
   AccordionContent,
@@ -20,8 +21,6 @@ import {
 } from "./ui/accordion";
 import { Card } from "./ui/card";
 import { Separator } from "./ui/separator";
-import { Skeleton } from "./ui/skeleton";
-import { useEffect } from "react";
 
 interface userOrdersProps {}
 
@@ -35,10 +34,6 @@ export const UserOrders = ({}: userOrdersProps) => {
     OrderPropsFragmentDoc,
     orderData?.getOrdersByUserId
   );
-
-  useEffect(() => {
-    console.log("USER DATA FROM SESSION: ", userData);
-  }, [userData]);
 
   const calculateOrderTotal = (order: OrderPropsFragment) => {
     let total = 0;
@@ -119,13 +114,7 @@ export const UserOrders = ({}: userOrdersProps) => {
       ))}
     </div>
   ) : status === "loading" ? (
-    <div className="mt-20 flex items-center space-x-4 justify-center">
-      <Skeleton className="h-12 w-12 rounded-full" />
-      <div className="space-y-2">
-        <Skeleton className="h-4 w-[250px]" />
-        <Skeleton className="h-4 w-[200px]" />
-      </div>
-    </div>
+    <LoadingSkeleton />
   ) : (
     <div className="mt-20 flex justify-center">No tienes pedidos</div>
   );

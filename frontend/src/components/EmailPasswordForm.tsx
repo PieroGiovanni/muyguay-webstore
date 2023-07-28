@@ -17,6 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 interface EmailPasswordFormProps {}
 
@@ -52,6 +53,9 @@ export const EmailPasswordForm = ({}: EmailPasswordFormProps) => {
       callbackUrl,
     });
   };
+
+  const registerUrl =
+    "/registrarse?callbackUrl=" + encodeURIComponent(callbackUrl);
 
   return (
     <Form {...form}>
@@ -93,7 +97,9 @@ export const EmailPasswordForm = ({}: EmailPasswordFormProps) => {
         />
         <div className="flex flex-row gap-5">
           <Button type="submit">Ingresar</Button>
-          <Button>Registrarse</Button>
+          <Link href={registerUrl}>
+            <Button>Registrarse</Button>
+          </Link>
         </div>
       </form>
     </Form>

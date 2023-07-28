@@ -63,15 +63,13 @@ class UserResponse {
 
 @Resolver()
 export class UserResolver {
-  @Query(() => UserInfo, { nullable: true })
-  async getUserById(
-    @Arg("id", () => Int) id: number
-  ): Promise<UserInfo | null> {
+  @Query(() => User, { nullable: true })
+  async getUserById(@Arg("id", () => Int) id: number): Promise<User | null> {
     const user = await prisma.user.findUnique({ where: { id } });
-    // if (user) {
-    //   const { password, ...userWithoutPassword } = user;
-    //   return userWithoutPassword;
-    // }
+    if (user) {
+      const { password, ...userWithoutPassword } = user;
+      return userWithoutPassword;
+    }
     return user;
   }
 
@@ -116,7 +114,7 @@ export class UserResolver {
             errors: [
               {
                 field: "email",
-                message: "email already taken",
+                message: "El correo ya está en uso",
               },
             ],
           };

@@ -19,14 +19,17 @@ const documents = {
     "fragment RegularError on FieldError {\n  field\n  message\n}": types.RegularErrorFragmentDoc,
     "fragment RegularUserInfo on UserInfo {\n  id\n  email\n  displayName\n}": types.RegularUserInfoFragmentDoc,
     "fragment RegularUserResponse on UserResponse {\n  errors {\n    ...RegularError\n  }\n  user {\n    ...RegularUserInfo\n  }\n}": types.RegularUserResponseFragmentDoc,
+    "fragment UserProps on User {\n  id\n  email\n  displayName\n  password\n  phoneNumber\n  address\n  createdAt\n  updatedAt\n}": types.UserPropsFragmentDoc,
     "mutation AddGoogleUser($input: UserInput!) {\n  addGoogleUser(input: $input) {\n    ...RegularUserInfo\n  }\n}": types.AddGoogleUserDocument,
     "mutation CreateOrder($input: OrderInput!) {\n  createOrder(input: $input) {\n    id\n    userId\n    paymentStatus\n    shippingStatus\n    products {\n      id\n      quantity\n    }\n    updatedAt\n    createdAt\n  }\n}": types.CreateOrderDocument,
+    "mutation Register($input: UserInput!) {\n  register(input: $input) {\n    ...RegularUserResponse\n  }\n}": types.RegisterDocument,
     "query GetImages {\n  getImages {\n    id\n    productId\n    colorId\n    imageUrl\n    createdAt\n    updatedAt\n    product {\n      name\n      price\n    }\n  }\n}": types.GetImagesDocument,
     "query GetOrdersByUserId($userId: Int!) {\n  getOrdersByUserId(userId: $userId) {\n    ...OrderProps\n  }\n}": types.GetOrdersByUserIdDocument,
     "query GetProduct($getProductId: Int!) {\n  getProduct(id: $getProductId) {\n    ...ProductProps\n  }\n}": types.GetProductDocument,
     "query GetProductCategories {\n  getProductCategories {\n    ...ProductCategoryProps\n  }\n}": types.GetProductCategoriesDocument,
     "query GetProducts {\n  getProducts {\n    ...ProductProps\n  }\n}": types.GetProductsDocument,
     "query GetUserByEmail($email: String!) {\n  getUserByEmail(email: $email) {\n    ...RegularUserInfo\n  }\n}": types.GetUserByEmailDocument,
+    "query GetUserById($id: Int!) {\n  getUserById(id: $id) {\n    ...UserProps\n  }\n}": types.GetUserByIdDocument,
     "mutation Login($email: String!, $password: String!) {\n  login(email: $email, password: $password) {\n    ...RegularUserResponse\n  }\n}": types.LoginDocument,
 };
 
@@ -71,11 +74,19 @@ export function graphql(source: "fragment RegularUserResponse on UserResponse {\
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "fragment UserProps on User {\n  id\n  email\n  displayName\n  password\n  phoneNumber\n  address\n  createdAt\n  updatedAt\n}"): (typeof documents)["fragment UserProps on User {\n  id\n  email\n  displayName\n  password\n  phoneNumber\n  address\n  createdAt\n  updatedAt\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "mutation AddGoogleUser($input: UserInput!) {\n  addGoogleUser(input: $input) {\n    ...RegularUserInfo\n  }\n}"): (typeof documents)["mutation AddGoogleUser($input: UserInput!) {\n  addGoogleUser(input: $input) {\n    ...RegularUserInfo\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "mutation CreateOrder($input: OrderInput!) {\n  createOrder(input: $input) {\n    id\n    userId\n    paymentStatus\n    shippingStatus\n    products {\n      id\n      quantity\n    }\n    updatedAt\n    createdAt\n  }\n}"): (typeof documents)["mutation CreateOrder($input: OrderInput!) {\n  createOrder(input: $input) {\n    id\n    userId\n    paymentStatus\n    shippingStatus\n    products {\n      id\n      quantity\n    }\n    updatedAt\n    createdAt\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "mutation Register($input: UserInput!) {\n  register(input: $input) {\n    ...RegularUserResponse\n  }\n}"): (typeof documents)["mutation Register($input: UserInput!) {\n  register(input: $input) {\n    ...RegularUserResponse\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -100,6 +111,10 @@ export function graphql(source: "query GetProducts {\n  getProducts {\n    ...Pr
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "query GetUserByEmail($email: String!) {\n  getUserByEmail(email: $email) {\n    ...RegularUserInfo\n  }\n}"): (typeof documents)["query GetUserByEmail($email: String!) {\n  getUserByEmail(email: $email) {\n    ...RegularUserInfo\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "query GetUserById($id: Int!) {\n  getUserById(id: $id) {\n    ...UserProps\n  }\n}"): (typeof documents)["query GetUserById($id: Int!) {\n  getUserById(id: $id) {\n    ...UserProps\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
