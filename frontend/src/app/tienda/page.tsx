@@ -1,11 +1,11 @@
 import { Shop } from "../../components/Shop";
-import { GetProductCategories, GetProducts } from "../api/queries";
+import { getProductCategories, getProducts } from "../api/queries";
 
 interface PageProps {}
 
 const Page = async ({}: PageProps) => {
-  const products = await GetProducts();
-  const categories = await GetProductCategories();
+  const products = await getProducts();
+  const categories = await getProductCategories();
 
   return categories && products ? (
     <div className="pt-16">

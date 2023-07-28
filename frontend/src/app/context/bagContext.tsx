@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { ProductPropsFragment } from "../../generated/graphql/graphql";
+import { ProductPropsFragment } from "../../graphql/generated/graphql";
 
 interface BagContextProviderProps {
   children: React.ReactNode;

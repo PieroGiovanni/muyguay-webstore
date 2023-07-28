@@ -6,20 +6,20 @@ import { Label } from "../../../components/ui/label";
 import { Button } from "../../../components/ui/button";
 import { Undo2 } from "lucide-react";
 import Link from "next/link";
-import { GetProduct } from "../../api/queries";
+import { getProduct } from "../../api/queries";
 
 interface pageProps {
   params: { id: string };
 }
 
 const Page = async ({ params }: pageProps) => {
-  const product = await GetProduct(parseInt(params.id));
+  const product = await getProduct(parseInt(params.id));
 
   return product ? (
     <div className="pt-16 flex flex-col space-y-5 items-center">
       <Card className="p-5 flex flex-col gap-5">
         <ProductImage
-          productPublicId={extractPublicId(product.images[0].imageUrl)}
+          productPublicId={extractPublicId(product.images[0].imageUrl!)}
         />
         <div className="flex gap-x-5 text-xl">
           <Label className="text-xl font-bold">

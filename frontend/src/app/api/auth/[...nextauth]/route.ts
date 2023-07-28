@@ -3,7 +3,7 @@ import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { AddGoogleUser, Login } from "../../mutations";
-import { GetUserByEmail } from "../../queries";
+import { getUserByEmail } from "../../queries";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -41,7 +41,7 @@ export const authOptions: NextAuthOptions = {
   pages: { signIn: "/signin" },
   callbacks: {
     async session({ session }) {
-      const user = await GetUserByEmail(session.user.email);
+      const user = await getUserByEmail(session.user.email);
 
       session.user.id = user!.id;
 
@@ -49,7 +49,7 @@ export const authOptions: NextAuthOptions = {
     },
     async signIn({ user, account }) {
       if (account?.provider === "google") {
-        const existingUser = await GetUserByEmail(user.email!);
+        const existingUser = await getUserByEmail(user.email!);
 
         if (!existingUser) {
           const newUser = await AddGoogleUser({

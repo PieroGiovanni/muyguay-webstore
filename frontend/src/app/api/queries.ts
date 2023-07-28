@@ -1,4 +1,4 @@
-import { useFragment } from "../../generated/graphql/fragment-masking";
+import { getFragmentData } from "../../graphql/generated/fragment-masking";
 import {
   GetOrdersByUserIdDocument,
   GetProductCategoriesDocument,
@@ -12,10 +12,10 @@ import {
   ProductPropsFragmentDoc,
   RegularUserInfoFragmentDoc,
   UserInfo,
-} from "../../generated/graphql/graphql";
+} from "../../graphql/generated/graphql";
 import { getClient } from "../../lib/client";
 
-export const GetUserByEmail = async (
+export const getUserByEmail = async (
   email: string
 ): Promise<UserInfo | undefined | null> => {
   const { data } = await getClient().query({
@@ -25,24 +25,24 @@ export const GetUserByEmail = async (
     },
   });
 
-  return useFragment(RegularUserInfoFragmentDoc, data.getUserByEmail);
+  return getFragmentData(RegularUserInfoFragmentDoc, data.getUserByEmail);
 };
 
-export const GetProducts = async (): Promise<
+export const getProducts = async (): Promise<
   readonly ProductPropsFragment[]
 > => {
   const { data } = await getClient().query({
     query: GetProductsDocument,
   });
-  return useFragment(ProductPropsFragmentDoc, data.getProducts);
+  return getFragmentData(ProductPropsFragmentDoc, data.getProducts);
 };
 
-export const GetProduct = async (id: number): Promise<ProductPropsFragment> => {
-  const products = await GetProducts();
+export const getProduct = async (id: number): Promise<ProductPropsFragment> => {
+  const products = await getProducts();
   return products.find((p) => p.id === id)!;
 };
 
-export const GetProductCategories = async (): Promise<
+export const getProductCategories = async (): Promise<
   readonly ProductCategoryPropsFragment[]
 > => {
   const {
@@ -51,10 +51,10 @@ export const GetProductCategories = async (): Promise<
     query: GetProductCategoriesDocument,
   });
 
-  return useFragment(ProductCategoryPropsFragmentDoc, getProductCategories);
+  return getFragmentData(ProductCategoryPropsFragmentDoc, getProductCategories);
 };
 
-export const GetOrdersByUserId = async (
+export const getOrdersByUserId = async (
   id: number
 ): Promise<readonly OrderPropsFragment[]> => {
   const { data } = await getClient().query({
@@ -64,5 +64,5 @@ export const GetOrdersByUserId = async (
     },
   });
 
-  return useFragment(OrderPropsFragmentDoc, data.getOrdersByUserId);
+  return getFragmentData(OrderPropsFragmentDoc, data.getOrdersByUserId);
 };

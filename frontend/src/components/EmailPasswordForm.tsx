@@ -91,7 +91,10 @@ export const EmailPasswordForm = ({}: EmailPasswordFormProps) => {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <div className="flex flex-row gap-5">
+          <Button type="submit">Ingresar</Button>
+          <Button>Registrarse</Button>
+        </div>
       </form>
     </Form>
   );
