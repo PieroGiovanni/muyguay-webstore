@@ -102,7 +102,7 @@ export const ShoppingBagSheet = ({}: ShoppingBagSheetProps) => {
                     src={
                       bp.images[0].cloudinaryPublicId
                         ? bp.images[0].cloudinaryPublicId
-                        : extractPublicId(bp.images[0].imageUrl)
+                        : extractPublicId(bp.images[0].imageUrl!)
                     }
                     alt={bp.name}
                     width={120}

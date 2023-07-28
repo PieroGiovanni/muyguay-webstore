@@ -1,24 +1,22 @@
 import { SlidersHorizontal } from "lucide-react";
-import { Button } from "../ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-  DropdownMenuLabel,
-  DropdownMenuContent,
-  DropdownMenuRadioItem,
-  DropdownMenuRadioGroup,
-} from "../ui/dropdown-menu";
+import { capitalizeFirstLetter } from "../../app/utils/stringUtils";
+import { ProductCategoryPropsFragment } from "../../graphql/generated/graphql";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "../ui/accordion";
-import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import { Button } from "../ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 import { Label } from "../ui/label";
-import { ProductCategoryPropsFragment } from "../../generated/graphql/graphql";
-import { capitalizeFirstLetter } from "../../app/utils/stringUtils";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 
 interface FilterButtonProps {
   categories: readonly ProductCategoryPropsFragment[];
@@ -55,6 +53,10 @@ export const FilterButton = ({
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="new" id="new" />
                     <Label htmlFor="new">Lo más nuevo</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="old" id="old" />
+                    <Label htmlFor="old">Lo más antiguo</Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="cheap" id="cheap" />

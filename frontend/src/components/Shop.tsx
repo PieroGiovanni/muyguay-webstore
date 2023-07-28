@@ -72,12 +72,24 @@ export const Shop = ({ categories, products }: ShopProps) => {
       setFilteredProducts((filteredProducts) =>
         [...filteredProducts].sort((a, b) => b.price - a.price)
       );
+    } else if (orderBy === "new") {
+      setFilteredProducts((filteredProducts) =>
+        [...filteredProducts].sort(
+          (a, b) => Date.parse(b.updatedAt) - Date.parse(a.updatedAt)
+        )
+      );
     } else {
       setFilteredProducts((filteredProducts) =>
-        [...filteredProducts].sort((a, b) => a.updatedAt - b.updatedAt)
+        [...filteredProducts].sort(
+          (a, b) => Date.parse(a.updatedAt) - Date.parse(b.updatedAt)
+        )
       );
     }
   }, [orderBy]);
+
+  // useEffect(() => {
+  //   console.log("FILTERED PRODUTCSTR: ", filteredProducts);
+  // }, [filteredProducts]);
 
   return filteredProducts && categories ? (
     <div className="">
