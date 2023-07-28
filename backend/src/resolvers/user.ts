@@ -14,6 +14,21 @@ import { prisma } from "..";
 import { Prisma } from "@prisma/client";
 
 @InputType()
+class UpdateInput {
+  @Field(() => Int)
+  id: number;
+
+  @Field()
+  displayName: string;
+
+  @Field(() => String, { nullable: true })
+  phoneNumber: string;
+
+  @Field(() => String, { nullable: true })
+  address: string;
+}
+
+@InputType()
 class UserInput {
   @Field()
   displayName: string;
@@ -156,5 +171,21 @@ export class UserResolver {
     }
 
     return { user };
+  }
+
+  @Mutation(() => User)
+  async updateUser(@Arg("input", () => UpdateInput) input: UpdateInput) {
+    const user = await prisma.user.update({
+      data: {
+        displayName: input.displayName,
+        phoneNumber: input.phoneNumber,
+        address: input.address,
+      },
+      where: {
+        id: input.id,
+      },
+    });
+
+    return user;
   }
 }
