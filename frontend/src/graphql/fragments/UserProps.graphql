@@ -1,0 +1,10 @@
+fragment UserProps on User {
+  id
+  email
+  displayName
+  password
+  phoneNumber
+  address
+  createdAt
+  updatedAt
+}

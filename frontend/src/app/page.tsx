@@ -1,9 +1,9 @@
 import { VerProdcutsButton } from "../components/Buttons/VerProdcutsButton";
 import { Showcase } from "../components/Showcase";
-import { GetProducts } from "./api/queries";
+import { getProducts } from "./api/queries";
 
 export default async function Home() {
-  const products = await GetProducts();
+  const products = await getProducts();
 
   return products ? (
     <>

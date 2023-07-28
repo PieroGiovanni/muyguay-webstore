@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import {
   ProductCategoryPropsFragment,
   ProductPropsFragment,
-} from "../generated/graphql/graphql";
+} from "../graphql/generated/graphql";
 import { Input } from "./ui/input";
 import { FilterButton } from "./Buttons/FilterButton";
 import { CldImage } from "next-cloudinary";
@@ -95,7 +95,7 @@ export const Shop = ({ categories, products }: ShopProps) => {
             <Card className="flex flex-col items-center rounded-sm">
               <Label className="">{p.name}</Label>
               <CldImage
-                src={extractPublicId(p.images[0].imageUrl)}
+                src={extractPublicId(p.images[0].imageUrl!)}
                 alt={p.name}
                 width={300}
                 height={300}

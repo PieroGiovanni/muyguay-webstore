@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation } from "@apollo/client";
-import { getSession, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -13,9 +13,8 @@ import {
   CardTitle,
 } from "../../components/ui/card";
 import { Separator } from "../../components/ui/separator";
+import { CreateOrderDocument } from "../../graphql/generated/graphql";
 import { useBagContext } from "../context/bagContext";
-import { CreateOrderDocument } from "../../generated/graphql/graphql";
-import { number } from "zod";
 
 interface PageProps {}
 

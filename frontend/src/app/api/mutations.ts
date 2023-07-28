@@ -1,4 +1,4 @@
-import { useFragment } from "../../generated/graphql";
+import { getFragmentData } from "../../graphql/generated";
 import {
   RegularUserInfoFragment,
   RegularErrorFragment,
@@ -8,7 +8,9 @@ import {
   RegularErrorFragmentDoc,
   AddGoogleUserDocument,
   UserInput,
-} from "../../generated/graphql/graphql";
+  RegisterDocument,
+  RegularUserResponseFragment,
+} from "../../graphql/generated/graphql";
 import { getClient } from "../../lib/client";
 
 export const Login = async (
@@ -26,9 +28,9 @@ export const Login = async (
     },
   });
 
-  const login = useFragment(RegularUserResponseFragmentDoc, data!.login);
-  const user = useFragment(RegularUserInfoFragmentDoc, login.user);
-  const errors = useFragment(RegularErrorFragmentDoc, login.errors);
+  const login = getFragmentData(RegularUserResponseFragmentDoc, data!.login);
+  const user = getFragmentData(RegularUserInfoFragmentDoc, login.user);
+  const errors = getFragmentData(RegularErrorFragmentDoc, login.errors);
 
   return { user, errors };
 };
@@ -41,5 +43,18 @@ export const AddGoogleUser = async (input: UserInput) => {
     },
   });
 
-  return useFragment(RegularUserInfoFragmentDoc, data?.addGoogleUser);
+  return getFragmentData(RegularUserInfoFragmentDoc, data?.addGoogleUser);
+};
+
+export const register = async (
+  input: UserInput
+): Promise<RegularUserResponseFragment> => {
+  const { data } = await getClient().mutate({
+    mutation: RegisterDocument,
+    variables: {
+      input,
+    },
+  });
+
+  return getFragmentData(RegularUserResponseFragmentDoc, data?.register!);
 };

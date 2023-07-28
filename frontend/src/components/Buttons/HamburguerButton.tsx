@@ -24,7 +24,7 @@ export const HamburguerButton = ({}: HamburguerButtonProps) => {
       <SheetContent side="left" className="flex flex-col">
         <SheetClose asChild>
           <Link href="/">
-            <Button>
+            <Button className="w-full gap-2">
               <Home />
               Menu Principal
             </Button>
@@ -32,16 +32,16 @@ export const HamburguerButton = ({}: HamburguerButtonProps) => {
         </SheetClose>
         <SheetClose asChild>
           <Link href="/tienda">
-            <Button>
+            <Button className="w-full gap-2">
               <Shirt />
-              Productos
+              Tienda
             </Button>
           </Link>
         </SheetClose>
         {session ? (
           <SheetClose asChild>
             <Link href="/pedidos">
-              <Button>
+              <Button className="w-full gap-2">
                 <History />
                 Mis Pedidos
               </Button>
@@ -50,23 +50,23 @@ export const HamburguerButton = ({}: HamburguerButtonProps) => {
         ) : null}
         {session ? (
           <SheetClose asChild>
-            <Link href="/cliente/id/perfil">
+            <Link href="/mi-perfil">
               <Button className="w-full gap-2">
                 <User />
-                Perfil
+                Mi Perfil
               </Button>
             </Link>
           </SheetClose>
         ) : null}
 
         {session ? (
-          <Button onClick={() => signOut()}>
+          <Button className="w-full gap-2" onClick={() => signOut()}>
             <LogOut />
             Cerrar Sesión
           </Button>
         ) : (
           <SheetClose asChild>
-            <Button onClick={() => signIn()}>
+            <Button className="w-full gap-2" onClick={() => signIn()}>
               <LogIn />
               Iniciar Sesión
             </Button>
