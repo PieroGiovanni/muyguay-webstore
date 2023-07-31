@@ -1,4 +1,5 @@
 import { VerProdcutsButton } from "../components/Buttons/VerProdcutsButton";
+import { CategoriesAccess } from "../components/CategoriesAccess";
 import { Showcase } from "../components/Showcase";
 import { getProducts } from "./api/queries";
 
@@ -14,9 +15,10 @@ export default async function Home() {
           </div>
         </div>
       </div>
-      <div className="flex h-screen bg-white">
+      <div className="flex bg-white">
         <Showcase products={products} />
       </div>
+      <CategoriesAccess />
     </>
   ) : (
     <div>loading...</div>

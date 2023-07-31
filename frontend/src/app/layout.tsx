@@ -2,6 +2,7 @@ import { Navbar } from "../components/Navbar";
 import { ApolloWrapper } from "../lib/apolloWrapper";
 import "../styles/globals.css";
 import { BagContextProvider } from "./context/bagContext";
+import { CategoryContextProvider } from "./context/categoryContext";
 import { AuthProvider } from "./prodivers/AuthProvider";
 
 export const metadata = {
@@ -26,10 +27,12 @@ export default function RootLayout({
       <body className="font-sans">
         <ApolloWrapper>
           <BagContextProvider>
-            <AuthProvider>
-              <Navbar />
-              <main>{children}</main>
-            </AuthProvider>
+            <CategoryContextProvider>
+              <AuthProvider>
+                <Navbar />
+                <main>{children}</main>
+              </AuthProvider>
+            </CategoryContextProvider>
           </BagContextProvider>
         </ApolloWrapper>
       </body>
