@@ -22,12 +22,14 @@ interface FilterButtonProps {
   categories: readonly ProductCategoryPropsFragment[];
   handleCategory: (category: string) => void;
   handleOrderBy: (order: string) => void;
+  defaultCategory?: string;
 }
 
 export const FilterButton = ({
   categories,
   handleCategory,
   handleOrderBy,
+  defaultCategory,
 }: FilterButtonProps) => {
   return (
     <div className="text-xs">
@@ -73,7 +75,7 @@ export const FilterButton = ({
               <AccordionTrigger>Elegir Categoría</AccordionTrigger>
               <AccordionContent>
                 <RadioGroup
-                  defaultValue="all"
+                  defaultValue={defaultCategory}
                   onValueChange={(e) => handleCategory(e)}
                 >
                   <div className="flex items-center space-x-2">

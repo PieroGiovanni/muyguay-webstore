@@ -12,6 +12,7 @@ import { extractPublicId } from "cloudinary-build-url";
 import { Label } from "@radix-ui/react-label";
 import { Card } from "./ui/card";
 import Link from "next/link";
+import { useCategoryContext } from "../app/context/categoryContext";
 
 interface ShopProps {
   categories: readonly ProductCategoryPropsFragment[];
@@ -24,19 +25,33 @@ export const Shop = ({ categories, products }: ShopProps) => {
   const [searchText, setSearchText] = useState("");
   const [orderBy, setOrderBy] = useState("new");
   const [category, setCategory] = useState("all");
+  const { categoryId, setCategoryId } = useCategoryContext();
+  const [initialRenderComplete, setInitialRenderComplete] = useState(false);
+
+  useEffect(() => {
+    setInitialRenderComplete(true);
+  }, []);
 
   //FILTER BY NAME
 
   useEffect(() => {
-    const getProducts = setTimeout(async () => {
-      setFilteredProducts(
-        products.filter((p) =>
-          p.name.toLowerCase().includes(searchText.toLowerCase())
-        )
-      );
-    }, 600);
+    if (initialRenderComplete) {
+      const getProducts = setTimeout(async () => {
+        setFilteredProducts(
+          products.filter(
+            (p) =>
+              p.name.toLowerCase().includes(searchText.toLowerCase()) &&
+              (category === "all"
+                ? true
+                : p.productType.productCategoryId ===
+                  categories.find((c) => c.name === category)!.id)
+          )
+        );
+      }, 600);
 
-    return () => clearTimeout(getProducts);
+      return () => clearTimeout(getProducts);
+    }
+    //eslint-disable-next-line
   }, [searchText, products]);
 
   //ORDER BY CATEGORY
@@ -56,6 +71,12 @@ export const Shop = ({ categories, products }: ShopProps) => {
       setFilteredProducts(products);
     }
   }, [category, categories, products]);
+
+  useEffect(() => {
+    if (categoryId) {
+      setCategory(categories.find((c) => c.id === categoryId)?.name!);
+    }
+  }, [categoryId, categories]);
 
   //ORDER BY NEW, CHEAPEST OR MOST EXPENSIVE
 
@@ -87,10 +108,6 @@ export const Shop = ({ categories, products }: ShopProps) => {
     }
   }, [orderBy]);
 
-  // useEffect(() => {
-  //   console.log("FILTERED PRODUTCSTR: ", filteredProducts);
-  // }, [filteredProducts]);
-
   return filteredProducts && categories ? (
     <div className="">
       <div className="flex w-full">
@@ -99,6 +116,7 @@ export const Shop = ({ categories, products }: ShopProps) => {
           handleCategory={handleCategory}
           handleOrderBy={handleOrderBy}
           categories={categories}
+          defaultCategory={category}
         />
       </div>
       <div className="grid grid-cols-2 gap-4 px-4">
