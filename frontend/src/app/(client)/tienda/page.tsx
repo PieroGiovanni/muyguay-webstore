@@ -1,5 +1,5 @@
-import { Shop } from "../../components/Shop";
-import { getProductCategories, getProducts } from "../api/queries";
+import { Shop } from "../../../components/Shop";
+import { getProductCategories, getProducts } from "../../api/queries";
 
 interface PageProps {}
 

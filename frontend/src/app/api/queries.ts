@@ -1,7 +1,10 @@
+import { fdatasync } from "fs";
 import { getFragmentData } from "../../graphql/generated/fragment-masking";
 import {
   GetOrdersByUserIdDocument,
   GetProductCategoriesDocument,
+  GetProductsDataDocument,
+  GetProductsDataQuery,
   GetProductsDocument,
   GetUserByEmailDocument,
   OrderPropsFragment,
@@ -10,6 +13,8 @@ import {
   ProductCategoryPropsFragmentDoc,
   ProductPropsFragment,
   ProductPropsFragmentDoc,
+  RegularProductDataFragment,
+  RegularProductDataFragmentDoc,
   RegularUserInfoFragmentDoc,
   UserInfo,
 } from "../../graphql/generated/graphql";
@@ -65,4 +70,14 @@ export const getOrdersByUserId = async (
   });
 
   return getFragmentData(OrderPropsFragmentDoc, data.getOrdersByUserId);
+};
+
+export const getProductsData = async (): Promise<
+  readonly RegularProductDataFragment[]
+> => {
+  const { data } = await getClient().query({
+    query: GetProductsDataDocument,
+  });
+
+  return getFragmentData(RegularProductDataFragmentDoc, data.getProducts);
 };

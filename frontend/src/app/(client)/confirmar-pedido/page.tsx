@@ -5,16 +5,16 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Button } from "../../components/ui/button";
+import { Button } from "../../../components/ui/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardTitle,
-} from "../../components/ui/card";
-import { Separator } from "../../components/ui/separator";
-import { CreateOrderDocument } from "../../graphql/generated/graphql";
-import { useBagContext } from "../context/bagContext";
+} from "../../../components/ui/card";
+import { Separator } from "../../../components/ui/separator";
+import { CreateOrderDocument } from "../../../graphql/generated/graphql";
+import { useBagContext } from "../../context/bagContext";
 
 interface PageProps {}
 

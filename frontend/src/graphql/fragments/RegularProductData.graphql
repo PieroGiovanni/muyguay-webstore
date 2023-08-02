@@ -1,0 +1,5 @@
+fragment RegularProductData on Product {
+  id
+  name
+  price
+}

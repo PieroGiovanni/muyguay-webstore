@@ -1,9 +1,9 @@
-import { Navbar } from "../components/Navbar";
-import { ApolloWrapper } from "../lib/apolloWrapper";
-import "../styles/globals.css";
-import { BagContextProvider } from "./context/bagContext";
-import { CategoryContextProvider } from "./context/categoryContext";
-import { AuthProvider } from "./prodivers/AuthProvider";
+import { Navbar } from "../../components/Navbar";
+import { ApolloWrapper } from "../../lib/apolloWrapper";
+import { BagContextProvider } from "../context/bagContext";
+import { CategoryContextProvider } from "../context/categoryContext";
+import { AuthProvider } from "../prodivers/AuthProvider";
+import "../../styles/globals.css";
 
 export const metadata = {
   title: "Create Next App",

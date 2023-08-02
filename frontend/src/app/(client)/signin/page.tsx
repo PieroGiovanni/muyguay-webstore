@@ -1,5 +1,5 @@
-import { EmailPasswordForm } from "../../components/EmailPasswordForm";
-import { GoogleSignInButton } from "../../components/Buttons/GoogleSignInButton";
+import { EmailPasswordForm } from "../../../components/EmailPasswordForm";
+import { GoogleSignInButton } from "../../../components/Buttons/GoogleSignInButton";
 
 interface PageProps {}
 

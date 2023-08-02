@@ -1,0 +1,5 @@
+query GetProductsData {
+  getProducts {
+    ...RegularProductData
+  }
+}
