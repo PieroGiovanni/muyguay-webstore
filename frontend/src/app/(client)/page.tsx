@@ -1,7 +1,7 @@
-import { VerProdcutsButton } from "../components/Buttons/VerProdcutsButton";
-import { CategoriesAccess } from "../components/CategoriesAccess";
-import { Showcase } from "../components/Showcase";
-import { getProducts } from "./api/queries";
+import { VerProdcutsButton } from "../../components/Buttons/VerProdcutsButton";
+import { CategoriesAccess } from "../../components/CategoriesAccess";
+import { Showcase } from "../../components/Showcase";
+import { getProducts } from "../api/queries";
 
 export default async function Home() {
   const products = await getProducts();

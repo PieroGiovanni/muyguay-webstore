@@ -1,4 +1,4 @@
-import { UserOrders } from "../../components/UserOrders";
+import { UserOrders } from "../../../components/UserOrders";
 
 interface PageProps {}
 

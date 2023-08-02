@@ -1,4 +1,4 @@
-import { PerfilCard } from "../../components/PerfilCard";
+import { PerfilCard } from "../../../components/PerfilCard";
 
 interface PageProps {}
 
