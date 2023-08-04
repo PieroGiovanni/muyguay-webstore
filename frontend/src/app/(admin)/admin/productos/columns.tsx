@@ -11,6 +11,16 @@ import {
 } from "../../../../components/ui/dropdown-menu";
 import { Button } from "../../../../components/ui/button";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { useMutation } from "@apollo/client";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../../../../components/ui/dialog";
+import { UpdateProductForm } from "../../../../components/UpdateProductForm";
 
 export type Product = {
   id: number;
@@ -54,19 +64,32 @@ export const columns: ColumnDef<RegularProductDataFragment>[] = [
       const product = row.original;
 
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Abrir Menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem>Actualizar Producto</DropdownMenuItem>
-            <DropdownMenuItem>Eliminar Producto</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Dialog>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Abrir Menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DialogTrigger asChild>
+                <DropdownMenuItem>Open</DropdownMenuItem>
+              </DialogTrigger>
+              <DropdownMenuItem>Eliminar Producto</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Actualizar Productos</DialogTitle>
+
+              <UpdateProductForm productId={product.id} />
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
       );
     },
   },
 ];
+
+const handleUpdateProduct = (id: number) => {};

@@ -24,7 +24,7 @@ model Product {
   brandId       Int
   productTypeId Int
   productType   ProductType    @relation(fields: [productTypeId], references: [id])
-  tags          Int[]
+  tags          String[]
   orderItems    OrderItem[]
   stock         Stock?
   isFeatured    Boolean        @default(false)

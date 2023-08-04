@@ -1,6 +1,44 @@
-import { Resolver, Query, FieldResolver, Root, Arg, Int } from "type-graphql";
+import {
+  Resolver,
+  Query,
+  FieldResolver,
+  Root,
+  Arg,
+  Int,
+  Mutation,
+  InputType,
+  Field,
+  Float,
+} from "type-graphql";
 import { Product, ProductType, Brand, Image } from "@generated/type-graphql";
 import { prisma } from "..";
+
+@InputType()
+export class ProductInput {
+  @Field(() => Int)
+  id: number;
+
+  @Field(() => Int, { nullable: true })
+  brandId?: number;
+
+  @Field(() => Int, { nullable: true })
+  productTypeId?: number;
+
+  @Field(() => [String], { nullable: true })
+  tags?: string[];
+
+  @Field(() => Boolean, { nullable: true })
+  isFeatured?: boolean;
+
+  @Field(() => Float, { nullable: true })
+  price?: number;
+
+  @Field(() => String, { nullable: true })
+  name?: string;
+
+  @Field(() => String, { nullable: true })
+  description?: string;
+}
 
 @Resolver(Product)
 export class ProductResolver {
@@ -33,6 +71,26 @@ export class ProductResolver {
     return await prisma.image.findMany({
       where: {
         productId: product.id,
+      },
+    });
+  }
+
+  @Mutation(() => Product)
+  async updateProduct(
+    @Arg("productInput", () => ProductInput) productInput: ProductInput
+  ) {
+    return await prisma.product.update({
+      data: {
+        brandId: productInput.brandId,
+        description: productInput.description,
+        isFeatured: productInput.isFeatured,
+        name: productInput.name,
+        price: productInput.price,
+        tags: productInput.tags,
+        productTypeId: productInput.productTypeId,
+      },
+      where: {
+        id: productInput.id,
       },
     });
   }
