@@ -38,6 +38,9 @@ export class ProductInput {
 
   @Field(() => String, { nullable: true })
   description?: string;
+
+  @Field(() => Int, { nullable: true })
+  stock?: number;
 }
 
 @Resolver(Product)
@@ -75,10 +78,29 @@ export class ProductResolver {
     });
   }
 
+  @FieldResolver(() => Int)
+  async stock(@Root() product: Product): Promise<number | undefined> {
+    const stock = await prisma.stock.findUnique({
+      where: { productId: product.id },
+    });
+
+    return stock?.stockQuantity;
+  }
+
   @Mutation(() => Product)
   async updateProduct(
     @Arg("productInput", () => ProductInput) productInput: ProductInput
   ) {
+    if (productInput.stock) {
+      await prisma.stock.update({
+        data: {
+          stockQuantity: productInput.stock,
+        },
+        where: {
+          productId: productInput.id,
+        },
+      });
+    }
     return await prisma.product.update({
       data: {
         brandId: productInput.brandId,

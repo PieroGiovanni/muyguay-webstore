@@ -9,6 +9,7 @@ fragment ProductProps on Product {
   isFeatured
   createdAt
   updatedAt
+  stock
   brand {
     name
   }

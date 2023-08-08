@@ -1,0 +1,6 @@
+fragment BrandProps on Brand {
+  id
+  name
+  updatedAt
+  createdAt
+}

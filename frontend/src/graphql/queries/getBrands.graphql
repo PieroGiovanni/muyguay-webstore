@@ -1,0 +1,5 @@
+query GetBrands {
+  getBrands {
+    ...BrandProps
+  }
+}

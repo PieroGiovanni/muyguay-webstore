@@ -1,26 +1,24 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
-import { RegularProductDataFragment } from "../../../../graphql/generated/graphql";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../../../../components/ui/dropdown-menu";
-import { Button } from "../../../../components/ui/button";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-import { useMutation } from "@apollo/client";
+import { UpdateProductForm } from "../../../../components/UpdateProductForm";
+import { Button } from "../../../../components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "../../../../components/ui/dialog";
-import { UpdateProductForm } from "../../../../components/UpdateProductForm";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../../../../components/ui/dropdown-menu";
+import { RegularProductDataFragment } from "../../../../graphql/generated/graphql";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 export type Product = {
   id: number;
@@ -64,29 +62,33 @@ export const columns: ColumnDef<RegularProductDataFragment>[] = [
       const product = row.original;
 
       return (
-        <Dialog>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Abrir Menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DialogTrigger asChild>
-                <DropdownMenuItem>Open</DropdownMenuItem>
-              </DialogTrigger>
-              <DropdownMenuItem>Eliminar Producto</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Actualizar Productos</DialogTitle>
+        <div>
+          <Dialog>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                  <span className="sr-only">Abrir Menu</span>
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DialogTrigger asChild>
+                  <DropdownMenuItem>Editar</DropdownMenuItem>
+                </DialogTrigger>
+                <DropdownMenuItem>Eliminar</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle className="text-center">
+                  Actualizar Producto
+                </DialogTitle>
 
-              <UpdateProductForm productId={product.id} />
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>
+                <UpdateProductForm productId={product.id} />
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+        </div>
       );
     },
   },
