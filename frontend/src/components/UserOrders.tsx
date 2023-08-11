@@ -30,25 +30,10 @@ export const UserOrders = ({}: userOrdersProps) => {
     variables: { userId: userData?.user.id! },
   });
 
-  const ordersWithoutTotal = getFragmentData(
+  const orders = getFragmentData(
     OrderPropsFragmentDoc,
     orderData?.getOrdersByUserId
   );
-
-  const calculateOrderTotal = (order: OrderPropsFragment) => {
-    let total = 0;
-    order.products.map((p) => {
-      total += p.price * p.quantity;
-    });
-    return total;
-  };
-
-  const orders = ordersWithoutTotal?.map((order) => {
-    return {
-      ...order,
-      total: calculateOrderTotal(order),
-    };
-  });
 
   const getOrderPaymentStatus = (paymentStatus: PaymentSatus) => {
     switch (paymentStatus) {

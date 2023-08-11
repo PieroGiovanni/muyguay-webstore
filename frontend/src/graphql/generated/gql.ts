@@ -14,7 +14,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "fragment BrandProps on Brand {\n  id\n  name\n  updatedAt\n  createdAt\n}": types.BrandPropsFragmentDoc,
-    "fragment OrderProps on Order {\n  id\n  userId\n  paymentStatus\n  shippingStatus\n  products {\n    id\n    name\n    quantity\n    price\n  }\n  updatedAt\n  createdAt\n}": types.OrderPropsFragmentDoc,
+    "fragment OrderProps on Order {\n  id\n  userId\n  userName\n  paymentStatus\n  shippingStatus\n  products {\n    id\n    name\n    quantity\n    price\n  }\n  total\n  updatedAt\n  createdAt\n}": types.OrderPropsFragmentDoc,
     "fragment ProductCategoryProps on ProductCategory {\n  id\n  name\n  createdAt\n  updatedAt\n}": types.ProductCategoryPropsFragmentDoc,
     "fragment ProductProps on Product {\n  id\n  name\n  price\n  description\n  brandId\n  productTypeId\n  tags\n  isFeatured\n  createdAt\n  updatedAt\n  stock\n  brand {\n    name\n  }\n  productType {\n    id\n    name\n    productCategoryId\n  }\n  images {\n    imageUrl\n    cloudinaryPublicId\n  }\n}": types.ProductPropsFragmentDoc,
     "fragment ProductTypeProps on ProductType {\n  id\n  name\n  productCategoryId\n  updatedAt\n  createdAt\n}": types.ProductTypePropsFragmentDoc,
@@ -26,10 +26,12 @@ const documents = {
     "mutation AddGoogleUser($input: UserInput!) {\n  addGoogleUser(input: $input) {\n    ...RegularUserInfo\n  }\n}": types.AddGoogleUserDocument,
     "mutation CreateOrder($input: OrderInput!) {\n  createOrder(input: $input) {\n    id\n    userId\n    paymentStatus\n    shippingStatus\n    products {\n      id\n      quantity\n    }\n    updatedAt\n    createdAt\n  }\n}": types.CreateOrderDocument,
     "mutation Register($input: UserInput!) {\n  register(input: $input) {\n    ...RegularUserResponse\n  }\n}": types.RegisterDocument,
+    "mutation UpdateOrder($input: UpdateOrderInput!) {\n  updateOrder(input: $input) {\n    ...OrderProps\n  }\n}": types.UpdateOrderDocument,
     "mutation UpdateProduct($productInput: ProductInput!) {\n  updateProduct(productInput: $productInput) {\n    ...ProductProps\n  }\n}": types.UpdateProductDocument,
     "mutation UpdateUser($input: UpdateInput!) {\n  updateUser(input: $input) {\n    ...UserProps\n  }\n}": types.UpdateUserDocument,
     "query GetBrands {\n  getBrands {\n    ...BrandProps\n  }\n}": types.GetBrandsDocument,
     "query GetImages {\n  getImages {\n    id\n    productId\n    colorId\n    imageUrl\n    createdAt\n    updatedAt\n    product {\n      name\n      price\n    }\n  }\n}": types.GetImagesDocument,
+    "query GetOrders {\n  getOrders {\n    ...OrderProps\n  }\n}": types.GetOrdersDocument,
     "query GetOrdersByUserId($userId: Int!) {\n  getOrdersByUserId(userId: $userId) {\n    ...OrderProps\n  }\n}": types.GetOrdersByUserIdDocument,
     "query GetProduct($getProductId: Int!) {\n  getProduct(id: $getProductId) {\n    ...ProductProps\n  }\n}": types.GetProductDocument,
     "query GetProductCategories {\n  getProductCategories {\n    ...ProductCategoryProps\n  }\n}": types.GetProductCategoriesDocument,
@@ -62,7 +64,7 @@ export function graphql(source: "fragment BrandProps on Brand {\n  id\n  name\n 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "fragment OrderProps on Order {\n  id\n  userId\n  paymentStatus\n  shippingStatus\n  products {\n    id\n    name\n    quantity\n    price\n  }\n  updatedAt\n  createdAt\n}"): (typeof documents)["fragment OrderProps on Order {\n  id\n  userId\n  paymentStatus\n  shippingStatus\n  products {\n    id\n    name\n    quantity\n    price\n  }\n  updatedAt\n  createdAt\n}"];
+export function graphql(source: "fragment OrderProps on Order {\n  id\n  userId\n  userName\n  paymentStatus\n  shippingStatus\n  products {\n    id\n    name\n    quantity\n    price\n  }\n  total\n  updatedAt\n  createdAt\n}"): (typeof documents)["fragment OrderProps on Order {\n  id\n  userId\n  userName\n  paymentStatus\n  shippingStatus\n  products {\n    id\n    name\n    quantity\n    price\n  }\n  total\n  updatedAt\n  createdAt\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -110,6 +112,10 @@ export function graphql(source: "mutation Register($input: UserInput!) {\n  regi
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "mutation UpdateOrder($input: UpdateOrderInput!) {\n  updateOrder(input: $input) {\n    ...OrderProps\n  }\n}"): (typeof documents)["mutation UpdateOrder($input: UpdateOrderInput!) {\n  updateOrder(input: $input) {\n    ...OrderProps\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "mutation UpdateProduct($productInput: ProductInput!) {\n  updateProduct(productInput: $productInput) {\n    ...ProductProps\n  }\n}"): (typeof documents)["mutation UpdateProduct($productInput: ProductInput!) {\n  updateProduct(productInput: $productInput) {\n    ...ProductProps\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -123,6 +129,10 @@ export function graphql(source: "query GetBrands {\n  getBrands {\n    ...BrandP
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "query GetImages {\n  getImages {\n    id\n    productId\n    colorId\n    imageUrl\n    createdAt\n    updatedAt\n    product {\n      name\n      price\n    }\n  }\n}"): (typeof documents)["query GetImages {\n  getImages {\n    id\n    productId\n    colorId\n    imageUrl\n    createdAt\n    updatedAt\n    product {\n      name\n      price\n    }\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "query GetOrders {\n  getOrders {\n    ...OrderProps\n  }\n}"): (typeof documents)["query GetOrders {\n  getOrders {\n    ...OrderProps\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
