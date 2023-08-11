@@ -77,14 +77,14 @@ model Order {
   id             Int            @id @default(autoincrement())
   user           User           @relation(fields: [userId], references: [id])
   userId         Int
-  paymentStatus  PaymentSatus   @default(PENDIENTE)
+  paymentStatus  PaymentStatus  @default(PENDIENTE)
   shippingStatus ShippingStatus @default(POR_ENTREGAR)
   orderItems     OrderItem[]
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @default(now()) @updatedAt
 }
 
-enum PaymentSatus {
+enum PaymentStatus {
   PENDIENTE
   PAGADO
   PAGO_FALLIDO

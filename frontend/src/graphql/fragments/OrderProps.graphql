@@ -1,6 +1,7 @@
 fragment OrderProps on Order {
   id
   userId
+  userName
   paymentStatus
   shippingStatus
   products {
@@ -9,6 +10,7 @@ fragment OrderProps on Order {
     quantity
     price
   }
+  total
   updatedAt
   createdAt
 }

@@ -11,8 +11,18 @@ import {
   Query,
   Resolver,
   Root,
+  registerEnumType,
 } from "type-graphql";
 import { prisma } from "..";
+import { PaymentStatus, ShippingStatus } from "@prisma/client";
+
+registerEnumType(PaymentStatus, {
+  name: "PaymentStatusEnum",
+});
+
+registerEnumType(ShippingStatus, {
+  name: "ShippingStatusEnum",
+});
 
 @ObjectType()
 class OrderProduct extends OrderItem {
@@ -41,8 +51,25 @@ class OrderInput {
   productWithQuantity: ProductWithQuantity[];
 }
 
+@InputType()
+class UpdateOrderInput {
+  @Field(() => Int)
+  id: number;
+
+  @Field(() => PaymentStatus, { nullable: true })
+  paymentStatus: PaymentStatus;
+
+  @Field(() => ShippingStatus, { nullable: true })
+  shippingStatus: ShippingStatus;
+}
+
 @Resolver(Order)
 export class OrderResolver {
+  @Query(() => [Order])
+  async getOrders(): Promise<Order[]> {
+    return await prisma.order.findMany();
+  }
+
   @Query(() => [Order])
   async getOrdersByUserId(
     @Arg("userId", () => Int)
@@ -53,6 +80,16 @@ export class OrderResolver {
         userId,
       },
     });
+  }
+
+  @FieldResolver(() => String)
+  async userName(@Root() order: Order): Promise<String> {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: order.userId,
+      },
+    });
+    return user?.displayName!;
   }
 
   @FieldResolver(() => [OrderProduct])
@@ -80,6 +117,30 @@ export class OrderResolver {
       .map(({ product, ...rest }) => rest);
   }
 
+  @FieldResolver(() => Float)
+  async total(@Root() order: Order): Promise<number> {
+    const orderItems = await prisma.orderItem.findMany({
+      where: {
+        orderId: order.id,
+      },
+      include: {
+        product: {
+          select: {
+            price: true,
+          },
+        },
+      },
+    });
+
+    let total = 0;
+
+    orderItems.map((item) => {
+      total += item.quantity * item.product.price;
+    });
+
+    return total;
+  }
+
   @Mutation(() => Order)
   async createOrder(@Arg("input") input: OrderInput): Promise<Order> {
     const order = await prisma.order.create({
@@ -99,5 +160,18 @@ export class OrderResolver {
     });
 
     return order;
+  }
+
+  @Mutation(() => Order)
+  async updateOrder(@Arg("input") input: UpdateOrderInput): Promise<Order> {
+    return await prisma.order.update({
+      data: {
+        paymentStatus: input.paymentStatus,
+        shippingStatus: input.shippingStatus,
+      },
+      where: {
+        id: input.id,
+      },
+    });
   }
 }
