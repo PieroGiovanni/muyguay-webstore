@@ -8,6 +8,7 @@ import {
   OrderPropsFragmentDoc,
   PaymentSatus,
   ShippingStatus,
+  ShippingStatusEnum,
 } from "../graphql/generated/graphql";
 
 import { getDateFromTimteStamp } from "../app/utils/dateUtils";
@@ -38,13 +39,13 @@ export const UserOrders = ({}: userOrdersProps) => {
   const getOrderPaymentStatus = (paymentStatus: PaymentSatus) => {
     switch (paymentStatus) {
       case PaymentSatus.Pendiente:
-        return <p className="text-red-500">Pago Pendiente</p>;
+        return <p className="text-blue-500">Pago Pendiente</p>;
       case PaymentSatus.Pagado:
         return <p className="text-green-500">Pagado</p>;
       case PaymentSatus.PagoFallido:
         return <p className="text-red-700">Pago Fallido</p>;
       case PaymentSatus.Reintegrado:
-        return <p className="text-blue-500">Reintegrado</p>;
+        return <p className="text-gray-500">Reintegrado</p>;
     }
   };
   const getOrderShippingStatus = (shippingStatus: ShippingStatus) => {
@@ -52,7 +53,9 @@ export const UserOrders = ({}: userOrdersProps) => {
       case ShippingStatus.Entregado:
         return <p className="text-green-500">Entregado</p>;
       case ShippingStatus.PorEntregar:
-        return <p className="text-red-500">Por Entregar</p>;
+        return <p className="text-blue-500">Por Entregar</p>;
+      case ShippingStatus.Cancelado:
+        return <p className="text-gray-500">Por Entregar</p>;
     }
   };
 
