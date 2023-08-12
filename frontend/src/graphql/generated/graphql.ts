@@ -230,11 +230,13 @@ export type QueryGetUserByIdArgs = {
 };
 
 export enum ShippingStatus {
+  Cancelado = 'CANCELADO',
   Entregado = 'ENTREGADO',
   PorEntregar = 'POR_ENTREGAR'
 }
 
 export enum ShippingStatusEnum {
+  Cancelado = 'CANCELADO',
   Entregado = 'ENTREGADO',
   PorEntregar = 'POR_ENTREGAR'
 }
