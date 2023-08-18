@@ -1,5 +1,5 @@
-mutation UpdateProduct($productInput: ProductInput!) {
-  updateProduct(productInput: $productInput) {
+mutation UpdateProduct($productInput: ProductInput!, $id: Int!) {
+  updateProduct(productInput: $productInput, id: $id) {
     ...ProductProps
   }
 }

@@ -15,12 +15,8 @@ import { prisma } from "..";
 
 @InputType()
 export class ProductInput {
-  @Field(() => Int)
-  id: number;
-
   @Field(() => Int, { nullable: true })
   brandId?: number;
-
   @Field(() => Int, { nullable: true })
   productTypeId?: number;
 
@@ -41,6 +37,9 @@ export class ProductInput {
 
   @Field(() => Int, { nullable: true })
   stock?: number;
+
+  @Field(() => String, { nullable: true })
+  imageUrl?: string;
 }
 
 @Resolver(Product)
@@ -89,6 +88,7 @@ export class ProductResolver {
 
   @Mutation(() => Product)
   async updateProduct(
+    @Arg("id", () => Int) id: number,
     @Arg("productInput", () => ProductInput) productInput: ProductInput
   ) {
     if (productInput.stock) {
@@ -97,7 +97,7 @@ export class ProductResolver {
           stockQuantity: productInput.stock,
         },
         where: {
-          productId: productInput.id,
+          productId: id,
         },
       });
     }
@@ -112,8 +112,46 @@ export class ProductResolver {
         productTypeId: productInput.productTypeId,
       },
       where: {
-        id: productInput.id,
+        id: id,
       },
     });
+  }
+
+  @Mutation(() => Product)
+  async createProduct(
+    @Arg("productInput", () => ProductInput) productInput: ProductInput
+  ): Promise<Product> {
+    try {
+      const product = await prisma.product.create({
+        data: {
+          name: productInput.name!,
+          price: productInput.price!,
+          description: productInput.description,
+          brandId: productInput.brandId as number,
+          productTypeId: productInput.productTypeId as number,
+          tags: productInput.tags,
+          isFeatured: productInput.isFeatured,
+        },
+      });
+
+      await prisma.stock.create({
+        data: {
+          productId: product.id,
+          stockQuantity: productInput.stock,
+        },
+      });
+
+      await prisma.image.create({
+        data: {
+          productId: product.id,
+          imageUrl: productInput.imageUrl,
+        },
+      });
+
+      return product;
+    } catch (error) {
+      console.log("there was an error with product creation");
+      throw error;
+    }
   }
 }
