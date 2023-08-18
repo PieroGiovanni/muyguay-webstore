@@ -6,7 +6,7 @@ import {
   GetOrdersByUserIdDocument,
   OrderPropsFragment,
   OrderPropsFragmentDoc,
-  PaymentSatus,
+  PaymentStatus,
   ShippingStatus,
   ShippingStatusEnum,
 } from "../graphql/generated/graphql";
@@ -36,15 +36,15 @@ export const UserOrders = ({}: userOrdersProps) => {
     orderData?.getOrdersByUserId
   );
 
-  const getOrderPaymentStatus = (paymentStatus: PaymentSatus) => {
+  const getOrderPaymentStatus = (paymentStatus: PaymentStatus) => {
     switch (paymentStatus) {
-      case PaymentSatus.Pendiente:
+      case PaymentStatus.Pendiente:
         return <p className="text-blue-500">Pago Pendiente</p>;
-      case PaymentSatus.Pagado:
+      case PaymentStatus.Pagado:
         return <p className="text-green-500">Pagado</p>;
-      case PaymentSatus.PagoFallido:
+      case PaymentStatus.PagoFallido:
         return <p className="text-red-700">Pago Fallido</p>;
-      case PaymentSatus.Reintegrado:
+      case PaymentStatus.Reintegrado:
         return <p className="text-gray-500">Reintegrado</p>;
     }
   };

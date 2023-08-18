@@ -24,10 +24,12 @@ const documents = {
     "fragment RegularUserResponse on UserResponse {\n  errors {\n    ...RegularError\n  }\n  user {\n    ...RegularUserInfo\n  }\n}": types.RegularUserResponseFragmentDoc,
     "fragment UserProps on User {\n  id\n  email\n  displayName\n  password\n  phoneNumber\n  address\n  createdAt\n  updatedAt\n}": types.UserPropsFragmentDoc,
     "mutation AddGoogleUser($input: UserInput!) {\n  addGoogleUser(input: $input) {\n    ...RegularUserInfo\n  }\n}": types.AddGoogleUserDocument,
+    "mutation AddProductImage($imageInput: ImageInput!) {\n  addProductImage(imageInput: $imageInput) {\n    productId\n    imageUrl\n  }\n}": types.AddProductImageDocument,
     "mutation CreateOrder($input: OrderInput!) {\n  createOrder(input: $input) {\n    id\n    userId\n    paymentStatus\n    shippingStatus\n    products {\n      id\n      quantity\n    }\n    updatedAt\n    createdAt\n  }\n}": types.CreateOrderDocument,
+    "mutation CreateProduct($productInput: ProductInput!) {\n  createProduct(productInput: $productInput) {\n    ...ProductProps\n  }\n}": types.CreateProductDocument,
     "mutation Register($input: UserInput!) {\n  register(input: $input) {\n    ...RegularUserResponse\n  }\n}": types.RegisterDocument,
     "mutation UpdateOrder($input: UpdateOrderInput!) {\n  updateOrder(input: $input) {\n    ...OrderProps\n  }\n}": types.UpdateOrderDocument,
-    "mutation UpdateProduct($productInput: ProductInput!) {\n  updateProduct(productInput: $productInput) {\n    ...ProductProps\n  }\n}": types.UpdateProductDocument,
+    "mutation UpdateProduct($productInput: ProductInput!, $id: Int!) {\n  updateProduct(productInput: $productInput, id: $id) {\n    ...ProductProps\n  }\n}": types.UpdateProductDocument,
     "mutation UpdateUser($input: UpdateInput!) {\n  updateUser(input: $input) {\n    ...UserProps\n  }\n}": types.UpdateUserDocument,
     "query GetBrands {\n  getBrands {\n    ...BrandProps\n  }\n}": types.GetBrandsDocument,
     "query GetImages {\n  getImages {\n    id\n    productId\n    colorId\n    imageUrl\n    createdAt\n    updatedAt\n    product {\n      name\n      price\n    }\n  }\n}": types.GetImagesDocument,
@@ -104,7 +106,15 @@ export function graphql(source: "mutation AddGoogleUser($input: UserInput!) {\n 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "mutation AddProductImage($imageInput: ImageInput!) {\n  addProductImage(imageInput: $imageInput) {\n    productId\n    imageUrl\n  }\n}"): (typeof documents)["mutation AddProductImage($imageInput: ImageInput!) {\n  addProductImage(imageInput: $imageInput) {\n    productId\n    imageUrl\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "mutation CreateOrder($input: OrderInput!) {\n  createOrder(input: $input) {\n    id\n    userId\n    paymentStatus\n    shippingStatus\n    products {\n      id\n      quantity\n    }\n    updatedAt\n    createdAt\n  }\n}"): (typeof documents)["mutation CreateOrder($input: OrderInput!) {\n  createOrder(input: $input) {\n    id\n    userId\n    paymentStatus\n    shippingStatus\n    products {\n      id\n      quantity\n    }\n    updatedAt\n    createdAt\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "mutation CreateProduct($productInput: ProductInput!) {\n  createProduct(productInput: $productInput) {\n    ...ProductProps\n  }\n}"): (typeof documents)["mutation CreateProduct($productInput: ProductInput!) {\n  createProduct(productInput: $productInput) {\n    ...ProductProps\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -116,7 +126,7 @@ export function graphql(source: "mutation UpdateOrder($input: UpdateOrderInput!)
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "mutation UpdateProduct($productInput: ProductInput!) {\n  updateProduct(productInput: $productInput) {\n    ...ProductProps\n  }\n}"): (typeof documents)["mutation UpdateProduct($productInput: ProductInput!) {\n  updateProduct(productInput: $productInput) {\n    ...ProductProps\n  }\n}"];
+export function graphql(source: "mutation UpdateProduct($productInput: ProductInput!, $id: Int!) {\n  updateProduct(productInput: $productInput, id: $id) {\n    ...ProductProps\n  }\n}"): (typeof documents)["mutation UpdateProduct($productInput: ProductInput!, $id: Int!) {\n  updateProduct(productInput: $productInput, id: $id) {\n    ...ProductProps\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

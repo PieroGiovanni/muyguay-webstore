@@ -1,6 +1,25 @@
-import { FieldResolver, Query, Resolver, Root } from "type-graphql";
-import { prisma } from "..";
 import { Image, Product } from "@generated/type-graphql";
+import {
+  Arg,
+  Field,
+  FieldResolver,
+  InputType,
+  Int,
+  Mutation,
+  Query,
+  Resolver,
+  Root,
+} from "type-graphql";
+import { prisma } from "..";
+
+@InputType()
+export class ImageInput {
+  @Field(() => Int)
+  productId: number;
+
+  @Field()
+  imageUrl: string;
+}
 
 @Resolver(Image)
 export class ImageResolver {
@@ -14,6 +33,18 @@ export class ImageResolver {
     return await prisma.product.findUnique({
       where: {
         id: image.productId,
+      },
+    });
+  }
+
+  @Mutation(() => Image)
+  async addProductImage(
+    @Arg("imageInput", () => ImageInput) imageInput: ImageInput
+  ): Promise<Image> {
+    return await prisma.image.create({
+      data: {
+        productId: imageInput.productId,
+        imageUrl: imageInput.imageUrl,
       },
     });
   }
