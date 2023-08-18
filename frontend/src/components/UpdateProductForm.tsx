@@ -1,20 +1,25 @@
+import { useMutation } from "@apollo/client";
 import { useQuery } from "@apollo/experimental-nextjs-app-support/ssr";
-import { getProduct } from "../app/api/queries";
+import { DialogClose } from "@radix-ui/react-dialog";
+import { useEffect, useState } from "react";
+import {
+  convertArrayToString,
+  parseStringToArray,
+} from "../app/utils/stringUtils";
+import { getFragmentData } from "../graphql/generated";
 import {
   BrandPropsFragmentDoc,
   GetBrandsDocument,
   GetProductDocument,
   GetProductTypesDocument,
-  GetProductsDocument,
   ProductPropsFragmentDoc,
   ProductTypePropsFragmentDoc,
   UpdateProductDocument,
 } from "../graphql/generated/graphql";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
-import { getFragmentData } from "../graphql/generated";
-import { useEffect, useState } from "react";
 import { LoadingSkeleton } from "./LoadingSkeleton";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import {
   Select,
@@ -24,16 +29,6 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Textarea } from "./ui/textarea";
-import {
-  convertArrayToString,
-  parseStringToArray,
-} from "../app/utils/stringUtils";
-import { CldUploadButton, CldUploadWidget } from "next-cloudinary";
-import { Button } from "./ui/button";
-import { UploadWidget } from "./UploadWidget";
-import { useMutation } from "@apollo/client";
-import { Variable } from "lucide-react";
-import { DialogClose } from "@radix-ui/react-dialog";
 
 interface UpdateProductFormProps {
   productId: number;
@@ -90,8 +85,8 @@ export const UpdateProductForm = ({ productId }: UpdateProductFormProps) => {
   const saveChanges = async () => {
     await updateProduct({
       variables: {
+        id: productId,
         productInput: {
-          id: productId,
           brandId: brandId,
           description: descriptionInput,
           isFeatured: isFeatured,

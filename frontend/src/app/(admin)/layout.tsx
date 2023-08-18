@@ -3,6 +3,7 @@ import { BagContextProvider } from "../context/bagContext";
 import { CategoryContextProvider } from "../context/categoryContext";
 import { AuthProvider } from "../prodivers/AuthProvider";
 import "../../styles/globals.css";
+import { Toaster } from "../../components/ui/toaster";
 
 export default function AdminLayout({
   children, // will be a page or nested layout
@@ -22,6 +23,7 @@ export default function AdminLayout({
         <ApolloWrapper>
           <AuthProvider>
             <main>{children}</main>
+            <Toaster />
           </AuthProvider>
         </ApolloWrapper>
       </body>

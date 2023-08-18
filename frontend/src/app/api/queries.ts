@@ -1,8 +1,12 @@
 import { fdatasync } from "fs";
 import { getFragmentData } from "../../graphql/generated/fragment-masking";
 import {
+  BrandPropsFragment,
+  BrandPropsFragmentDoc,
+  GetBrandsDocument,
   GetOrdersByUserIdDocument,
   GetProductCategoriesDocument,
+  GetProductTypesDocument,
   GetProductsDataDocument,
   GetProductsDataQuery,
   GetProductsDocument,
@@ -13,6 +17,8 @@ import {
   ProductCategoryPropsFragmentDoc,
   ProductPropsFragment,
   ProductPropsFragmentDoc,
+  ProductTypePropsFragment,
+  ProductTypePropsFragmentDoc,
   RegularProductDataFragment,
   RegularProductDataFragmentDoc,
   RegularUserInfoFragmentDoc,
@@ -80,4 +86,22 @@ export const getProductsData = async (): Promise<
   });
 
   return getFragmentData(RegularProductDataFragmentDoc, data.getProducts);
+};
+
+export const getProductTypes = async (): Promise<
+  readonly ProductTypePropsFragment[]
+> => {
+  const { data } = await getClient().query({
+    query: GetProductTypesDocument,
+  });
+
+  return getFragmentData(ProductTypePropsFragmentDoc, data.getProductTypes);
+};
+
+export const getBrands = async (): Promise<readonly BrandPropsFragment[]> => {
+  const { data } = await getClient().query({
+    query: GetBrandsDocument,
+  });
+
+  return getFragmentData(BrandPropsFragmentDoc, data.getBrands);
 };

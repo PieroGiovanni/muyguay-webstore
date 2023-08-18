@@ -1,0 +1,6 @@
+mutation AddProductImage($imageInput: ImageInput!) {
+  addProductImage(imageInput: $imageInput) {
+    productId
+    imageUrl
+  }
+}
