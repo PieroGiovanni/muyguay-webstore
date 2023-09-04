@@ -101,6 +101,9 @@ export class ProductResolver {
         },
       });
     }
+
+    console.log(productInput.description);
+
     return await prisma.product.update({
       data: {
         brandId: productInput.brandId,
