@@ -27,11 +27,11 @@ const Page = async ({ params }: pageProps) => {
           </Label>
           <Label className="text-xl">S/. {product.price}</Label>
         </div>
-        <p>
+        <div className="whitespace-pre-line">
           {product.description
             ? product.description
-            : "descripción a del producto"}
-        </p>
+            : "descripción del producto"}
+        </div>
         <div className="flex justify-around">
           <Button>Comprar</Button>
           <AddToBagButton product={product} />

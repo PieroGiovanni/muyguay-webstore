@@ -6,9 +6,10 @@ import { Label } from "./ui/label";
 
 interface UploadWidgetProps {
   onImageUrl: (imageUrl: any) => void;
+  resetImage?: boolean;
 }
 
-export const UploadWidget = ({ onImageUrl }: UploadWidgetProps) => {
+export const UploadWidget = ({ onImageUrl, resetImage }: UploadWidgetProps) => {
   const [loaded, setLoaded] = useState(false);
   // const [cloudName, setCloudName] = useState(
   //   process.env.PUBLIC_CLOUDINARY_CLOUD_NAME
@@ -54,6 +55,12 @@ export const UploadWidget = ({ onImageUrl }: UploadWidgetProps) => {
       proccessResults
     );
   };
+
+  useEffect(() => {
+    if (resetImage) {
+      setUploadedImage(undefined);
+    }
+  }, [resetImage]);
 
   // const uploadWidget = () => {
   //   //@ts-ignore

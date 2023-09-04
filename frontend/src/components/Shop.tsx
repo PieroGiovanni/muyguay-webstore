@@ -60,6 +60,10 @@ export const Shop = ({ categories, products }: ShopProps) => {
     setCategory(category);
   };
 
+  const handleOrderBy = (orderBy: string) => {
+    setOrderBy(orderBy);
+  };
+
   useEffect(() => {
     if (category !== "all") {
       const categoryId = categories.find((c) => c.name === category)?.id;
@@ -70,21 +74,7 @@ export const Shop = ({ categories, products }: ShopProps) => {
     } else {
       setFilteredProducts(products);
     }
-  }, [category, categories, products]);
 
-  useEffect(() => {
-    if (categoryId) {
-      setCategory(categories.find((c) => c.id === categoryId)?.name!);
-    }
-  }, [categoryId, categories]);
-
-  //ORDER BY NEW, CHEAPEST OR MOST EXPENSIVE
-
-  const handleOrderBy = (orderBy: string) => {
-    setOrderBy(orderBy);
-  };
-
-  useEffect(() => {
     if (orderBy === "cheap") {
       setFilteredProducts((filteredProducts) =>
         [...filteredProducts].sort((a, b) => a.price - b.price)
@@ -106,7 +96,39 @@ export const Shop = ({ categories, products }: ShopProps) => {
         )
       );
     }
-  }, [orderBy]);
+  }, [category, categories, products, orderBy]);
+
+  useEffect(() => {
+    if (categoryId) {
+      setCategory(categories.find((c) => c.id === categoryId)?.name!);
+    }
+  }, [categoryId, categories]);
+
+  //ORDER BY NEW, CHEAPEST OR MOST EXPENSIVE
+
+  // useEffect(() => {
+  //   if (orderBy === "cheap") {
+  //     setFilteredProducts((filteredProducts) =>
+  //       [...filteredProducts].sort((a, b) => a.price - b.price)
+  //     );
+  //   } else if (orderBy === "expensive") {
+  //     setFilteredProducts((filteredProducts) =>
+  //       [...filteredProducts].sort((a, b) => b.price - a.price)
+  //     );
+  //   } else if (orderBy === "new") {
+  //     setFilteredProducts((filteredProducts) =>
+  //       [...filteredProducts].sort(
+  //         (a, b) => Date.parse(b.updatedAt) - Date.parse(a.updatedAt)
+  //       )
+  //     );
+  //   } else {
+  //     setFilteredProducts((filteredProducts) =>
+  //       [...filteredProducts].sort(
+  //         (a, b) => Date.parse(a.updatedAt) - Date.parse(b.updatedAt)
+  //       )
+  //     );
+  //   }
+  // }, [orderBy]);
 
   return filteredProducts && categories ? (
     <div className="">
@@ -125,7 +147,11 @@ export const Shop = ({ categories, products }: ShopProps) => {
             <Card className="flex flex-col items-center rounded-sm">
               <Label className="">{p.name}</Label>
               <CldImage
-                src={extractPublicId(p.images[0].imageUrl!)}
+                src={
+                  p.images[0].imageUrl
+                    ? extractPublicId(p.images[0].imageUrl!)
+                    : "/image-not-found.webp"
+                }
                 alt={p.name}
                 width={300}
                 height={300}

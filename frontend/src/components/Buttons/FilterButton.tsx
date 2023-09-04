@@ -17,6 +17,7 @@ import {
 } from "../ui/dropdown-menu";
 import { Label } from "../ui/label";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import { useState } from "react";
 
 interface FilterButtonProps {
   categories: readonly ProductCategoryPropsFragment[];
@@ -31,6 +32,9 @@ export const FilterButton = ({
   handleOrderBy,
   defaultCategory,
 }: FilterButtonProps) => {
+  const [orderBy, setOrderBy] = useState("new");
+  const [category, setCategory] = useState(defaultCategory);
+
   return (
     <div className="text-xs">
       <DropdownMenu>
@@ -44,13 +48,20 @@ export const FilterButton = ({
             Filtrar por:
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <Accordion type="multiple" className="w-[40vw]">
+          <Accordion
+            type="multiple"
+            defaultValue={["item-1", "item-2"]}
+            className="w-[40vw]"
+          >
             <AccordionItem value="item-1" className="w-full">
               <AccordionTrigger>Ordenar por:</AccordionTrigger>
               <AccordionContent>
                 <RadioGroup
-                  defaultValue="new"
-                  onValueChange={(value) => handleOrderBy(value)}
+                  defaultValue={orderBy}
+                  onValueChange={(value) => {
+                    handleOrderBy(value);
+                    setOrderBy(value);
+                  }}
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="new" id="new" />
@@ -75,8 +86,11 @@ export const FilterButton = ({
               <AccordionTrigger>Elegir Categoría</AccordionTrigger>
               <AccordionContent>
                 <RadioGroup
-                  defaultValue={defaultCategory}
-                  onValueChange={(e) => handleCategory(e)}
+                  defaultValue={category}
+                  onValueChange={(value) => {
+                    handleCategory(value);
+                    setCategory(value);
+                  }}
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="all" id="all" />
