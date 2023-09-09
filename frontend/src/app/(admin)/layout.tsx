@@ -4,6 +4,7 @@ import { CategoryContextProvider } from "../context/categoryContext";
 import { AuthProvider } from "../prodivers/AuthProvider";
 import "../../styles/globals.css";
 import { Toaster } from "../../components/ui/toaster";
+import { AdminNavBar } from "../../components/AdminNavBar";
 
 export default function AdminLayout({
   children, // will be a page or nested layout
@@ -22,6 +23,7 @@ export default function AdminLayout({
       <body className="font-sans">
         <ApolloWrapper>
           <AuthProvider>
+            <AdminNavBar />
             <main>{children}</main>
             <Toaster />
           </AuthProvider>

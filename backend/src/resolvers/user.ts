@@ -1,4 +1,4 @@
-import { User } from "@generated/type-graphql";
+import { User, UserType as UserTypeEnum } from "@generated/type-graphql";
 import { hash, verify } from "argon2";
 import {
   Arg,
@@ -9,9 +9,14 @@ import {
   ObjectType,
   Query,
   Resolver,
+  registerEnumType,
 } from "type-graphql";
 import { prisma } from "..";
-import { Prisma } from "@prisma/client";
+import { Prisma, UserType } from "@prisma/client";
+
+// registerEnumType(UserType, {
+//   name: "UserEnum",
+// });
 
 @InputType()
 class UpdateInput {
@@ -56,6 +61,9 @@ class UserInfo {
 
   @Field()
   email: string;
+
+  @Field(() => UserTypeEnum)
+  userType: UserType;
 }
 
 @ObjectType()

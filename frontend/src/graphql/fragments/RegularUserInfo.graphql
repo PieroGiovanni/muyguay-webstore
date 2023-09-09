@@ -2,4 +2,5 @@ fragment RegularUserInfo on UserInfo {
   id
   email
   displayName
+  userType
 }
