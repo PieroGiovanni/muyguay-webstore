@@ -44,6 +44,7 @@ export const authOptions: NextAuthOptions = {
       const user = await getUserByEmail(session.user.email);
 
       session.user.id = user!.id;
+      session.user.userType = user!.userType;
 
       return session;
     },

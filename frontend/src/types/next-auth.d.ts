@@ -1,4 +1,5 @@
 import NextAuth from "next-auth/next";
+import { UserType, UserTypeEnum } from "../graphql/generated/graphql";
 
 declare module "next-auth" {
   interface Session {
@@ -6,6 +7,7 @@ declare module "next-auth" {
       id: number;
       email: string;
       name: string;
+      userType: UserType;
     };
   }
 

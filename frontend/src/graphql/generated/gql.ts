@@ -20,7 +20,7 @@ const documents = {
     "fragment ProductTypeProps on ProductType {\n  id\n  name\n  productCategoryId\n  updatedAt\n  createdAt\n}": types.ProductTypePropsFragmentDoc,
     "fragment RegularError on FieldError {\n  field\n  message\n}": types.RegularErrorFragmentDoc,
     "fragment RegularProductData on Product {\n  id\n  name\n  price\n}": types.RegularProductDataFragmentDoc,
-    "fragment RegularUserInfo on UserInfo {\n  id\n  email\n  displayName\n}": types.RegularUserInfoFragmentDoc,
+    "fragment RegularUserInfo on UserInfo {\n  id\n  email\n  displayName\n  userType\n}": types.RegularUserInfoFragmentDoc,
     "fragment RegularUserResponse on UserResponse {\n  errors {\n    ...RegularError\n  }\n  user {\n    ...RegularUserInfo\n  }\n}": types.RegularUserResponseFragmentDoc,
     "fragment UserProps on User {\n  id\n  email\n  displayName\n  password\n  phoneNumber\n  address\n  createdAt\n  updatedAt\n}": types.UserPropsFragmentDoc,
     "mutation AddGoogleUser($input: UserInput!) {\n  addGoogleUser(input: $input) {\n    ...RegularUserInfo\n  }\n}": types.AddGoogleUserDocument,
@@ -90,7 +90,7 @@ export function graphql(source: "fragment RegularProductData on Product {\n  id\
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "fragment RegularUserInfo on UserInfo {\n  id\n  email\n  displayName\n}"): (typeof documents)["fragment RegularUserInfo on UserInfo {\n  id\n  email\n  displayName\n}"];
+export function graphql(source: "fragment RegularUserInfo on UserInfo {\n  id\n  email\n  displayName\n  userType\n}"): (typeof documents)["fragment RegularUserInfo on UserInfo {\n  id\n  email\n  displayName\n  userType\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

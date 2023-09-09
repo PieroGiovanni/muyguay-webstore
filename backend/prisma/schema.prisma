@@ -7,7 +7,7 @@ generator client {
 
 generator typegraphql {
   provider = "typegraphql-prisma"
-  emitOnly = "models"
+  emitOnly = ["models", "enums"]
 }
 
 datasource db {

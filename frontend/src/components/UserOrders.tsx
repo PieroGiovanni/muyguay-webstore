@@ -100,10 +100,15 @@ export const UserOrders = ({}: userOrdersProps) => {
           </Accordion>
         </Card>
       ))}
+      <div className="mt-20 flex justify-center">
+        No tienes pedidos2 {userData.user.userType}
+      </div>
     </div>
   ) : status === "loading" ? (
     <LoadingSkeleton />
   ) : (
-    <div className="mt-20 flex justify-center">No tienes pedidos</div>
+    <div className="mt-20 flex justify-center">
+      No tienes pedidos3 {userData.user.userType}
+    </div>
   );
 };
