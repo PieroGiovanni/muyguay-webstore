@@ -1,11 +1,21 @@
 "use client";
 
-import { History, Home, LogIn, LogOut, Menu, Shirt, User } from "lucide-react";
+import {
+  History,
+  Home,
+  LogIn,
+  LogOut,
+  Menu,
+  Shirt,
+  User,
+  UserCog,
+} from "lucide-react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "../ui/button";
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "../ui/sheet";
+import { UserType } from "../../graphql/generated/graphql";
 
 interface HamburguerButtonProps {}
 
@@ -21,55 +31,77 @@ export const HamburguerButton = ({}: HamburguerButtonProps) => {
           <Menu />
         </button>
       </SheetTrigger>
-      <SheetContent side="left" className="flex flex-col">
+      <SheetContent side="left" className="flex flex-col gap-0">
         <SheetClose asChild>
-          <Link href="/">
-            <Button className="w-full gap-2">
-              <Home />
-              Menu Principal
-            </Button>
+          <Link
+            href="/"
+            className="flex h-10 gap-2 hover:bg-slate-100 items-center pl-10"
+          >
+            {/* <Button className="w-full gap-2"> */}
+            <Home />
+            Menu Principal
+            {/* </Button> */}
           </Link>
         </SheetClose>
         <SheetClose asChild>
-          <Link href="/tienda">
-            <Button className="w-full gap-2">
-              <Shirt />
-              Tienda
-            </Button>
+          <Link
+            href="/tienda"
+            className="flex h-10 gap-2 hover:bg-slate-100 items-center pl-10"
+          >
+            {/* <Button className="w-full gap-2"> */}
+            <Shirt />
+            Tienda
+            {/* </Button> */}
           </Link>
         </SheetClose>
         {session ? (
-          <SheetClose asChild>
-            <Link href="/pedidos">
-              <Button className="w-full gap-2">
+          <>
+            <SheetClose asChild>
+              <Link
+                href="/pedidos"
+                className="flex h-10 gap-2 hover:bg-slate-100 items-center pl-10"
+              >
                 <History />
                 Mis Pedidos
-              </Button>
-            </Link>
-          </SheetClose>
-        ) : null}
-        {session ? (
-          <SheetClose asChild>
-            <Link href="/mi-perfil">
-              <Button className="w-full gap-2">
+              </Link>
+            </SheetClose>
+            <SheetClose asChild>
+              <Link
+                href="/mi-perfil"
+                className="flex h-10 gap-2 hover:bg-slate-100 items-center pl-10"
+              >
                 <User />
                 Mi Perfil
-              </Button>
-            </Link>
-          </SheetClose>
-        ) : null}
-
-        {session ? (
-          <Button className="w-full gap-2" onClick={() => signOut()}>
-            <LogOut />
-            Cerrar Sesión
-          </Button>
+              </Link>
+            </SheetClose>
+            {session.user.userType === UserType.Admin ? (
+              <Link
+                href="/admin"
+                className="flex h-10 gap-2 hover:bg-slate-100 items-center pl-10"
+              >
+                <UserCog />
+                Administrar
+              </Link>
+            ) : null}
+            <SheetClose asChild>
+              <div
+                className="flex h-10 gap-2 hover:bg-slate-100 items-center pl-10 hover:cursor-pointer"
+                onClick={() => signOut()}
+              >
+                <LogOut />
+                Cerrar Sesión
+              </div>
+            </SheetClose>
+          </>
         ) : (
           <SheetClose asChild>
-            <Button className="w-full gap-2" onClick={() => signIn()}>
+            <div
+              className="flex h-10 gap-2 hover:bg-slate-100 items-center pl-10 hover:cursor-pointer"
+              onClick={() => signIn()}
+            >
               <LogIn />
               Iniciar Sesión
-            </Button>
+            </div>
           </SheetClose>
         )}
 
