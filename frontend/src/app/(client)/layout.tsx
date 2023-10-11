@@ -4,6 +4,7 @@ import { BagContextProvider } from "../context/bagContext";
 import { CategoryContextProvider } from "../context/categoryContext";
 import { AuthProvider } from "../prodivers/AuthProvider";
 import "../../styles/globals.css";
+import { Toaster } from "../../components/ui/toaster";
 
 export const metadata = {
   title: "Create Next App",
@@ -31,6 +32,7 @@ export default function RootLayout({
               <AuthProvider>
                 <Navbar />
                 <main>{children}</main>
+                <Toaster />
               </AuthProvider>
             </CategoryContextProvider>
           </BagContextProvider>

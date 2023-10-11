@@ -86,18 +86,17 @@ export const ShoppingBagSheet = ({}: ShoppingBagSheetProps) => {
           ) : null}
         </button>
       </SheetTrigger>
-      <SheetContent>
+      <SheetContent className="overflow-scroll flex flex-col items-center">
         <SheetHeader>
           <SheetTitle>Productos en la cartera</SheetTitle>
         </SheetHeader>
         {bagProducts.length === 0 ? (
           <div>No hay productos en la cartera</div>
         ) : (
-          <>
+          <div className="flex flex-col gap-2">
             {bagProducts.map((bp) => (
-              <div key={bp.id}>
-                <Separator />
-                <div className="flex">
+              <div key={bp.id} className="flex gap-2 items-center">
+                <div className="w-20 relative h-20  shrink-0">
                   <CldImage
                     src={
                       bp.images[0].cloudinaryPublicId
@@ -105,33 +104,55 @@ export const ShoppingBagSheet = ({}: ShoppingBagSheetProps) => {
                         : extractPublicId(bp.images[0].imageUrl!)
                     }
                     alt={bp.name}
-                    width={120}
-                    height={120}
+                    fill
                   />
-                  <div className="flex flex-col text-sm">
-                    <Label>{bp.name}</Label>
-                    <Label>s/. {bp.price * bp.quantity}</Label>
-                    <div className="flex flex-row">
-                      <Button onClick={() => subtractQuantity(bp.id)}>-</Button>
-                      <Button>{bp.quantity}</Button>
-                      <Button onClick={() => addQuantity(bp.id)}>+</Button>
+                </div>
+                <div className="flex flex-col text-sm">
+                  <Label>{bp.name}</Label>
+                  <div className="flex flex-row gap-[1px] items-center">
+                    <button
+                      className="border-2 border-black w-7 h-7 rounded-md"
+                      onClick={() => subtractQuantity(bp.id)}
+                    >
+                      -
+                    </button>
+                    <div className="h-9 items-center w-5 flex justify-center px-1">
+                      {bp.quantity}
                     </div>
+                    <button
+                      className="border-2 border-black w-7 h-7 rounded-md"
+                      onClick={() => addQuantity(bp.id)}
+                    >
+                      +
+                    </button>
+                    <button
+                      className="ml-10"
+                      onClick={() => deleteProduct(bp.id)}
+                    >
+                      <Trash2 />
+                    </button>
                   </div>
-                  <button onClick={() => deleteProduct(bp.id)}>
-                    <Trash2 />
-                  </button>
+                  <Label>s/. {bp.price * bp.quantity}</Label>
                 </div>
               </div>
             ))}
             <div>TOTAL: S/. {total}</div>
-          </>
+          </div>
         )}
-        <SheetFooter>
-          <SheetClose asChild>
-            <Link href="/confirmar-pedido">
-              <Button>Comprar</Button>
-            </Link>
-          </SheetClose>
+        <SheetFooter className="flex justify-center">
+          {bagProducts.length > 0 ? (
+            <SheetClose asChild>
+              <Link href="/confirmar-pedido">
+                <Button>Comprar</Button>
+              </Link>
+            </SheetClose>
+          ) : (
+            <SheetClose asChild>
+              <Link href="/tienda" className="flex justify-center">
+                <Button>Ver Productos</Button>
+              </Link>
+            </SheetClose>
+          )}
         </SheetFooter>
       </SheetContent>
     </Sheet>

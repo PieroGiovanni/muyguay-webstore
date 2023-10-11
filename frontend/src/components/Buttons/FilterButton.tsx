@@ -17,7 +17,7 @@ import {
 } from "../ui/dropdown-menu";
 import { Label } from "../ui/label";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface FilterButtonProps {
   categories: readonly ProductCategoryPropsFragment[];
@@ -33,7 +33,15 @@ export const FilterButton = ({
   defaultCategory,
 }: FilterButtonProps) => {
   const [orderBy, setOrderBy] = useState("new");
-  const [category, setCategory] = useState(defaultCategory);
+  const [category, setCategory] = useState("all");
+
+  useEffect(() => {
+    if (defaultCategory) {
+      setCategory(defaultCategory);
+    }
+  }, [defaultCategory]);
+
+  console.log("CATEGORY: ", defaultCategory);
 
   return (
     <div className="text-xs">
