@@ -1,4 +1,5 @@
 import { User, UserType as UserTypeEnum } from "@generated/type-graphql";
+import { Prisma, UserType } from "@prisma/client";
 import { hash, verify } from "argon2";
 import {
   Arg,
@@ -9,10 +10,8 @@ import {
   ObjectType,
   Query,
   Resolver,
-  registerEnumType,
 } from "type-graphql";
 import { prisma } from "..";
-import { Prisma, UserType } from "@prisma/client";
 
 // registerEnumType(UserType, {
 //   name: "UserEnum",

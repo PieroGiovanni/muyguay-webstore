@@ -15,7 +15,7 @@ export const CategoriesAccess = ({}: CategoriesAccessProps) => {
     router.push("/tienda");
   };
   return (
-    <div className="flex flex-col">
+    <div className="grid grid-cols-2 gap-0.5">
       <Button className="h-20" onClick={() => handleCategory(1)}>
         Ropa
       </Button>
@@ -30,6 +30,9 @@ export const CategoriesAccess = ({}: CategoriesAccessProps) => {
       </Button>
       <Button className="h-20" onClick={() => handleCategory(5)}>
         Accesorios
+      </Button>
+      <Button className="h-20" onClick={() => handleCategory(6)}>
+        Calzado
       </Button>
     </div>
   );
