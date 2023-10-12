@@ -13,6 +13,7 @@ import {
   CardTitle,
 } from "../../../components/ui/card";
 import { Separator } from "../../../components/ui/separator";
+import { toast } from "../../../components/ui/use-toast";
 import { CreateOrderDocument } from "../../../graphql/generated/graphql";
 import { useBagContext } from "../../context/bagContext";
 
@@ -26,9 +27,10 @@ const Page = ({}: PageProps) => {
   const { data } = useSession({ required: true });
   const [createOrder] = useMutation(CreateOrderDocument);
 
+  const userName = data?.user.name;
   useEffect(() => {
     let total = 0;
-    let text = "LISTA DE PRODUCTOS: \n\n";
+    let text = "Cliente: " + userName + "\n\nLista de Productos: \n\n";
 
     bagProducts.map((p) => {
       total = total + p.price * p.quantity;
@@ -44,9 +46,9 @@ const Page = ({}: PageProps) => {
 
     setTotal(total);
     setText(text + "\n" + "TOTAL: S/. " + total);
-  }, [bagProducts]);
+  }, [bagProducts, userName]);
 
-  const whatsappURL = `https://wa.me/51948614445?text=${encodeURIComponent(
+  const whatsappURL = `https://wa.me/51955119590?text=${encodeURIComponent(
     text
   )}`;
 
@@ -68,7 +70,13 @@ const Page = ({}: PageProps) => {
       console.log(err);
     }
     setBagProducts([]);
+    toast({
+      description: "Gracias Por tu Compra 😍",
+    });
     router.push("/tienda");
+    setTimeout(() => {
+      window.location.href = whatsappURL;
+    }, 2000);
   };
 
   return bagProducts ? (
@@ -96,9 +104,7 @@ const Page = ({}: PageProps) => {
         </div>
       </CardContent>
       <CardFooter className="flex flex-row justify-center gap-3">
-        {/* <a href={whatsappURL}> */}
-        <Button onClick={handleOnClick}>Confirmar Pedido</Button>
-        {/* </a> */}
+        <Button onClick={handleOnClick}>Confirmar Compra</Button>
 
         <Link href="/tienda">
           <Button>Seguir Comprando</Button>

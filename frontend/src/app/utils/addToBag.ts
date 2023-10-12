@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 import { toast } from "../../components/ui/use-toast";
 import { ProductPropsFragment } from "../../graphql/generated/graphql";
-import { ProductWithQuantity, useBagContext } from "../context/bagContext";
+import { ProductWithQuantity } from "../context/bagContext";
 
 export const AddToBag = (
   product: ProductPropsFragment,

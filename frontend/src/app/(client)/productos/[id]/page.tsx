@@ -33,16 +33,17 @@ const Page = async ({ params }: pageProps) => {
             : "descripción del producto"}
         </div>
         <div className="flex justify-around">
-          <Button>Comprar</Button>
+          {/* <Button>Comprar</Button> */}
           <AddToBagButton product={product} />
+          <Link href={`/tienda`}>
+            <Button className="flex items-center gap-1">
+              <Undo2 />
+              <p>Tienda</p>
+            </Button>
+          </Link>
           {/* <Button>Seguir Mirando</Button> */}
         </div>
       </Card>
-      <Link href={`/tienda`}>
-        <Button className="w-20">
-          <Undo2 />
-        </Button>
-      </Link>
     </div>
   ) : null;
 };

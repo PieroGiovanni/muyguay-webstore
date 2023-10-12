@@ -32,8 +32,6 @@ export const Shop = ({ categories, products }: ShopProps) => {
   const [initialRenderComplete, setInitialRenderComplete] = useState(false);
   const { bagProducts, setBagProducts } = useBagContext();
 
-  const { toast } = useToast();
-
   useEffect(() => {
     setInitialRenderComplete(true);
   }, []);

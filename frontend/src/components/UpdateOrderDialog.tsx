@@ -61,10 +61,6 @@ export const UpdateOrderDialog = ({ order }: UpdateOrderDialogProps) => {
       <DialogContent>
         <DialogHeader className="gap-2">
           <DialogTitle>Actualizar Pedido</DialogTitle>
-          {/* <DialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </DialogDescription> */}
           <div className=" flex flex-row gap-2 items-center">
             <Label>Estado de Pago:</Label>
             <Select
