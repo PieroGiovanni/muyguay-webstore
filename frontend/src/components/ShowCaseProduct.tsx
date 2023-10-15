@@ -20,11 +20,12 @@ export const ShowCaseProduct = ({ product }: ShowCaseProductProps) => {
         <Label className="text-xs md:text-base text-center">
           {product.name}
         </Label>
-        <div className="flex w-full relative md:h-[50vh] h-[25vh]">
+        <div className="flex w-full relative md:h-[50vh] h-48">
           <CldImage
             src={extractPublicId(product.images[0].imageUrl!)}
             alt={product.name}
             fill
+            sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 33vw"
           />
         </div>
 

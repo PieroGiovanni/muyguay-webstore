@@ -121,7 +121,9 @@ export const UserOrders = ({}: userOrdersProps) => {
         ))}
     </div>
   ) : status === "loading" ? (
-    <Loading />
+    <div className="w-full h-[50vh] flex justify-center items-end">
+      <Loading />
+    </div>
   ) : (
     <div className="mt-20 flex justify-center">No tienes pedidos</div>
   );

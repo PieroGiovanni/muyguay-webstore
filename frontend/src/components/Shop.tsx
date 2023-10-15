@@ -16,6 +16,8 @@ import { FilterButton } from "./Buttons/FilterButton";
 import { Card } from "./ui/card";
 import { Input } from "./ui/input";
 import { useToast } from "./ui/use-toast";
+import { Loading } from "./Loading";
+import { ShopImage } from "./ShopImage";
 
 interface ShopProps {
   categories: readonly ProductCategoryPropsFragment[];
@@ -124,29 +126,20 @@ export const Shop = ({ categories, products }: ShopProps) => {
         {filteredProducts.map((p) => (
           <div key={p.id} className="relative">
             <Link key={p.name} href={`/productos/${p.id}`}>
-              <Card className="flex flex-col rounded-sm">
-                <Label className="flex text-xs h-8 justify-center items-center">
+              <Card className="flex flex-col rounded-sm md:h-[430px] h-[220px]">
+                <Label className="flex text-xs md:text-base h-8 justify-center items-center">
                   {p.name}
                 </Label>
-                <CldImage
-                  src={
-                    p.images[0].imageUrl
-                      ? extractPublicId(p.images[0].imageUrl!)
-                      : "/image-not-found.webp"
-                  }
-                  alt={p.name}
-                  width={300}
-                  height={300}
-                  // sizes="(max-width: 768px) 30vw"
-                />
-                <Label className="flex text-lg ml-2 items-center font-bold">
+                <ShopImage product={p} />
+
+                <Label className="flex text-lg ml-2 font-bold">
                   S/. {p.price}
                 </Label>
               </Card>
             </Link>
             <div className="absolute bottom-1 right-1">
               <button
-                className="rounded-full relative border-2 border-black w-10 h-10 items-center flex justify-center bg-white"
+                className="rounded-full relative border-2 border-black w-10 h-10 md:w-[70px] md:h-[70px] items-center flex justify-center bg-white"
                 onClick={() => AddToBag(p, bagProducts, setBagProducts)}
               >
                 {/* <ShoppingBag /> */}
@@ -156,7 +149,7 @@ export const Shop = ({ categories, products }: ShopProps) => {
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="w-6 h-6"
+                  className="w-6 h-6 md:w-12 md:h-12"
                   overflow="visible"
                 >
                   <path
@@ -177,9 +170,6 @@ export const Shop = ({ categories, products }: ShopProps) => {
                     +
                   </text>
                 </svg>
-                {/* <div className="absolute w-[0.1%] h-[0.1px]">
-                  <Plus />
-                </div> */}
               </button>
             </div>
           </div>
