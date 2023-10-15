@@ -18,6 +18,7 @@ import { Input } from "./ui/input";
 import { useToast } from "./ui/use-toast";
 import { Loading } from "./Loading";
 import { ShopImage } from "./ShopImage";
+import { Product } from "./Product";
 
 interface ShopProps {
   categories: readonly ProductCategoryPropsFragment[];
@@ -32,7 +33,6 @@ export const Shop = ({ categories, products }: ShopProps) => {
   const [category, setCategory] = useState("all");
   const { categoryId, setCategoryId } = useCategoryContext();
   const [initialRenderComplete, setInitialRenderComplete] = useState(false);
-  const { bagProducts, setBagProducts } = useBagContext();
 
   useEffect(() => {
     setInitialRenderComplete(true);
@@ -124,55 +124,7 @@ export const Shop = ({ categories, products }: ShopProps) => {
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 px-4 pt-4">
         {filteredProducts.map((p) => (
-          <div key={p.id} className="relative">
-            <Link key={p.name} href={`/productos/${p.id}`}>
-              <Card className="flex flex-col rounded-sm md:h-[430px] h-[220px]">
-                <Label className="flex text-xs md:text-base h-8 justify-center items-center">
-                  {p.name}
-                </Label>
-                <ShopImage product={p} />
-
-                <Label className="flex text-lg ml-2 font-bold">
-                  S/. {p.price}
-                </Label>
-              </Card>
-            </Link>
-            <div className="absolute bottom-1 right-1">
-              <button
-                className="rounded-full relative border-2 border-black w-10 h-10 md:w-[70px] md:h-[70px] items-center flex justify-center bg-white"
-                onClick={() => AddToBag(p, bagProducts, setBagProducts)}
-              >
-                {/* <ShoppingBag /> */}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6 md:w-12 md:h-12"
-                  overflow="visible"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
-                  />
-
-                  <circle
-                    cx="18"
-                    cy="19"
-                    r="6"
-                    fill="white"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                  />
-                  <text x="14" y="23" fontSize="13" className="font-thin">
-                    +
-                  </text>
-                </svg>
-              </button>
-            </div>
-          </div>
+          <Product key={p.id} product={p} />
         ))}
       </div>
     </div>
