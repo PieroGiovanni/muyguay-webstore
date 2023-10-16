@@ -8,12 +8,13 @@ interface ProductImageProps {
 
 export const ProductImage = ({ productPublicId }: ProductImageProps) => {
   return (
-    <CldImage
-      src={productPublicId}
-      alt={productPublicId}
-      width={500}
-      height={500}
-      sizes="90vw"
-    />
+    <div className="md:w-[30vw] md:h-[30vw] w-[90vw] h-[90vw] relative">
+      <CldImage
+        src={productPublicId}
+        alt={productPublicId}
+        fill
+        sizes="(max-width: 768px) 90vw, (max-width: 1200px) 30vw, 33vw"
+      />
+    </div>
   );
 };

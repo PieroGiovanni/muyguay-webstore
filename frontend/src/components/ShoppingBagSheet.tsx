@@ -105,6 +105,7 @@ export const ShoppingBagSheet = ({}: ShoppingBagSheetProps) => {
                     }
                     alt={bp.name}
                     fill
+                    sizes="10vw"
                   />
                 </div>
                 <div className="flex flex-col text-sm">
