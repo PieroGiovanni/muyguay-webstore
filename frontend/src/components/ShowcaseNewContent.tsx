@@ -1,8 +1,8 @@
-import { useState, useRef } from "react";
+import { useRef, useState } from "react";
 import { ProductPropsFragment } from "../graphql/generated/graphql";
 import { ScrollLeftButton } from "./Buttons/ScrollLeftButton";
 import { ScrollRightButton } from "./Buttons/ScrollRightButton";
-import { ShowCaseProduct } from "./ShowCaseProduct";
+import { Product } from "./Product";
 
 interface ShowcaseNewContentProps {
   products: readonly ProductPropsFragment[];
@@ -22,7 +22,12 @@ export const ShowcaseNewContent = ({ products }: ShowcaseNewContentProps) => {
           .sort((a, b) => Date.parse(b.updatedAt) - Date.parse(a.updatedAt))
           .slice(0, 5)
           .map((p) => (
-            <ShowCaseProduct key={p.id} product={p} />
+            <div
+              key={p.id}
+              className="flex shrink-0 w-[50vw] md:w-[25vw] sm:w-[33vw]"
+            >
+              <Product product={p} />
+            </div>
           ))}
       </div>
       <ScrollLeftButton scrolling={scrolling} containerRef={containerRef} />

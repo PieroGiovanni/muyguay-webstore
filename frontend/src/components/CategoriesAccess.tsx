@@ -16,22 +16,22 @@ export const CategoriesAccess = ({}: CategoriesAccessProps) => {
   };
   return (
     <div className="grid grid-cols-2 gap-0.5">
-      <Button className="h-20" onClick={() => handleCategory(1)}>
+      <Button className="h-20 md:text-xl" onClick={() => handleCategory(1)}>
         Ropa
       </Button>
-      <Button className="h-20" onClick={() => handleCategory(2)}>
+      <Button className="h-20 md:text-xl" onClick={() => handleCategory(2)}>
         Maquillaje
       </Button>
-      <Button className="h-20" onClick={() => handleCategory(3)}>
+      <Button className="h-20 md:text-xl" onClick={() => handleCategory(3)}>
         Joyería
       </Button>
-      <Button className="h-20" onClick={() => handleCategory(4)}>
+      <Button className="h-20 md:text-xl" onClick={() => handleCategory(4)}>
         Belleza
       </Button>
-      <Button className="h-20" onClick={() => handleCategory(5)}>
+      <Button className="h-20 md:text-xl" onClick={() => handleCategory(5)}>
         Accesorios
       </Button>
-      <Button className="h-20" onClick={() => handleCategory(6)}>
+      <Button className="h-20 md:text-xl" onClick={() => handleCategory(6)}>
         Calzado
       </Button>
     </div>

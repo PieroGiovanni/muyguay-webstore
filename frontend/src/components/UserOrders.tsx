@@ -27,7 +27,7 @@ import { Loading } from "./Loading";
 interface userOrdersProps {}
 
 export const UserOrders = ({}: userOrdersProps) => {
-  const { data: userData, status } = useSession({ required: true });
+  const { data: userData } = useSession({ required: true });
   const { data: orderData } = useQuery(GetOrdersByUserIdDocument, {
     variables: { userId: userData?.user.id! },
     fetchPolicy: "no-cache",
@@ -61,7 +61,7 @@ export const UserOrders = ({}: userOrdersProps) => {
     }
   };
 
-  return orders && orders.length > 0 && status !== "loading" ? (
+  return orders && orders.length > 0 ? (
     <div className="pt-20 flex flex-col gap-3 items-center">
       <div className="grid grid-cols-6 place-items-center justify-center w-[95%] md:w-[50%] font-bold text-sm md:text-base">
         <p>ID</p>
@@ -120,9 +120,11 @@ export const UserOrders = ({}: userOrdersProps) => {
           </Card>
         ))}
     </div>
-  ) : status === "loading" ? (
-    <Loading />
-  ) : (
+  ) : orders?.length == 0 ? (
     <div className="mt-20 flex justify-center">No tienes pedidos</div>
+  ) : (
+    <div className="w-full h-[50vh] flex justify-center items-end">
+      <Loading />
+    </div>
   );
 };

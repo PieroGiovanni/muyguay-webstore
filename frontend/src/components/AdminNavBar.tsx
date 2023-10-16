@@ -7,6 +7,7 @@ import { HamburguerButton } from "./Buttons/HamburguerButton";
 import { useSession } from "next-auth/react";
 import { UserType } from "../graphql/generated/graphql";
 import { redirect } from "next/navigation";
+import { LogOut } from "lucide-react";
 
 interface AdminNavBarProps {}
 
@@ -20,16 +21,12 @@ export const AdminNavBar = ({}: AdminNavBarProps) => {
   return (
     <nav className="flex items-enter justify-between ">
       <AdminHamburgerButton />
-      <Link href="/" className="ml-2 text-lg font-semibold">
-        <Image
-          src={"/logomuyguay.webp"}
-          alt="Logo MuyGuay"
-          width={150}
-          height={40}
-          priority
-        />
+      <Link href="/admin" className="ml-2 text-3xl font-semibold">
+        Menu Principal
       </Link>
-      <div>N</div>
+      <Link href="/">
+        <LogOut />
+      </Link>
     </nav>
   );
 };
