@@ -4,9 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "tsc -w",
-    "dev": "nodemon dist/index.js"
+    "dev": "nodemon dist/index.js",
+    "start:prod": "node dist/index.js",
+    "start:migrate:prod": "prisma migrate deploy && npm run start:prod"
   },
   "author": "",
   "license": "ISC",
@@ -14,7 +17,8 @@
     "@types/cors": "^2.8.13",
     "nodemon": "^2.0.22",
     "prisma": "^5.2.0",
-    "typegraphql-prisma": "^0.27.0"
+    "typegraphql-prisma": "^0.27.0",
+    "typescript": "^5.2.2"
   },
   "dependencies": {
     "@apollo/server": "^4.7.3",
