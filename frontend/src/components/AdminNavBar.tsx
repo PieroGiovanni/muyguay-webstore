@@ -1,13 +1,11 @@
 "use client";
 
-import Link from "next/link";
-import Image from "next/image";
-import { AdminHamburgerButton } from "./Buttons/AdminHamburgerButton";
-import { HamburguerButton } from "./Buttons/HamburguerButton";
-import { useSession } from "next-auth/react";
-import { UserType } from "../graphql/generated/graphql";
-import { redirect } from "next/navigation";
 import { LogOut } from "lucide-react";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { UserType } from "../graphql/generated/graphql";
+import { AdminHamburgerButton } from "./Buttons/AdminHamburgerButton";
 
 interface AdminNavBarProps {}
 

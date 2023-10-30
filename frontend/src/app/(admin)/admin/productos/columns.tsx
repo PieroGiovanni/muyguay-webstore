@@ -6,7 +6,6 @@ import { Button } from "../../../../components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -18,7 +17,6 @@ import {
   DropdownMenuTrigger,
 } from "../../../../components/ui/dropdown-menu";
 import { RegularProductDataFragment } from "../../../../graphql/generated/graphql";
-import { DialogClose } from "@radix-ui/react-dialog";
 
 export type Product = {
   id: number;

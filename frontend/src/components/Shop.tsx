@@ -1,24 +1,14 @@
 "use client";
 
-import { Label } from "@radix-ui/react-label";
-import { extractPublicId } from "cloudinary-build-url";
-import { CldImage } from "next-cloudinary";
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useBagContext } from "../app/context/bagContext";
 import { useCategoryContext } from "../app/context/categoryContext";
-import { AddToBag } from "../app/utils/addToBag";
 import {
   ProductCategoryPropsFragment,
   ProductPropsFragment,
 } from "../graphql/generated/graphql";
 import { FilterButton } from "./Buttons/FilterButton";
-import { Card } from "./ui/card";
-import { Input } from "./ui/input";
-import { useToast } from "./ui/use-toast";
-import { Loading } from "./Loading";
-import { ShopImage } from "./ShopImage";
 import { Product } from "./Product";
+import { Input } from "./ui/input";
 
 interface ShopProps {
   categories: readonly ProductCategoryPropsFragment[];

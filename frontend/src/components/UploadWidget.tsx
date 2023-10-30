@@ -11,12 +11,6 @@ interface UploadWidgetProps {
 
 export const UploadWidget = ({ onImageUrl, resetImage }: UploadWidgetProps) => {
   const [loaded, setLoaded] = useState(false);
-  // const [cloudName, setCloudName] = useState(
-  //   process.env.PUBLIC_CLOUDINARY_CLOUD_NAME
-  // );
-  // const [unsignedPreset, setUnsignedPreset] = useState(
-  //   process.env.PULLIC_CLOUDINARY_PRESET
-  // );
   const [uploadedImage, setUploadedImage] = useState();
 
   useEffect(() => {
@@ -61,18 +55,6 @@ export const UploadWidget = ({ onImageUrl, resetImage }: UploadWidgetProps) => {
       setUploadedImage(undefined);
     }
   }, [resetImage]);
-
-  // const uploadWidget = () => {
-  //   //@ts-ignore
-  //   window.cloudinary.openUploadWidget(
-  //     {
-  //       cloudName: "dax2ssfpm",
-  //       uploadPreset: "muyguay-webstore",
-  //       sources: ["local", "url"],
-  //     },
-  //     proccessResults
-  //   );
-  // };
 
   return (
     <div>

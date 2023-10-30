@@ -1,31 +1,20 @@
 "use client";
 
 import { useMutation } from "@apollo/client";
-import { useState } from "react";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
-import { parseStringToArray } from "../../app/utils/stringUtils";
-import {
-  CreateProductDocument,
-  AddProductImageDocument,
-  BrandPropsFragment,
-  ProductTypePropsFragment,
-} from "../../graphql/generated/graphql";
-import { LoadingSkeleton } from "../LoadingSkeleton";
-import { UploadWidget } from "../UploadWidget";
-import { Button } from "../ui/button";
-import { Textarea } from "../ui/textarea";
-import * as z from "zod";
-import { set, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { parseStringToArray } from "../app/utils/stringUtils";
+import {
+  BrandPropsFragment,
+  CreateProductDocument,
+  ProductTypePropsFragment,
+} from "../graphql/generated/graphql";
+import { LoadingSkeleton } from "./LoadingSkeleton";
+import { UploadWidget } from "./UploadWidget";
+import { Button } from "./ui/button";
 import {
   Form,
   FormControl,
@@ -33,10 +22,19 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
-import { toast } from "../ui/use-toast";
-import { useRouter } from "next/navigation";
-import { valueFromAST } from "graphql";
+} from "./ui/form";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import { Textarea } from "./ui/textarea";
+import { toast } from "./ui/use-toast";
 
 interface AddProductFormProps {
   brands: readonly BrandPropsFragment[];
@@ -66,8 +64,6 @@ export const AddProductForm = ({
 }: AddProductFormProps) => {
   const [addProduct] = useMutation(CreateProductDocument);
 
-  // const [isFeatured, setIsFeatured] = useState<boolean>(false);
-  // const [brandId, setBrandId] = useState<number>(1);
   const [imageUrl, setImageUrl] = useState();
   const [resetImage, setResetImage] = useState(false);
 
@@ -93,39 +89,37 @@ export const AddProductForm = ({
   const router = useRouter();
 
   const saveChanges = async (data: z.infer<typeof FormSchema>) => {
-    // if (imageUrl === undefined) {
-    //   toast({
-    //     title: "Agregar Imagen",
-    //   });
-    // } else {
-    //   const newProdcut = await addProduct({
-    //     variables: {
-    //       productInput: {
-    //         name: data.name,
-    //         price: data.price,
-    //         productTypeId: parseInt(data.productType),
-    //         description: data.description,
-    //         brandId,
-    //         tags: parseStringToArray(data.tags),
-    //         isFeatured,
-    //         stock: data.stock,
-    //         imageUrl,
-    //       },
-    //     },
-    //   });
-    //   if (newProdcut) {
-    //     toast({
-    //       title: "Producto Agregado",
-    //     });
-    console.log("brand: ", data.brandId);
-    console.log("featured: ", data.featured);
-    setImageUrl(undefined);
-    // setIsFeatured(false);
-    // setBrandId(1);
-    form.reset();
-    setResetImage(true);
-    //   }
-    // }
+    if (imageUrl === undefined) {
+      toast({
+        title: "Agregar Imagen",
+      });
+      return;
+    }
+
+    const newProdcut = await addProduct({
+      variables: {
+        productInput: {
+          name: data.name,
+          price: data.price,
+          productTypeId: parseInt(data.productType),
+          description: data.description,
+          brandId: data.brandId,
+          tags: parseStringToArray(data.tags),
+          isFeatured: data.featured,
+          stock: data.stock,
+          imageUrl,
+        },
+      },
+    });
+
+    if (newProdcut) {
+      toast({
+        title: "Producto Agregado",
+      });
+      setImageUrl(undefined);
+      form.reset();
+      setResetImage(true);
+    }
   };
 
   return productTypes && brands ? (
@@ -191,7 +185,6 @@ export const AddProductForm = ({
                       onValueChange={(e) => {
                         field.onChange(e === "featured" ? true : false);
                       }}
-                      // defaultValue="notFeatured"
                       value={field.value ? "featured" : "notFeatured"}
                       className="flex flex-row basis-2/3"
                     >

@@ -1,19 +1,17 @@
 "use client";
 
-import { useQuery } from "@apollo/client";
 import { useSession } from "next-auth/react";
 import {
   GetOrdersByUserIdDocument,
-  OrderPropsFragment,
   OrderPropsFragmentDoc,
   PaymentStatus,
   ShippingStatus,
-  ShippingStatusEnum,
 } from "../graphql/generated/graphql";
 
+import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import { getDateFromTimteStamp } from "../app/utils/dateUtils";
 import { getFragmentData } from "../graphql/generated/fragment-masking";
-import { LoadingSkeleton } from "./LoadingSkeleton";
+import { Loading } from "./Loading";
 import {
   Accordion,
   AccordionContent,
@@ -22,13 +20,12 @@ import {
 } from "./ui/accordion";
 import { Card } from "./ui/card";
 import { Separator } from "./ui/separator";
-import { Loading } from "./Loading";
 
 interface userOrdersProps {}
 
 export const UserOrders = ({}: userOrdersProps) => {
   const { data: userData } = useSession({ required: true });
-  const { data: orderData } = useQuery(GetOrdersByUserIdDocument, {
+  const { data: orderData } = useSuspenseQuery(GetOrdersByUserIdDocument, {
     variables: { userId: userData?.user.id! },
     fetchPolicy: "no-cache",
   });

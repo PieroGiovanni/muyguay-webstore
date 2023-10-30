@@ -1,9 +1,8 @@
-import { useRef } from "react";
+import { ScrollDownButton } from "../../components/Buttons/ScrollDownButton";
 import { VerProductsButton } from "../../components/Buttons/VerProductsButton";
 import { CategoriesAccess } from "../../components/CategoriesAccess";
 import { Showcase } from "../../components/Showcase";
 import { getProducts } from "../api/queries";
-import { ScrollDownButton } from "../../components/Buttons/ScrollDownButton";
 
 export default async function Home() {
   const products = await getProducts();

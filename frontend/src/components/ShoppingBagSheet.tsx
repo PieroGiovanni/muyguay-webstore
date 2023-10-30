@@ -1,25 +1,22 @@
 "use client";
 
+import { extractPublicId } from "cloudinary-build-url";
+import { Trash2 } from "lucide-react";
+import { CldImage } from "next-cloudinary";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { useBagContext } from "../app/context/bagContext";
 import { Button } from "./ui/button";
-import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetDescription,
   SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "./ui/sheet";
-import { useBagContext } from "../app/context/bagContext";
-import { CldImage } from "next-cloudinary";
-import { extractPublicId } from "cloudinary-build-url";
-import { Separator } from "./ui/separator";
-import { Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
-import Link from "next/link";
 
 interface ShoppingBagSheetProps {}
 

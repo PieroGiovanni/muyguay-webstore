@@ -7,7 +7,7 @@ import { Button } from "./ui/button";
 interface CategoriesAccessProps {}
 
 export const CategoriesAccess = ({}: CategoriesAccessProps) => {
-  const { categoryId, setCategoryId } = useCategoryContext();
+  const { setCategoryId } = useCategoryContext();
   const router = useRouter();
 
   const handleCategory = (id: number) => {

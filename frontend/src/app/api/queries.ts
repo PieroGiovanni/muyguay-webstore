@@ -1,4 +1,3 @@
-import { fdatasync } from "fs";
 import { getFragmentData } from "../../graphql/generated/fragment-masking";
 import {
   BrandPropsFragment,
@@ -8,7 +7,6 @@ import {
   GetProductCategoriesDocument,
   GetProductTypesDocument,
   GetProductsDataDocument,
-  GetProductsDataQuery,
   GetProductsDocument,
   GetUserByEmailDocument,
   OrderPropsFragment,

@@ -70,7 +70,7 @@ export const RegisterForm = ({}: RegisterFormProps) => {
     showError: false,
     message: "",
   });
-  const [register, { data, loading, error }] = useMutation(RegisterDocument);
+  const [register, { data }] = useMutation(RegisterDocument);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (values.password !== values.repeatPassword) {

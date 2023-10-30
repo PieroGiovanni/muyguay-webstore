@@ -1,9 +1,7 @@
 import { Menu } from "lucide-react";
-import { Sheet, SheetClose, SheetContent, SheetTrigger } from "../ui/sheet";
-import { left } from "@cloudinary/url-gen/qualifiers/textAlignment";
-import { Label } from "../ui/label";
 import Link from "next/link";
-import { Separator } from "../ui/separator";
+import { Label } from "../ui/label";
+import { Sheet, SheetClose, SheetContent, SheetTrigger } from "../ui/sheet";
 
 interface AdminHamburgerButtonProps {}
 

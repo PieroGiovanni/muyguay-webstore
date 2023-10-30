@@ -1,7 +1,4 @@
 import { DataTableComponent } from "../../../../components/DataTableComponent";
-import { getProductsData } from "../../../api/queries";
-import { columns } from "./columns";
-import { DataTable } from "./dataTable";
 
 interface PageProps {}
 
