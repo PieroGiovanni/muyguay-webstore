@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.8.6",
-    "@apollo/experimental-nextjs-app-support": "^0.3.5",
+    "@apollo/experimental-nextjs-app-support": "^0.5.0",
     "@cloudinary/react": "^1.11.2",
     "@cloudinary/url-gen": "^1.11.1",
     "@hookform/resolvers": "^3.1.1",
@@ -38,7 +38,7 @@
     "graphql": "^16.7.1",
     "lucide-react": "^0.246.0",
     "next": "^14.0.1",
-    "next-auth": "^4.22.1",
+    "next-auth": "^4.24.4",
     "next-cloudinary": "^5.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
