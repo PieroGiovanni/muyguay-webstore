@@ -26,7 +26,7 @@ interface userOrdersProps {}
 export const UserOrders = ({}: userOrdersProps) => {
   const { data: userData } = useSession({ required: true });
   const { data: orderData } = useSuspenseQuery(GetOrdersByUserIdDocument, {
-    variables: { userId: userData?.user.id! },
+    variables: { userId: userData?.user.id || 0 },
     fetchPolicy: "no-cache",
   });
 

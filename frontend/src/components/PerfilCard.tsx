@@ -22,7 +22,7 @@ interface PerfilCardProps {}
 export const PerfilCard = ({}: PerfilCardProps) => {
   const { data: userData, status } = useSession({ required: true });
   const { data: userInfo } = useSuspenseQuery(GetUserByIdDocument, {
-    variables: { id: userData?.user.id! },
+    variables: { id: userData?.user.id || 0 },
   });
   const [editing, setEditing] = useState(false);
   const [updateUser] = useMutation(UpdateUserDocument);
