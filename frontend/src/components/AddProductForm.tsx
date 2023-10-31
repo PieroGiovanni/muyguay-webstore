@@ -35,6 +35,8 @@ import {
 } from "./ui/select";
 import { Textarea } from "./ui/textarea";
 import { toast } from "./ui/use-toast";
+import Link from "next/link";
+import action from "../app/actions";
 
 interface AddProductFormProps {
   brands: readonly BrandPropsFragment[];
@@ -119,6 +121,7 @@ export const AddProductForm = ({
       setImageUrl(undefined);
       form.reset();
       setResetImage(true);
+      action();
     }
   };
 
@@ -314,8 +317,9 @@ export const AddProductForm = ({
             <Button className="w-32" type="submit">
               Guardar
             </Button>
-
-            <Button>Cancelar</Button>
+            <Link href="/admin">
+              <Button>Cancelar</Button>
+            </Link>
           </div>
         </div>
       </form>

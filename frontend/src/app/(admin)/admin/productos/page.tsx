@@ -3,7 +3,6 @@ import { DataTableComponent } from "../../../../components/DataTableComponent";
 interface PageProps {}
 
 const Page = async ({}: PageProps) => {
-  // const data = await getProductsData();
   return (
     <div className="flex justify-center">
       <div className="w-[90%] flex items-center flex-col">

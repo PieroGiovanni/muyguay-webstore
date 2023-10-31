@@ -41,8 +41,6 @@ export const FilterButton = ({
     }
   }, [defaultCategory]);
 
-  console.log("CATEGORY: ", defaultCategory);
-
   return (
     <div className="text-xs">
       <DropdownMenu>

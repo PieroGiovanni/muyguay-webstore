@@ -19,7 +19,7 @@ export const DataTableComponent = ({}: DataTableComponentProps) => {
     productsData?.getProducts!
   );
   return data ? (
-    <DataTable columns={columns} data={[...data].sort((a, b) => a.id - b.id)} />
+    <DataTable columns={columns} data={[...data].sort((a, b) => b.id - a.id)} />
   ) : (
     <LoadingSkeleton />
   );

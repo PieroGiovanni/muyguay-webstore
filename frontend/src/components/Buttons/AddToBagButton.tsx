@@ -1,9 +1,10 @@
 "use client";
 
+import { useEffect } from "react";
 import { useBagContext } from "../../app/context/bagContext";
-import { AddToBag } from "../../app/utils/addToBag";
-import { ProductPropsFragment } from "../../graphql/generated/graphql";
 import { Button } from "../ui/button";
+import { ProductPropsFragment } from "../../graphql/generated/graphql";
+import { AddToBag } from "../../app/utils/addToBag";
 
 interface AddToBagButtonProps {
   product: ProductPropsFragment;

@@ -56,7 +56,6 @@ export const authOptions: NextAuthOptions = {
             email: user.email!,
             displayName: user.name!,
           });
-          console.log("GOOGLE USER ADDED: ", newUser);
         }
       }
 

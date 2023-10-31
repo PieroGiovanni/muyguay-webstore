@@ -18,9 +18,6 @@ import { Sheet, SheetClose, SheetContent, SheetTrigger } from "../ui/sheet";
 interface HamburguerButtonProps {}
 
 export const HamburguerButton = ({}: HamburguerButtonProps) => {
-  // const pathname = usePathname();
-
-  // console.log(pathname);
   const { data: session } = useSession();
   return (
     <Sheet>

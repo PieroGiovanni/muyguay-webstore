@@ -37,10 +37,6 @@ export const UpdateOrderDialog = ({ order }: UpdateOrderDialogProps) => {
   const [shippingStatus, setShippingStatus] = useState<ShippingStatusEnum>();
   const [updateOrder] = useMutation(UpdateOrderDocument);
 
-  useEffect(() => {
-    console.log(paymentStatus);
-  }, [paymentStatus]);
-
   const handleSaveButton = () => {
     updateOrder({
       variables: {

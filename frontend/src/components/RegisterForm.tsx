@@ -120,10 +120,6 @@ export const RegisterForm = ({}: RegisterFormProps) => {
     }
   };
 
-  useEffect(() => {
-    console.log("DATA :", data);
-  }, [data]);
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
