@@ -1,5 +1,4 @@
 import { NextAuthOptions } from "next-auth";
-import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { AddGoogleUser, Login } from "../api/mutations";
@@ -57,7 +56,6 @@ export const authOptions: NextAuthOptions = {
             email: user.email!,
             displayName: user.name!,
           });
-          console.log("GOOGLE USER ADDED: ", newUser);
         }
       }
 

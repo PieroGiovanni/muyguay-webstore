@@ -1,31 +1,29 @@
 "use client";
 
+import { extractPublicId } from "cloudinary-build-url";
+import { Trash2 } from "lucide-react";
+import { CldImage } from "next-cloudinary";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { ProductWithQuantity, useBagContext } from "../app/context/bagContext";
 import { Button } from "./ui/button";
-import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetDescription,
   SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "./ui/sheet";
-import { useBagContext } from "../app/context/bagContext";
-import { CldImage } from "next-cloudinary";
-import { extractPublicId } from "cloudinary-build-url";
-import { Separator } from "./ui/separator";
-import { Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
-import Link from "next/link";
 
 interface ShoppingBagSheetProps {}
 
 export const ShoppingBagSheet = ({}: ShoppingBagSheetProps) => {
   const { bagProducts, setBagProducts } = useBagContext();
   const [total, setTotal] = useState(0);
+  const [products, setProducts] = useState<ProductWithQuantity[]>();
 
   const addQuantity = (productId: number) => {
     setBagProducts(
@@ -59,6 +57,8 @@ export const ShoppingBagSheet = ({}: ShoppingBagSheetProps) => {
       total = total + p.price * p.quantity;
     });
     setTotal(total);
+
+    setProducts(bagProducts);
   }, [bagProducts]);
 
   return (
@@ -79,9 +79,9 @@ export const ShoppingBagSheet = ({}: ShoppingBagSheetProps) => {
               d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
             />
           </svg>
-          {bagProducts.length > 0 ? (
+          {products?.length !== 0 ? (
             <span className="absolute top-6 right-0 flex items-center justify-center w-4 h-4 rounded-full bg-black text-white text-xs">
-              {bagProducts.length}
+              {products?.length}
             </span>
           ) : null}
         </button>

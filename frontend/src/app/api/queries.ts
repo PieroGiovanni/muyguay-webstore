@@ -1,4 +1,3 @@
-import { fdatasync } from "fs";
 import { getFragmentData } from "../../graphql/generated/fragment-masking";
 import {
   BrandPropsFragment,
@@ -8,7 +7,6 @@ import {
   GetProductCategoriesDocument,
   GetProductTypesDocument,
   GetProductsDataDocument,
-  GetProductsDataQuery,
   GetProductsDocument,
   GetUserByEmailDocument,
   OrderPropsFragment,
@@ -44,6 +42,13 @@ export const getProducts = async (): Promise<
 > => {
   const { data } = await getClient().query({
     query: GetProductsDocument,
+    context: {
+      fetchOptions: {
+        next: {
+          tags: ["products"],
+        },
+      },
+    },
   });
   return getFragmentData(ProductPropsFragmentDoc, data.getProducts);
 };
@@ -63,29 +68,6 @@ export const getProductCategories = async (): Promise<
   });
 
   return getFragmentData(ProductCategoryPropsFragmentDoc, getProductCategories);
-};
-
-export const getOrdersByUserId = async (
-  id: number
-): Promise<readonly OrderPropsFragment[]> => {
-  const { data } = await getClient().query({
-    query: GetOrdersByUserIdDocument,
-    variables: {
-      userId: id,
-    },
-  });
-
-  return getFragmentData(OrderPropsFragmentDoc, data.getOrdersByUserId);
-};
-
-export const getProductsData = async (): Promise<
-  readonly RegularProductDataFragment[]
-> => {
-  const { data } = await getClient().query({
-    query: GetProductsDataDocument,
-  });
-
-  return getFragmentData(RegularProductDataFragmentDoc, data.getProducts);
 };
 
 export const getProductTypes = async (): Promise<

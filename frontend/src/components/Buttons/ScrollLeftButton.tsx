@@ -1,5 +1,5 @@
 import { ArrowBigLeft } from "lucide-react";
-import { MutableRefObject, useRef, useState } from "react";
+import { MutableRefObject } from "react";
 
 interface ScrollLeftButtonProps {
   scrolling: number;

@@ -19,14 +19,13 @@ interface BagContextType {
 const BagContext = createContext({});
 
 export const BagContextProvider = ({ children }: BagContextProviderProps) => {
-  const [bagProducts, setBagProducts] = useState<ProductWithQuantity[]>([]);
+  const savedBagProducts = global?.localStorage?.getItem("bagProducts");
+  const initialBagProducts = savedBagProducts
+    ? JSON.parse(savedBagProducts)
+    : [];
 
-  useEffect(() => {
-    const savedBagProducts = localStorage.getItem("bagProducts");
-    if (savedBagProducts) {
-      setBagProducts(JSON.parse(savedBagProducts));
-    }
-  }, []);
+  const [bagProducts, setBagProducts] =
+    useState<ProductWithQuantity[]>(initialBagProducts);
 
   useEffect(() => {
     localStorage.setItem("bagProducts", JSON.stringify(bagProducts));

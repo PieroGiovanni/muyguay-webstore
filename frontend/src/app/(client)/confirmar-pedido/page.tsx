@@ -15,7 +15,7 @@ import {
 import { Separator } from "../../../components/ui/separator";
 import { toast } from "../../../components/ui/use-toast";
 import { CreateOrderDocument } from "../../../graphql/generated/graphql";
-import { useBagContext } from "../../context/bagContext";
+import { ProductWithQuantity, useBagContext } from "../../context/bagContext";
 
 interface PageProps {}
 
@@ -26,6 +26,7 @@ const Page = ({}: PageProps) => {
   const router = useRouter();
   const { data } = useSession({ required: true });
   const [createOrder] = useMutation(CreateOrderDocument);
+  const [products, setProducts] = useState<ProductWithQuantity[]>();
 
   const userName = data?.user.name;
   useEffect(() => {
@@ -46,6 +47,7 @@ const Page = ({}: PageProps) => {
 
     setTotal(total);
     setText(text + "\n" + "TOTAL: S/. " + total);
+    setProducts(bagProducts);
   }, [bagProducts, userName]);
 
   const whatsappURL = `https://wa.me/51955119590?text=${encodeURIComponent(
@@ -89,7 +91,7 @@ const Page = ({}: PageProps) => {
             <p className="col-span-2">Nombre</p>
             <p>Precio</p>
           </div>
-          {bagProducts.map((p) => (
+          {products?.map((p) => (
             <div key={p.id} className="grid grid-cols-4 justify-items-center">
               <p>{p.quantity}</p>
               <p className="col-span-2">{p.name}</p>

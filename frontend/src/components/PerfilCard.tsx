@@ -8,7 +8,7 @@ import {
   UserPropsFragmentDoc,
 } from "../graphql/generated/graphql";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { useQuery } from "@apollo/experimental-nextjs-app-support/ssr";
+import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import { LoadingSkeleton } from "./LoadingSkeleton";
 import { Label } from "./ui/label";
 import { Separator } from "./ui/separator";
@@ -21,8 +21,8 @@ interface PerfilCardProps {}
 
 export const PerfilCard = ({}: PerfilCardProps) => {
   const { data: userData, status } = useSession({ required: true });
-  const { data: userInfo } = useQuery(GetUserByIdDocument, {
-    variables: { id: userData?.user.id! },
+  const { data: userInfo } = useSuspenseQuery(GetUserByIdDocument, {
+    variables: { id: userData?.user.id || 0 },
   });
   const [editing, setEditing] = useState(false);
   const [updateUser] = useMutation(UpdateUserDocument);

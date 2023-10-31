@@ -1,4 +1,4 @@
-import { AddProductForm } from "../../../../components/Buttons/AddProductForm";
+import { AddProductForm } from "../../../../components/AddProductForm";
 import { getBrands, getProductTypes } from "../../../api/queries";
 
 interface PageProps {}

@@ -20,7 +20,7 @@ export const ShowcaseNewContent = ({ products }: ShowcaseNewContentProps) => {
       >
         {[...products]
           .sort((a, b) => Date.parse(b.updatedAt) - Date.parse(a.updatedAt))
-          .slice(0, 5)
+          .slice(0, 8)
           .map((p) => (
             <div
               key={p.id}

@@ -12,17 +12,12 @@ import {
 } from "lucide-react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Button } from "../ui/button";
-import { Sheet, SheetClose, SheetContent, SheetTrigger } from "../ui/sheet";
 import { UserType } from "../../graphql/generated/graphql";
+import { Sheet, SheetClose, SheetContent, SheetTrigger } from "../ui/sheet";
 
 interface HamburguerButtonProps {}
 
 export const HamburguerButton = ({}: HamburguerButtonProps) => {
-  // const pathname = usePathname();
-
-  // console.log(pathname);
   const { data: session } = useSession();
   return (
     <Sheet>

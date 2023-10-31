@@ -1,5 +1,5 @@
 import { useMutation } from "@apollo/client";
-import { useQuery } from "@apollo/experimental-nextjs-app-support/ssr";
+import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { useEffect, useState } from "react";
 import {
@@ -29,24 +29,20 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Textarea } from "./ui/textarea";
+import action from "../app/actions";
 
 interface UpdateProductFormProps {
   productId: number;
 }
 
 export const UpdateProductForm = ({ productId }: UpdateProductFormProps) => {
-  const { data: productData, loading: loadingProducts } = useQuery(
-    GetProductDocument,
-    {
-      variables: { getProductId: productId },
-    }
-  );
+  const { data: productData } = useSuspenseQuery(GetProductDocument, {
+    variables: { getProductId: productId },
+  });
 
-  const { data: productTypeData, loading: loadingProductTypes } = useQuery(
-    GetProductTypesDocument
-  );
+  const { data: productTypeData } = useSuspenseQuery(GetProductTypesDocument);
 
-  const { data: brandData } = useQuery(GetBrandsDocument);
+  const { data: brandData } = useSuspenseQuery(GetBrandsDocument);
 
   const [updateProduct] = useMutation(UpdateProductDocument);
 
@@ -98,6 +94,7 @@ export const UpdateProductForm = ({ productId }: UpdateProductFormProps) => {
         },
       },
     });
+    action();
   };
 
   return product && productTypes && brands ? (

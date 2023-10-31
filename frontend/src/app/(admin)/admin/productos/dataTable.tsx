@@ -11,6 +11,9 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { useState } from "react";
+import { Button } from "../../../../components/ui/button";
+import { Input } from "../../../../components/ui/input";
 import {
   Table,
   TableBody,
@@ -19,15 +22,6 @@ import {
   TableHeader,
   TableRow,
 } from "../../../../components/ui/table";
-import { Button } from "../../../../components/ui/button";
-import { useState } from "react";
-import { Input } from "../../../../components/ui/input";
-import { useQuery } from "@apollo/experimental-nextjs-app-support/ssr";
-import { getFragmentData } from "../../../../graphql/generated";
-import {
-  GetProductsDataDocument,
-  RegularProductDataFragmentDoc,
-} from "../../../../graphql/generated/graphql";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

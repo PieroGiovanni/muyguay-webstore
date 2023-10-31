@@ -1,10 +1,8 @@
-import { ApolloWrapper } from "../../lib/apolloWrapper";
-import { BagContextProvider } from "../context/bagContext";
-import { CategoryContextProvider } from "../context/categoryContext";
-import { AuthProvider } from "../prodivers/AuthProvider";
-import "../../styles/globals.css";
-import { Toaster } from "../../components/ui/toaster";
 import { AdminNavBar } from "../../components/AdminNavBar";
+import { Toaster } from "../../components/ui/toaster";
+import { ApolloWrapper } from "../../lib/apolloWrapper";
+import "../../styles/globals.css";
+import { AuthProvider } from "../prodivers/AuthProvider";
 
 export default function AdminLayout({
   children, // will be a page or nested layout

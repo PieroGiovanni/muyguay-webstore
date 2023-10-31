@@ -22,6 +22,7 @@ export const ShowcaseFeaturedContent = ({
       >
         {products
           ?.filter((p) => p.isFeatured)
+          .sort((a, b) => Date.parse(b.updatedAt) - Date.parse(a.updatedAt))
           .map((p) => (
             <div
               key={p.id}

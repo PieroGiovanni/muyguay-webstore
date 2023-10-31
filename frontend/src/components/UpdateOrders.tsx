@@ -1,34 +1,32 @@
 "use client";
 
-import { useQuery } from "@apollo/client";
+import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
+import { getDateFromTimteStamp } from "../app/utils/dateUtils";
 import { getFragmentData } from "../graphql/generated";
 import {
   GetOrdersDocument,
   OrderPropsFragmentDoc,
 } from "../graphql/generated/graphql";
 import { LoadingSkeleton } from "./LoadingSkeleton";
-import { Card, CardContent } from "./ui/card";
-import { getDateFromTimteStamp } from "../app/utils/dateUtils";
+import { UpdateOrderDialog } from "./UpdateOrderDialog";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "./ui/accordion";
-import { FileEdit } from "lucide-react";
-import { UpdateOrderDialog } from "./UpdateOrderDialog";
 
 interface UpdateOrdersProps {}
 
 export const UpdateOrders = ({}: UpdateOrdersProps) => {
-  const { data } = useQuery(GetOrdersDocument);
+  const { data } = useSuspenseQuery(GetOrdersDocument);
   const orders = getFragmentData(OrderPropsFragmentDoc, data?.getOrders);
 
   return orders ? (
     <div>
       <div className="grid grid-cols-6 items-center justify-items-center gap-2">
         <p>ID</p>
-        <p>Fecha2</p>
+        <p>Fecha</p>
         <p>Usuario</p>
         <p className="col-span-2">Importe</p>
         <p>Editar</p>
