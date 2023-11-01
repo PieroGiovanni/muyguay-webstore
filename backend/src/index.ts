@@ -31,7 +31,7 @@ const main = async () => {
 
   app.use(
     "/",
-    cors<CorsRequest>(),
+    cors<CorsRequest>({ origin: process.env.CORS_ORIGIN, credentials: true }),
     bodyParser.json(),
     expressMiddleware(apolloServer, {
       context: async () => {
