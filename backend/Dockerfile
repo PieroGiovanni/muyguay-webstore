@@ -11,6 +11,7 @@ COPY prisma ./prisma/
 RUN npm install
 
 COPY . .
+COPY .env.production .env
 
 #RUN npx prisma generate
 

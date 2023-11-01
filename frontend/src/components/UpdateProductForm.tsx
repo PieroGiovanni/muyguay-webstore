@@ -94,7 +94,7 @@ export const UpdateProductForm = ({ productId }: UpdateProductFormProps) => {
         },
       },
     });
-    action();
+    // action();
   };
 
   return product && productTypes && brands ? (
