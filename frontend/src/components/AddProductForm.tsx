@@ -10,7 +10,7 @@ import { parseStringToArray } from "../app/utils/stringUtils";
 import {
   BrandPropsFragment,
   CreateProductDocument,
-  ProductTypePropsFragment,
+  ProductCategoryPropsFragment,
 } from "../graphql/generated/graphql";
 import { LoadingSkeleton } from "./LoadingSkeleton";
 import { UploadWidget } from "./UploadWidget";
@@ -40,14 +40,14 @@ import action from "../app/actions";
 
 interface AddProductFormProps {
   brands: readonly BrandPropsFragment[];
-  productTypes: readonly ProductTypePropsFragment[];
+  productCategories: readonly ProductCategoryPropsFragment[];
 }
 
 const FormSchema = z.object({
   name: z.string().nonempty({ message: "ingresar nombre del producto" }),
-  productType: z
-    .string({ required_error: "elegir tipo de producto" })
-    .nonempty({ message: "elegir tipo de producto2" }),
+  productCategory: z
+    .string({ required_error: "elegir categoría" })
+    .nonempty({ message: "elegir categoría" }),
   price: z.coerce
     .number({ invalid_type_error: "ingresar precio" })
     .positive({ message: "ingresar precio" }),
@@ -62,7 +62,7 @@ const FormSchema = z.object({
 
 export const AddProductForm = ({
   brands,
-  productTypes,
+  productCategories,
 }: AddProductFormProps) => {
   const [addProduct] = useMutation(CreateProductDocument);
 
@@ -82,7 +82,7 @@ export const AddProductForm = ({
       description: "",
       stock: 1,
       tags: "",
-      productType: "",
+      productCategory: "",
       brandId: 1,
       featured: false,
     },
@@ -103,7 +103,7 @@ export const AddProductForm = ({
         productInput: {
           name: data.name,
           price: data.price,
-          productTypeId: parseInt(data.productType),
+          productCategoryId: parseInt(data.productCategory),
           description: data.description,
           brandId: data.brandId,
           tags: parseStringToArray(data.tags),
@@ -125,7 +125,7 @@ export const AddProductForm = ({
     }
   };
 
-  return productTypes && brands ? (
+  return productCategories && brands ? (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(saveChanges)}>
         <div className="flex flex-col gap-5 m-5">
@@ -228,11 +228,11 @@ export const AddProductForm = ({
             <div className="flex flex-col justify-start gap-3 basis-1/2">
               <FormField
                 control={form.control}
-                name="productType"
+                name="productCategory"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-start">
-                      Tipo de Producto
+                      Categoría de Producto
                     </FormLabel>
                     <Select
                       onValueChange={field.onChange}
@@ -241,11 +241,11 @@ export const AddProductForm = ({
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Tipo de Producto" />
+                          <SelectValue placeholder="Categoría de Producto" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent className="h-96">
-                        {productTypes.map((pt) => (
+                      <SelectContent className="h-auto">
+                        {productCategories.map((pt) => (
                           <SelectItem key={pt.id} value={pt.id.toString()}>
                             {pt.name}
                           </SelectItem>

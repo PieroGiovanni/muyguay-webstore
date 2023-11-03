@@ -4,7 +4,7 @@ fragment ProductProps on Product {
   price
   description
   brandId
-  productTypeId
+  productCategoryId
   tags
   isFeatured
   createdAt
@@ -13,10 +13,9 @@ fragment ProductProps on Product {
   brand {
     name
   }
-  productType {
+  productCategory {
     id
     name
-    productCategoryId
   }
   images {
     imageUrl

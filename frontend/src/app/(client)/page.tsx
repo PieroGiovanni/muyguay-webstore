@@ -2,10 +2,11 @@ import { ScrollDownButton } from "../../components/Buttons/ScrollDownButton";
 import { VerProductsButton } from "../../components/Buttons/VerProductsButton";
 import { CategoriesAccess } from "../../components/CategoriesAccess";
 import { Showcase } from "../../components/Showcase";
-import { getProducts } from "../api/queries";
+import { getProductCategories, getProducts } from "../api/queries";
 
 export default async function Home() {
   const products = await getProducts();
+  const categories = await getProductCategories();
 
   return products ? (
     <div suppressHydrationWarning>
@@ -31,7 +32,7 @@ export default async function Home() {
         <Showcase products={products} />
       </div>
       <div className="pt-4">
-        <CategoriesAccess />
+        <CategoriesAccess categories={categories} />
       </div>
     </div>
   ) : (

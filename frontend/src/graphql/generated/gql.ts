@@ -16,8 +16,7 @@ const documents = {
     "fragment BrandProps on Brand {\n  id\n  name\n  updatedAt\n  createdAt\n}": types.BrandPropsFragmentDoc,
     "fragment OrderProps on Order {\n  id\n  userId\n  userName\n  paymentStatus\n  shippingStatus\n  products {\n    id\n    name\n    quantity\n    price\n  }\n  total\n  updatedAt\n  createdAt\n}": types.OrderPropsFragmentDoc,
     "fragment ProductCategoryProps on ProductCategory {\n  id\n  name\n  createdAt\n  updatedAt\n}": types.ProductCategoryPropsFragmentDoc,
-    "fragment ProductProps on Product {\n  id\n  name\n  price\n  description\n  brandId\n  productTypeId\n  tags\n  isFeatured\n  createdAt\n  updatedAt\n  stock\n  brand {\n    name\n  }\n  productType {\n    id\n    name\n    productCategoryId\n  }\n  images {\n    imageUrl\n    cloudinaryPublicId\n  }\n}": types.ProductPropsFragmentDoc,
-    "fragment ProductTypeProps on ProductType {\n  id\n  name\n  productCategoryId\n  updatedAt\n  createdAt\n}": types.ProductTypePropsFragmentDoc,
+    "fragment ProductProps on Product {\n  id\n  name\n  price\n  description\n  brandId\n  productCategoryId\n  tags\n  isFeatured\n  createdAt\n  updatedAt\n  stock\n  brand {\n    name\n  }\n  productCategory {\n    id\n    name\n  }\n  images {\n    imageUrl\n    cloudinaryPublicId\n  }\n}": types.ProductPropsFragmentDoc,
     "fragment RegularError on FieldError {\n  field\n  message\n}": types.RegularErrorFragmentDoc,
     "fragment RegularProductData on Product {\n  id\n  name\n  price\n}": types.RegularProductDataFragmentDoc,
     "fragment RegularUserInfo on UserInfo {\n  id\n  email\n  displayName\n  userType\n}": types.RegularUserInfoFragmentDoc,
@@ -37,7 +36,6 @@ const documents = {
     "query GetOrdersByUserId($userId: Int!) {\n  getOrdersByUserId(userId: $userId) {\n    ...OrderProps\n  }\n}": types.GetOrdersByUserIdDocument,
     "query GetProduct($getProductId: Int!) {\n  getProduct(id: $getProductId) {\n    ...ProductProps\n  }\n}": types.GetProductDocument,
     "query GetProductCategories {\n  getProductCategories {\n    ...ProductCategoryProps\n  }\n}": types.GetProductCategoriesDocument,
-    "query GetProductTypes {\n  getProductTypes {\n    ...ProductTypeProps\n  }\n}": types.GetProductTypesDocument,
     "query GetProducts {\n  getProducts {\n    ...ProductProps\n  }\n}": types.GetProductsDocument,
     "query GetProductsData {\n  getProducts {\n    ...RegularProductData\n  }\n}": types.GetProductsDataDocument,
     "query GetUserByEmail($email: String!) {\n  getUserByEmail(email: $email) {\n    ...RegularUserInfo\n  }\n}": types.GetUserByEmailDocument,
@@ -74,11 +72,7 @@ export function graphql(source: "fragment ProductCategoryProps on ProductCategor
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "fragment ProductProps on Product {\n  id\n  name\n  price\n  description\n  brandId\n  productTypeId\n  tags\n  isFeatured\n  createdAt\n  updatedAt\n  stock\n  brand {\n    name\n  }\n  productType {\n    id\n    name\n    productCategoryId\n  }\n  images {\n    imageUrl\n    cloudinaryPublicId\n  }\n}"): (typeof documents)["fragment ProductProps on Product {\n  id\n  name\n  price\n  description\n  brandId\n  productTypeId\n  tags\n  isFeatured\n  createdAt\n  updatedAt\n  stock\n  brand {\n    name\n  }\n  productType {\n    id\n    name\n    productCategoryId\n  }\n  images {\n    imageUrl\n    cloudinaryPublicId\n  }\n}"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "fragment ProductTypeProps on ProductType {\n  id\n  name\n  productCategoryId\n  updatedAt\n  createdAt\n}"): (typeof documents)["fragment ProductTypeProps on ProductType {\n  id\n  name\n  productCategoryId\n  updatedAt\n  createdAt\n}"];
+export function graphql(source: "fragment ProductProps on Product {\n  id\n  name\n  price\n  description\n  brandId\n  productCategoryId\n  tags\n  isFeatured\n  createdAt\n  updatedAt\n  stock\n  brand {\n    name\n  }\n  productCategory {\n    id\n    name\n  }\n  images {\n    imageUrl\n    cloudinaryPublicId\n  }\n}"): (typeof documents)["fragment ProductProps on Product {\n  id\n  name\n  price\n  description\n  brandId\n  productCategoryId\n  tags\n  isFeatured\n  createdAt\n  updatedAt\n  stock\n  brand {\n    name\n  }\n  productCategory {\n    id\n    name\n  }\n  images {\n    imageUrl\n    cloudinaryPublicId\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -155,10 +149,6 @@ export function graphql(source: "query GetProduct($getProductId: Int!) {\n  getP
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "query GetProductCategories {\n  getProductCategories {\n    ...ProductCategoryProps\n  }\n}"): (typeof documents)["query GetProductCategories {\n  getProductCategories {\n    ...ProductCategoryProps\n  }\n}"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "query GetProductTypes {\n  getProductTypes {\n    ...ProductTypeProps\n  }\n}"): (typeof documents)["query GetProductTypes {\n  getProductTypes {\n    ...ProductTypeProps\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

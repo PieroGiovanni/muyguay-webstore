@@ -3,22 +3,13 @@ import {
   BrandPropsFragment,
   BrandPropsFragmentDoc,
   GetBrandsDocument,
-  GetOrdersByUserIdDocument,
   GetProductCategoriesDocument,
-  GetProductTypesDocument,
-  GetProductsDataDocument,
   GetProductsDocument,
   GetUserByEmailDocument,
-  OrderPropsFragment,
-  OrderPropsFragmentDoc,
   ProductCategoryPropsFragment,
   ProductCategoryPropsFragmentDoc,
   ProductPropsFragment,
   ProductPropsFragmentDoc,
-  ProductTypePropsFragment,
-  ProductTypePropsFragmentDoc,
-  RegularProductDataFragment,
-  RegularProductDataFragmentDoc,
   RegularUserInfoFragmentDoc,
   UserInfo,
 } from "../../graphql/generated/graphql";
@@ -68,16 +59,6 @@ export const getProductCategories = async (): Promise<
   });
 
   return getFragmentData(ProductCategoryPropsFragmentDoc, getProductCategories);
-};
-
-export const getProductTypes = async (): Promise<
-  readonly ProductTypePropsFragment[]
-> => {
-  const { data } = await getClient().query({
-    query: GetProductTypesDocument,
-  });
-
-  return getFragmentData(ProductTypePropsFragmentDoc, data.getProductTypes);
 };
 
 export const getBrands = async (): Promise<readonly BrandPropsFragment[]> => {
