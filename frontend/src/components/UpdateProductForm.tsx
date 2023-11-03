@@ -10,10 +10,10 @@ import { getFragmentData } from "../graphql/generated";
 import {
   BrandPropsFragmentDoc,
   GetBrandsDocument,
+  GetProductCategoriesDocument,
   GetProductDocument,
-  GetProductTypesDocument,
+  ProductCategoryPropsFragmentDoc,
   ProductPropsFragmentDoc,
-  ProductTypePropsFragmentDoc,
   UpdateProductDocument,
 } from "../graphql/generated/graphql";
 import { LoadingSkeleton } from "./LoadingSkeleton";
@@ -40,7 +40,9 @@ export const UpdateProductForm = ({ productId }: UpdateProductFormProps) => {
     variables: { getProductId: productId },
   });
 
-  const { data: productTypeData } = useSuspenseQuery(GetProductTypesDocument);
+  const { data: productCategoryData } = useSuspenseQuery(
+    GetProductCategoriesDocument
+  );
 
   const { data: brandData } = useSuspenseQuery(GetBrandsDocument);
 
@@ -51,9 +53,9 @@ export const UpdateProductForm = ({ productId }: UpdateProductFormProps) => {
     productData?.getProduct
   );
 
-  const productTypes = getFragmentData(
-    ProductTypePropsFragmentDoc,
-    productTypeData?.getProductTypes
+  const productCategories = getFragmentData(
+    ProductCategoryPropsFragmentDoc,
+    productCategoryData?.getProductCategories
   );
 
   const brands = getFragmentData(BrandPropsFragmentDoc, brandData?.getBrands);
@@ -62,7 +64,7 @@ export const UpdateProductForm = ({ productId }: UpdateProductFormProps) => {
   const [descriptionInput, setDescriptionInput] = useState<string | null>();
   const [isFeatured, setIsFeatured] = useState<boolean>();
   const [priceInput, setPriceInput] = useState<number>();
-  const [productTypeId, setProductTypeId] = useState<number>();
+  const [productCategoryId, setProductCategoryId] = useState<number>();
   const [brandId, setBrandId] = useState<number>();
   const [tags, setTags] = useState<string[]>();
   const [stock, setStock] = useState<number>();
@@ -73,7 +75,7 @@ export const UpdateProductForm = ({ productId }: UpdateProductFormProps) => {
     setIsFeatured(product?.isFeatured);
     setBrandId(product?.brandId);
     setPriceInput(product?.price);
-    setProductTypeId(product?.productTypeId);
+    setProductCategoryId(product?.productCategoryId);
     setTags(product?.tags);
     setStock(product?.stock);
   }, [product]);
@@ -88,16 +90,16 @@ export const UpdateProductForm = ({ productId }: UpdateProductFormProps) => {
           isFeatured: isFeatured,
           name: nameInput,
           price: priceInput,
-          productTypeId: productTypeId,
+          productCategoryId: productCategoryId,
           stock: stock,
           tags: tags,
         },
       },
     });
-    // action();
+    action();
   };
 
-  return product && productTypes && brands ? (
+  return product && productCategories && brands ? (
     <div className="flex flex-col gap-5">
       <div className="flex flex-row gap-4">
         <div className="flex flex-col justify-start gap-3 basis-3/4">
@@ -157,13 +159,13 @@ export const UpdateProductForm = ({ productId }: UpdateProductFormProps) => {
       </div>
       <div className="flex flex-row gap-3">
         <div className="flex flex-col justify-start gap-3 basis-1/2">
-          <Label className="text-start">Tipo de Producto</Label>
-          <Select onValueChange={(e) => setProductTypeId(parseInt(e))}>
+          <Label className="text-start">Categoría de Producto</Label>
+          <Select onValueChange={(e) => setProductCategoryId(parseInt(e))}>
             <SelectTrigger className="">
-              <SelectValue placeholder={product.productType.name} />
+              <SelectValue placeholder={product.productCategory.name} />
             </SelectTrigger>
             <SelectContent className="h-96">
-              {productTypes.map((pt) => (
+              {productCategories.map((pt) => (
                 <SelectItem key={pt.id} value={pt.id.toString()}>
                   {pt.name}
                 </SelectItem>

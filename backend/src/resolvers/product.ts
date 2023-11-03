@@ -10,7 +10,12 @@ import {
   Field,
   Float,
 } from "type-graphql";
-import { Product, ProductType, Brand, Image } from "@generated/type-graphql";
+import {
+  Product,
+  ProductCategory,
+  Brand,
+  Image,
+} from "@generated/type-graphql";
 import { prisma } from "..";
 
 @InputType()
@@ -18,7 +23,7 @@ export class ProductInput {
   @Field(() => Int, { nullable: true })
   brandId?: number;
   @Field(() => Int, { nullable: true })
-  productTypeId?: number;
+  productCategoryId?: number;
 
   @Field(() => [String], { nullable: true })
   tags?: string[];
@@ -49,10 +54,12 @@ export class ProductResolver {
     return await prisma.product.findMany();
   }
 
-  @FieldResolver(() => ProductType)
-  async productType(@Root() product: Product): Promise<ProductType | null> {
-    return await prisma.productType.findUnique({
-      where: { id: product.productTypeId },
+  @FieldResolver(() => ProductCategory)
+  async productCategory(
+    @Root() product: Product
+  ): Promise<ProductCategory | null> {
+    return await prisma.productCategory.findUnique({
+      where: { id: product.productCategoryId },
     });
   }
 
@@ -112,7 +119,7 @@ export class ProductResolver {
         name: productInput.name,
         price: productInput.price,
         tags: productInput.tags,
-        productTypeId: productInput.productTypeId,
+        productCategoryId: productInput.productCategoryId,
       },
       where: {
         id: id,
@@ -131,7 +138,7 @@ export class ProductResolver {
           price: productInput.price!,
           description: productInput.description,
           brandId: productInput.brandId as number,
-          productTypeId: productInput.productTypeId as number,
+          productCategoryId: productInput.productCategoryId as number,
           tags: productInput.tags,
           isFeatured: productInput.isFeatured,
         },

@@ -1,13 +1,15 @@
 import { AddProductForm } from "../../../../components/AddProductForm";
-import { getBrands, getProductTypes } from "../../../api/queries";
+import { getBrands, getProductCategories } from "../../../api/queries";
 
 interface PageProps {}
 
 const Page = async ({}: PageProps) => {
   const brands = await getBrands();
-  const productTypes = await getProductTypes();
+  const productCategories = await getProductCategories();
 
-  return <AddProductForm brands={brands} productTypes={productTypes} />;
+  return (
+    <AddProductForm brands={brands} productCategories={productCategories} />
+  );
 };
 
 export default Page;

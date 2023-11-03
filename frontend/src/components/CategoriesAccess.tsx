@@ -3,10 +3,13 @@
 import { useRouter } from "next/navigation";
 import { useCategoryContext } from "../app/context/categoryContext";
 import { Button } from "./ui/button";
+import { ProductCategoryPropsFragment } from "../graphql/generated/graphql";
 
-interface CategoriesAccessProps {}
+interface CategoriesAccessProps {
+  categories: readonly ProductCategoryPropsFragment[];
+}
 
-export const CategoriesAccess = ({}: CategoriesAccessProps) => {
+export const CategoriesAccess = ({ categories }: CategoriesAccessProps) => {
   const { setCategoryId } = useCategoryContext();
   const router = useRouter();
 
@@ -15,25 +18,20 @@ export const CategoriesAccess = ({}: CategoriesAccessProps) => {
     router.push("/tienda");
   };
   return (
-    <div className="grid grid-cols-2 gap-0.5">
-      <Button className="h-20 md:text-xl" onClick={() => handleCategory(1)}>
-        Ropa
-      </Button>
-      <Button className="h-20 md:text-xl" onClick={() => handleCategory(2)}>
-        Maquillaje
-      </Button>
-      <Button className="h-20 md:text-xl" onClick={() => handleCategory(3)}>
-        Joyería
-      </Button>
-      <Button className="h-20 md:text-xl" onClick={() => handleCategory(4)}>
-        Belleza
-      </Button>
-      <Button className="h-20 md:text-xl" onClick={() => handleCategory(5)}>
-        Accesorios
-      </Button>
-      <Button className="h-20 md:text-xl" onClick={() => handleCategory(6)}>
-        Calzado
-      </Button>
-    </div>
+    categories && (
+      <div className="grid grid-cols-2 gap-0.5">
+        {[...categories]
+          .sort((a, b) => a.id - b.id)
+          .map((c) => (
+            <Button
+              className="h-20 md:text-xl"
+              onClick={() => handleCategory(c.id)}
+              key={c.id}
+            >
+              {c.name}
+            </Button>
+          ))}
+      </div>
+    )
   );
 };

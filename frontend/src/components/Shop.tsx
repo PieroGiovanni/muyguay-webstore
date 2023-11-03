@@ -39,7 +39,7 @@ export const Shop = ({ categories, products }: ShopProps) => {
               p.name.toLowerCase().includes(searchText.toLowerCase()) &&
               (category === "all"
                 ? true
-                : p.productType.productCategoryId ===
+                : p.productCategoryId ===
                   categories.find((c) => c.name === category)!.id)
           )
         );
@@ -65,7 +65,7 @@ export const Shop = ({ categories, products }: ShopProps) => {
       const categoryId = categories.find((c) => c.name === category)?.id;
 
       setFilteredProducts(
-        products.filter((p) => p.productType.productCategoryId === categoryId)
+        products.filter((p) => p.productCategoryId === categoryId)
       );
     } else {
       setFilteredProducts(products);

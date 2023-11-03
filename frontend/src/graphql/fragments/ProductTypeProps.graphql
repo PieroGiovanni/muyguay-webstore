@@ -1,7 +1,0 @@
-fragment ProductTypeProps on ProductType {
-  id
-  name
-  productCategoryId
-  updatedAt
-  createdAt
-}

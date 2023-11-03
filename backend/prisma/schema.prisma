@@ -16,22 +16,22 @@ datasource db {
 }
 
 model Product {
-  id            Int            @id @default(autoincrement())
-  name          String
-  price         Float
-  description   String?        @db.Text
-  brand         Brand          @relation(fields: [brandId], references: [id])
-  brandId       Int
-  productTypeId Int
-  productType   ProductType    @relation(fields: [productTypeId], references: [id])
-  tags          String[]
-  orderItems    OrderItem[]
-  stock         Stock?
-  isFeatured    Boolean        @default(false)
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @default(now()) @updatedAt
-  productColor  ProductColor[]
-  images        Image[]
+  id                Int             @id @default(autoincrement())
+  name              String
+  price             Float
+  description       String?         @db.Text
+  brand             Brand           @relation(fields: [brandId], references: [id])
+  brandId           Int
+  productCategoryId Int
+  productCategory   ProductCategory @relation(fields: [productCategoryId], references: [id])
+  tags              String[]
+  orderItems        OrderItem[]
+  stock             Stock?
+  isFeatured        Boolean         @default(false)
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @default(now()) @updatedAt
+  productColor      ProductColor[]
+  images            Image[]
 }
 
 model Brand {
@@ -43,21 +43,11 @@ model Brand {
 }
 
 model ProductCategory {
-  id           Int           @id @default(autoincrement())
-  name         String
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @default(now()) @updatedAt
-  productTypes ProductType[]
-}
-
-model ProductType {
-  id                Int             @id @default(autoincrement())
-  name              String
-  productCategoryId Int
-  productCategory   ProductCategory @relation(fields: [productCategoryId], references: [id])
-  products          Product[]
-  createdAt         DateTime        @default(now())
-  updatedAt         DateTime        @default(now()) @updatedAt
+  id        Int       @id @default(autoincrement())
+  name      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
+  products  Product[]
 }
 
 model User {
