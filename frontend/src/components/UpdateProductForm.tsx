@@ -99,10 +99,6 @@ export const UpdateProductForm = ({ productId }: UpdateProductFormProps) => {
     action();
   };
 
-  useEffect(() => {
-    console.log("FEATURED?:", isFeatured);
-  }, [isFeatured]);
-
   return product && productCategories && brands ? (
     <div className="flex flex-col gap-5">
       <div className="flex flex-row gap-4">
