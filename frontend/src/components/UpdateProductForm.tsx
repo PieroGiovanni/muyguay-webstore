@@ -134,9 +134,7 @@ export const UpdateProductForm = ({ productId }: UpdateProductFormProps) => {
         <RadioGroup
           defaultValue={product.isFeatured ? "featured" : "notFeatured"}
           className="flex flex-row basis-2/3"
-          onValueChange={(e) =>
-            setIsFeatured(e === "isFeatured" ? true : false)
-          }
+          onValueChange={(e) => setIsFeatured(e === "featured" ? true : false)}
         >
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="featured" id="featured" />
@@ -164,7 +162,7 @@ export const UpdateProductForm = ({ productId }: UpdateProductFormProps) => {
             <SelectTrigger className="">
               <SelectValue placeholder={product.productCategory.name} />
             </SelectTrigger>
-            <SelectContent className="h-96">
+            <SelectContent className="h-auto">
               {productCategories.map((pt) => (
                 <SelectItem key={pt.id} value={pt.id.toString()}>
                   {pt.name}
