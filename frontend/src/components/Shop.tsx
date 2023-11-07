@@ -92,6 +92,7 @@ export const Shop = ({ categories, products }: ShopProps) => {
         )
       );
     }
+    setSearchText("");
   }, [category, categories, products, orderBy]);
 
   useEffect(() => {
@@ -104,7 +105,10 @@ export const Shop = ({ categories, products }: ShopProps) => {
     <div className="">
       <div className="flex w-full gap-2 items-center px-4">
         <p>Buscar: </p>
-        <Input onChange={(e) => setSearchText(e.target.value)} />
+        <Input
+          onChange={(e) => setSearchText(e.target.value)}
+          value={searchText}
+        />
         <FilterButton
           handleCategory={handleCategory}
           handleOrderBy={handleOrderBy}

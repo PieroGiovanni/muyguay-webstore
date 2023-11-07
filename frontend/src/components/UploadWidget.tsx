@@ -45,6 +45,9 @@ export const UploadWidget = ({ onImageUrl, resetImage }: UploadWidgetProps) => {
         cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
         uploadPreset: process.env.NEXT_PUBLIC_CLOUDINARY_PRESET,
         sources: ["local", "url"],
+        maxImageWidth: 1280,
+        maxImageHeight: 1280,
+        folder: "muyguay",
       },
       proccessResults
     );
