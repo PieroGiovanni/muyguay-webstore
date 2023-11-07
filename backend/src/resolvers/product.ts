@@ -51,7 +51,13 @@ export class ProductInput {
 export class ProductResolver {
   @Query(() => [Product])
   async getProducts() {
-    return await prisma.product.findMany();
+    return await prisma.product.findMany({
+      orderBy: [
+        {
+          id: "desc",
+        },
+      ],
+    });
   }
 
   @FieldResolver(() => ProductCategory)
