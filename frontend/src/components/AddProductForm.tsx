@@ -36,7 +36,7 @@ import {
 import { Textarea } from "./ui/textarea";
 import { toast } from "./ui/use-toast";
 import Link from "next/link";
-import action from "../app/actions";
+import action from "../app/utils/actions";
 
 interface AddProductFormProps {
   brands: readonly BrandPropsFragment[];

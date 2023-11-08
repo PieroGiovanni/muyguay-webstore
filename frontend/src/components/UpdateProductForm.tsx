@@ -29,7 +29,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Textarea } from "./ui/textarea";
-import action from "../app/actions";
+import action from "../app/utils/actions";
 
 interface UpdateProductFormProps {
   productId: number;

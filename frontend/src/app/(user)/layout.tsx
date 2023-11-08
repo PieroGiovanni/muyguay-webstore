@@ -5,6 +5,7 @@ import "../../styles/globals.css";
 import { AuthProvider } from "../prodivers/AuthProvider";
 import { BagContextProvider } from "../context/bagContext";
 import { CategoryContextProvider } from "../context/categoryContext";
+import { inter } from "../ui/fonts";
 
 export const metadata = {
   title: "Muy Guay",
@@ -18,14 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        <link
-          rel="stylesheet"
-          href="https://rsms.me/inter/inter.css"
-          as="style"
-        />
-      </head>
-      <body className="font-sans">
+      <body className={`${inter.className} font-sans`}>
         <ApolloWrapper>
           <BagContextProvider>
             <CategoryContextProvider>

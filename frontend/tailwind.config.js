@@ -29,7 +29,7 @@ module.exports = {
     },
     fontFamily: {
       sans: [
-        "Inter var",
+        "Inter",
         {
           fontVariationSettings: '"opsz" 32',
           fontFeatureSettings: '"cv11", "ss01"',
