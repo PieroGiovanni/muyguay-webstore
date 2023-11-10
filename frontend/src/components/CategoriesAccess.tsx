@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useCategoryContext } from "../app/context/categoryContext";
+
 import { Button } from "./ui/button";
 import { ProductCategoryPropsFragment } from "../graphql/generated/graphql";
 
@@ -10,12 +10,10 @@ interface CategoriesAccessProps {
 }
 
 export const CategoriesAccess = ({ categories }: CategoriesAccessProps) => {
-  const { setCategoryId } = useCategoryContext();
   const router = useRouter();
 
   const handleCategory = (id: number) => {
-    setCategoryId(id);
-    router.push("/tienda");
+    router.push(`/tienda?categoryId=${id}`);
   };
   return (
     categories && (

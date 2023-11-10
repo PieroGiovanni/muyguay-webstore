@@ -1,15 +1,38 @@
 import { Shop } from "../../../components/Shop";
-import { getProductCategories, getProducts } from "../../api/queries";
+import {
+  getFilteredProducts,
+  getProductCategories,
+  getProducts,
+} from "../../api/queries";
 
-interface PageProps {}
+interface PageProps {
+  searchParams?: {
+    query?: string;
+    categoryId?: string;
+    orderBy?: string;
+  };
+}
 
-const Page = async ({}: PageProps) => {
-  const products = await getProducts();
+const Page = async ({ searchParams }: PageProps) => {
+  // const products = await getProducts();
   const categories = await getProductCategories();
 
-  return categories && products ? (
+  const query = searchParams?.query;
+  const categoryId =
+    searchParams?.categoryId && !isNaN(parseInt(searchParams.categoryId))
+      ? parseInt(searchParams.categoryId)
+      : undefined;
+  const orderBy = searchParams?.orderBy;
+
+  const filteredProducts = await getFilteredProducts(
+    query,
+    categoryId,
+    orderBy
+  );
+
+  return categories && filteredProducts ? (
     <div className="pt-16">
-      <Shop categories={categories} products={products} />
+      <Shop categories={categories} products={filteredProducts} />
     </div>
   ) : null;
 };

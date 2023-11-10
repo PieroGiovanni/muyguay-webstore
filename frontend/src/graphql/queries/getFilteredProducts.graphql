@@ -1,0 +1,9 @@
+query GetFilteredProducts($query: String, $categoryId: Int, $orderBy: String) {
+  getFilteredProducts(
+    query: $query
+    categoryId: $categoryId
+    orderBy: $orderBy
+  ) {
+    ...ProductProps
+  }
+}

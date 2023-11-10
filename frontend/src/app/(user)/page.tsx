@@ -2,10 +2,14 @@ import { ScrollDownButton } from "../../components/Buttons/ScrollDownButton";
 import { VerProductsButton } from "../../components/Buttons/VerProductsButton";
 import { CategoriesAccess } from "../../components/CategoriesAccess";
 import { Showcase } from "../../components/Showcase";
-import { getProductCategories, getProducts } from "../api/queries";
+import {
+  getFilteredProducts,
+  getProductCategories,
+  getProducts,
+} from "../api/queries";
 
 export default async function Home() {
-  const products = await getProducts();
+  const products = await getFilteredProducts("");
   const categories = await getProductCategories();
 
   return products ? (

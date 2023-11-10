@@ -4,7 +4,6 @@ import { ApolloWrapper } from "../../lib/apolloWrapper";
 import "../../styles/globals.css";
 import { AuthProvider } from "../prodivers/AuthProvider";
 import { BagContextProvider } from "../context/bagContext";
-import { CategoryContextProvider } from "../context/categoryContext";
 import { inter } from "../ui/fonts";
 
 export const metadata = {
@@ -22,13 +21,11 @@ export default function RootLayout({
       <body className={`${inter.className} font-sans`}>
         <ApolloWrapper>
           <BagContextProvider>
-            <CategoryContextProvider>
-              <AuthProvider>
-                <Navbar />
-                <main>{children}</main>
-                <Toaster />
-              </AuthProvider>
-            </CategoryContextProvider>
+            <AuthProvider>
+              <Navbar />
+              <main>{children}</main>
+              <Toaster />
+            </AuthProvider>
           </BagContextProvider>
         </ApolloWrapper>
       </body>

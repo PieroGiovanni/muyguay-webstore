@@ -60,6 +60,84 @@ export class ProductResolver {
     });
   }
 
+  @Query(() => [Product])
+  async getFilteredProducts(
+    @Arg("query", () => String, { nullable: true })
+    query?: string,
+    @Arg("categoryId", () => Int, { nullable: true })
+    categoryId?: number,
+    @Arg("orderBy", () => String, { nullable: true })
+    orderBy?: string
+  ): Promise<Product[]> {
+    try {
+      let sortingOptions = {};
+      switch (orderBy) {
+        case "old":
+          sortingOptions = { updatedAt: "asc" };
+          break;
+        case "less-expensive":
+          sortingOptions = { price: "asc" };
+          break;
+        case "most-expensive":
+          sortingOptions = { price: "desc" };
+          break;
+        default:
+          sortingOptions = { updatedAt: "desc" };
+      }
+
+      return await prisma.product.findMany({
+        where: {
+          name: {
+            contains: query,
+            mode: "insensitive",
+          },
+          productCategoryId: categoryId,
+        },
+        orderBy: [sortingOptions],
+      });
+    } catch (error) {
+      console.error("Error in getFilteredProducts:", error);
+      throw new Error("An error occurred while fetching products.");
+    }
+  }
+
+  @Query(() => [Product])
+  async getProductsByCategory(
+    @Arg("categoryId", () => Int)
+    categoryId: number
+  ): Promise<readonly Product[]> {
+    return await prisma.product.findMany({
+      where: {
+        productCategoryId: categoryId,
+      },
+    });
+  }
+
+  @Query(() => [Product])
+  async getFeaturedProdcuts(
+    @Arg("isFeatured", () => Boolean)
+    isFeatured: boolean
+  ): Promise<readonly Product[]> {
+    return await prisma.product.findMany({
+      where: {
+        isFeatured,
+      },
+    });
+  }
+
+  @Query(() => [Product])
+  async getNewProducts(
+    @Arg("quantity", () => Int)
+    quantity: number
+  ): Promise<readonly Product[]> {
+    return await prisma.product.findMany({
+      orderBy: {
+        updatedAt: "desc",
+      },
+      take: quantity,
+    });
+  }
+
   @FieldResolver(() => ProductCategory)
   async productCategory(
     @Root() product: Product
@@ -77,8 +155,10 @@ export class ProductResolver {
   }
 
   @Query(() => Product)
-  async getProduct(@Arg("id", () => Int) id: number) {
-    return await prisma.product.findUnique({ where: { id } });
+  async getProduct(@Arg("id", () => Int) id: number): Promise<Product> {
+    const product = await prisma.product.findUnique({ where: { id } });
+    if (!product) throw new Error("Producto no encontrado");
+    return product;
   }
 
   @FieldResolver(() => [Image])
@@ -114,8 +194,6 @@ export class ProductResolver {
         },
       });
     }
-
-    console.log(productInput.description);
 
     return await prisma.product.update({
       data: {
