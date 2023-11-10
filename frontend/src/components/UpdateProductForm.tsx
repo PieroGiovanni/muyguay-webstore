@@ -37,7 +37,7 @@ interface UpdateProductFormProps {
 
 export const UpdateProductForm = ({ productId }: UpdateProductFormProps) => {
   const { data: productData } = useSuspenseQuery(GetProductDocument, {
-    variables: { getProductId: productId },
+    variables: { id: productId },
   });
 
   const { data: productCategoryData } = useSuspenseQuery(
