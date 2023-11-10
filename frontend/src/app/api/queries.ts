@@ -64,7 +64,7 @@ export const getFilteredProducts = async (
       fetchOptions: {
         next: {
           tags: ["filteredProducts"],
-          revalidate: 1,
+          // revalidate: 1,
         },
       },
     },
