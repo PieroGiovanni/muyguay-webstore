@@ -3,22 +3,16 @@ import { Toaster } from "../../components/ui/toaster";
 import { ApolloWrapper } from "../../lib/apolloWrapper";
 import "../../styles/globals.css";
 import { AuthProvider } from "../prodivers/AuthProvider";
+import { inter } from "../ui/fonts";
 
 export default function AdminLayout({
-  children, // will be a page or nested layout
+  children,
 }: {
   children: React.ReactNode;
 }) {
   return (
     <html lang="en">
-      <head>
-        <link
-          rel="stylesheet"
-          href="https://rsms.me/inter/inter.css"
-          as="style"
-        />
-      </head>
-      <body className="font-sans">
+      <body className={`${inter.className} font-sans`}>
         <ApolloWrapper>
           <AuthProvider>
             <AdminNavBar />

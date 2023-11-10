@@ -2,14 +2,18 @@ import { ScrollDownButton } from "../../components/Buttons/ScrollDownButton";
 import { VerProductsButton } from "../../components/Buttons/VerProductsButton";
 import { CategoriesAccess } from "../../components/CategoriesAccess";
 import { Showcase } from "../../components/Showcase";
-import { getProductCategories, getProducts } from "../api/queries";
+import {
+  getFilteredProducts,
+  getProductCategories,
+  getProducts,
+} from "../api/queries";
 
 export default async function Home() {
-  const products = await getProducts();
+  const products = await getFilteredProducts("");
   const categories = await getProductCategories();
 
   return products ? (
-    <div suppressHydrationWarning>
+    <>
       <div className="flex flex-col bg-[url('/4.webp')] sm:bg-[url('/3.webp')] w-full h-[100svh] bg-cover pt-0 overflow-x-hidden">
         {/* Button for the bottom left quarter (desktop) */}
         <div className="hidden md:flex sm:flex-col absolute  left-0 w-1/2 h-screen items-center justify-center gap-10">
@@ -34,7 +38,7 @@ export default async function Home() {
       <div className="pt-4">
         <CategoriesAccess categories={categories} />
       </div>
-    </div>
+    </>
   ) : (
     <div>loading...</div>
   );

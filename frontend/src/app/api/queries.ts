@@ -1,9 +1,12 @@
+import { ApolloError } from "@apollo/client";
 import { getFragmentData } from "../../graphql/generated/fragment-masking";
 import {
   BrandPropsFragment,
   BrandPropsFragmentDoc,
   GetBrandsDocument,
+  GetFilteredProductsDocument,
   GetProductCategoriesDocument,
+  GetProductDocument,
   GetProductsDocument,
   GetUserByEmailDocument,
   ProductCategoryPropsFragment,
@@ -44,9 +47,39 @@ export const getProducts = async (): Promise<
   return getFragmentData(ProductPropsFragmentDoc, data.getProducts);
 };
 
+export const getFilteredProducts = async (
+  query?: string,
+  categoryId?: number,
+  orderBy?: string
+): Promise<readonly ProductPropsFragment[]> => {
+  const { data } = await getClient().query({
+    query: GetFilteredProductsDocument,
+    variables: {
+      query,
+      categoryId,
+      orderBy,
+    },
+
+    context: {
+      fetchOptions: {
+        next: {
+          tags: ["filteredProducts"],
+          revalidate: 1,
+        },
+      },
+    },
+  });
+  return getFragmentData(ProductPropsFragmentDoc, data.getFilteredProducts);
+};
+
 export const getProduct = async (id: number): Promise<ProductPropsFragment> => {
-  const products = await getProducts();
-  return products.find((p) => p.id === id)!;
+  const { data } = await getClient().query({
+    query: GetProductDocument,
+    variables: {
+      id,
+    },
+  });
+  return getFragmentData(ProductPropsFragmentDoc, data.getProduct);
 };
 
 export const getProductCategories = async (): Promise<

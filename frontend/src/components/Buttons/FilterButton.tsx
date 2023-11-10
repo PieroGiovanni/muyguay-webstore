@@ -18,28 +18,36 @@ import {
 import { Label } from "../ui/label";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { useEffect, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface FilterButtonProps {
   categories: readonly ProductCategoryPropsFragment[];
-  handleCategory: (category: string) => void;
-  handleOrderBy: (order: string) => void;
-  defaultCategory?: string;
 }
 
-export const FilterButton = ({
-  categories,
-  handleCategory,
-  handleOrderBy,
-  defaultCategory,
-}: FilterButtonProps) => {
-  const [orderBy, setOrderBy] = useState("new");
-  const [category, setCategory] = useState("all");
+export const FilterButton = ({ categories }: FilterButtonProps) => {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
 
-  useEffect(() => {
-    if (defaultCategory) {
-      setCategory(defaultCategory);
+  const handleCategoryChange = (id: string) => {
+    const params = new URLSearchParams(searchParams);
+    if (id !== "all" && id) {
+      params.set("categoryId", id);
+    } else {
+      params.delete("categoryId");
     }
-  }, [defaultCategory]);
+    replace(`${pathname}?${params.toString()}`);
+  };
+
+  const handleOrderBy = (order: string) => {
+    const params = new URLSearchParams(searchParams);
+    if (order) {
+      params.set("orderBy", order);
+    } else {
+      params.delete("orderByDate");
+    }
+    replace(`${pathname}?${params.toString()}`);
+  };
 
   return (
     <div className="text-xs">
@@ -51,26 +59,55 @@ export const FilterButton = ({
         </DropdownMenuTrigger>
         <DropdownMenuContent className="text-xs">
           <DropdownMenuLabel className="text-sm">
-            Filtrar por:
+            Filtrar productos
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <Accordion
             type="multiple"
-            defaultValue={["item-1", "item-2"]}
+            defaultValue={["category", "orderBy"]}
             className="w-[40vw]"
           >
-            <AccordionItem value="item-1" className="w-full">
-              <AccordionTrigger>Ordenar por:</AccordionTrigger>
+            <AccordionItem value="category" className="w-full">
+              <AccordionTrigger>Elegir Categoría</AccordionTrigger>
               <AccordionContent>
                 <RadioGroup
-                  defaultValue={orderBy}
+                  defaultValue={
+                    searchParams.get("categoryId")?.toString() || "all"
+                  }
                   onValueChange={(value) => {
-                    handleOrderBy(value);
-                    setOrderBy(value);
+                    handleCategoryChange(value);
                   }}
                 >
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="new" id="new" />
+                    <RadioGroupItem value="all" id="todo" />
+                    <Label htmlFor="todo" className="text-xs">
+                      Todo
+                    </Label>
+                  </div>
+                  {categories.map((c) => (
+                    <div key={c.id} className="flex items-center space-x-2">
+                      <RadioGroupItem value={c.id.toString()} id={c.name} />
+                      <Label htmlFor={c.name} className="text-xs">
+                        {capitalizeFirstLetter(c.name)}
+                      </Label>
+                    </div>
+                  ))}
+                </RadioGroup>
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="orderBy" className="w-full">
+              <AccordionTrigger>Ordenar por:</AccordionTrigger>
+              <AccordionContent>
+                <RadioGroup
+                  defaultValue={
+                    searchParams.get("orderByPrice")?.toString() || "new"
+                  }
+                  onValueChange={(value) => {
+                    handleOrderBy(value);
+                  }}
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="new" id="new " />
                     <Label htmlFor="new">Lo más nuevo</Label>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -78,40 +115,13 @@ export const FilterButton = ({
                     <Label htmlFor="old">Lo más antiguo</Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="cheap" id="cheap" />
+                    <RadioGroupItem value="less-expensive" id="cheap" />
                     <Label htmlFor="cheap">Menor Precio</Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="expensive" id="expensive" />
+                    <RadioGroupItem value="most-expensive" id="expensive" />
                     <Label htmlFor="expensive">Mayor Precio</Label>
                   </div>
-                </RadioGroup>
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-2" className="w-full">
-              <AccordionTrigger>Elegir Categoría</AccordionTrigger>
-              <AccordionContent>
-                <RadioGroup
-                  defaultValue={category}
-                  onValueChange={(value) => {
-                    handleCategory(value);
-                    setCategory(value);
-                  }}
-                >
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="all" id="all" />
-                    <Label htmlFor="all" className="text-xs">
-                      Todo
-                    </Label>
-                  </div>
-                  {categories.map((c) => (
-                    <div key={c.id} className="flex items-center space-x-2">
-                      <RadioGroupItem value={c.name} id={c.name} />
-                      <Label htmlFor={c.name} className="text-xs">
-                        {capitalizeFirstLetter(c.name)}
-                      </Label>
-                    </div>
-                  ))}
                 </RadioGroup>
               </AccordionContent>
             </AccordionItem>

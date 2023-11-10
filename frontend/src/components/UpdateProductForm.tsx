@@ -29,7 +29,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Textarea } from "./ui/textarea";
-import action from "../app/actions";
+import action from "../app/utils/actions";
 
 interface UpdateProductFormProps {
   productId: number;
@@ -37,7 +37,7 @@ interface UpdateProductFormProps {
 
 export const UpdateProductForm = ({ productId }: UpdateProductFormProps) => {
   const { data: productData } = useSuspenseQuery(GetProductDocument, {
-    variables: { getProductId: productId },
+    variables: { id: productId },
   });
 
   const { data: productCategoryData } = useSuspenseQuery(
