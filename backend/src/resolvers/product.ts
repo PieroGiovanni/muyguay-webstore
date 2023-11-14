@@ -9,6 +9,7 @@ import {
   InputType,
   Field,
   Float,
+  ObjectType,
 } from "type-graphql";
 import {
   Product,
@@ -47,6 +48,15 @@ export class ProductInput {
   imageUrl?: string;
 }
 
+@ObjectType()
+class PaginatedProducts {
+  @Field(() => [Product])
+  products: Product[];
+
+  @Field(() => Boolean)
+  hasMore: boolean;
+}
+
 @Resolver(Product)
 export class ProductResolver {
   @Query(() => [Product])
@@ -60,20 +70,27 @@ export class ProductResolver {
     });
   }
 
-  @Query(() => [Product])
+  @Query(() => PaginatedProducts)
   async getFilteredProducts(
+    @Arg("limit", () => Int)
+    limit: number,
     @Arg("query", () => String, { nullable: true })
     query?: string,
     @Arg("categoryId", () => Int, { nullable: true })
     categoryId?: number,
     @Arg("orderBy", () => String, { nullable: true })
-    orderBy?: string
-  ): Promise<Product[]> {
+    orderBy?: string,
+    @Arg("cursor", () => Int, { nullable: true })
+    cursor?: number | null
+  ): Promise<PaginatedProducts> {
     try {
+      const realLimit = Math.min(50, limit);
+      const realLimitPlusOne = realLimit + 1;
+
       let sortingOptions = {};
       switch (orderBy) {
         case "old":
-          sortingOptions = { updatedAt: "asc" };
+          sortingOptions = { id: "asc" };
           break;
         case "less-expensive":
           sortingOptions = { price: "asc" };
@@ -82,10 +99,10 @@ export class ProductResolver {
           sortingOptions = { price: "desc" };
           break;
         default:
-          sortingOptions = { updatedAt: "desc" };
+          sortingOptions = { id: "desc" };
       }
 
-      return await prisma.product.findMany({
+      const findManyArgs: any = {
         where: {
           name: {
             contains: query,
@@ -94,7 +111,23 @@ export class ProductResolver {
           productCategoryId: categoryId,
         },
         orderBy: [sortingOptions],
-      });
+
+        take: realLimitPlusOne,
+      };
+
+      if (cursor) {
+        findManyArgs.cursor = {
+          id: cursor,
+        };
+        findManyArgs.skip = 1;
+      }
+      console.log(findManyArgs);
+      const products = await prisma.product.findMany(findManyArgs);
+
+      return {
+        products: products.slice(0, realLimit),
+        hasMore: products.length === realLimitPlusOne,
+      };
     } catch (error) {
       console.error("Error in getFilteredProducts:", error);
       throw new Error("An error occurred while fetching products.");
@@ -114,13 +147,10 @@ export class ProductResolver {
   }
 
   @Query(() => [Product])
-  async getFeaturedProdcuts(
-    @Arg("isFeatured", () => Boolean)
-    isFeatured: boolean
-  ): Promise<readonly Product[]> {
+  async getFeaturedProducts(): Promise<readonly Product[]> {
     return await prisma.product.findMany({
       where: {
-        isFeatured,
+        isFeatured: true,
       },
     });
   }
@@ -245,6 +275,32 @@ export class ProductResolver {
       return product;
     } catch (error) {
       console.log("there was an error with product creation");
+      throw error;
+    }
+  }
+
+  @Mutation(() => Boolean)
+  async deleteProduct(@Arg("id") id: number): Promise<boolean> {
+    try {
+      await prisma.orderItem.deleteMany({
+        where: { productId: id },
+      });
+
+      await prisma.image.deleteMany({
+        where: { productId: id },
+      });
+
+      await prisma.stock.delete({
+        where: { productId: id },
+      });
+
+      await prisma.product.delete({
+        where: { id },
+      });
+
+      return true;
+    } catch (error) {
+      console.log("There was an error with product deletion");
       throw error;
     }
   }

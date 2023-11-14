@@ -4,7 +4,9 @@ import {
   BrandPropsFragment,
   BrandPropsFragmentDoc,
   GetBrandsDocument,
+  GetFeaturedProductsDocument,
   GetFilteredProductsDocument,
+  GetNewProductsDocument,
   GetProductCategoriesDocument,
   GetProductDocument,
   GetProductsDocument,
@@ -48,28 +50,31 @@ export const getProducts = async (): Promise<
 };
 
 export const getFilteredProducts = async (
+  limit: number,
   query?: string,
   categoryId?: number,
-  orderBy?: string
-): Promise<readonly ProductPropsFragment[]> => {
+  orderBy?: string,
+  cursor?: number
+) => {
   const { data } = await getClient().query({
     query: GetFilteredProductsDocument,
     variables: {
       query,
       categoryId,
       orderBy,
+      limit,
+      cursor,
     },
-
-    context: {
-      fetchOptions: {
-        next: {
-          tags: ["filteredProducts"],
-          // revalidate: 1,
-        },
-      },
-    },
+    partialRefetch: true,
   });
-  return getFragmentData(ProductPropsFragmentDoc, data.getFilteredProducts);
+
+  return {
+    products: getFragmentData(
+      ProductPropsFragmentDoc,
+      data.getFilteredProducts.products
+    ),
+    hasMore: data.getFilteredProducts.hasMore,
+  };
 };
 
 export const getProduct = async (id: number): Promise<ProductPropsFragment> => {
@@ -100,4 +105,25 @@ export const getBrands = async (): Promise<readonly BrandPropsFragment[]> => {
   });
 
   return getFragmentData(BrandPropsFragmentDoc, data.getBrands);
+};
+
+export const getFeaturedProducts = async (): Promise<
+  readonly ProductPropsFragment[]
+> => {
+  const { data } = await getClient().query({
+    query: GetFeaturedProductsDocument,
+  });
+  return getFragmentData(ProductPropsFragmentDoc, data.getFeaturedProducts);
+};
+
+export const getNewProducts = async (
+  quantity: number
+): Promise<readonly ProductPropsFragment[]> => {
+  const { data } = await getClient().query({
+    query: GetNewProductsDocument,
+    variables: {
+      quantity,
+    },
+  });
+  return getFragmentData(ProductPropsFragmentDoc, data.getNewProducts);
 };

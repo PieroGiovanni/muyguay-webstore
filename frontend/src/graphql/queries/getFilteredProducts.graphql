@@ -1,9 +1,20 @@
-query GetFilteredProducts($query: String, $categoryId: Int, $orderBy: String) {
+query GetFilteredProducts(
+  $limit: Int!
+  $cursor: Int
+  $orderBy: String
+  $categoryId: Int
+  $query: String
+) {
   getFilteredProducts(
-    query: $query
-    categoryId: $categoryId
+    limit: $limit
+    cursor: $cursor
     orderBy: $orderBy
+    categoryId: $categoryId
+    query: $query
   ) {
-    ...ProductProps
+    hasMore
+    products {
+      ...ProductProps
+    }
   }
 }
