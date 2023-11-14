@@ -119,7 +119,7 @@ export const Shop = ({ categories, searchParams }: ShopProps) => {
       </Suspense>
       {data.getFilteredProducts.hasMore ? (
         <div
-          className="w-full h-24 flex relativejustify-center items-center"
+          className="w-full h-24 flex relative justify-center items-center"
           ref={loadMoreRef}
         >
           <Loading />
