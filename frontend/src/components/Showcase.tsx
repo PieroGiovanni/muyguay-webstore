@@ -6,10 +6,11 @@ import { ShowcaseNewContent } from "./ShowcaseNewContent";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 
 interface ShowcaseProps {
-  products: readonly ProductPropsFragment[];
+  featuredProducts: readonly ProductPropsFragment[];
+  newProducts: readonly ProductPropsFragment[];
 }
 
-export const Showcase = ({ products }: ShowcaseProps) => {
+export const Showcase = ({ featuredProducts, newProducts }: ShowcaseProps) => {
   return (
     <Tabs defaultValue="featured" className="w-full h-full">
       <TabsList className="grid w-full grid-cols-3">
@@ -24,10 +25,10 @@ export const Showcase = ({ products }: ShowcaseProps) => {
         </TabsTrigger>
       </TabsList>
       <TabsContent value="featured">
-        <ShowcaseFeaturedContent products={products} />
+        <ShowcaseFeaturedContent products={featuredProducts} />
       </TabsContent>
       <TabsContent value="new">
-        <ShowcaseNewContent products={products} />
+        <ShowcaseNewContent products={newProducts} />
       </TabsContent>
       <TabsContent value="mostSold">Pronto</TabsContent>
     </Tabs>

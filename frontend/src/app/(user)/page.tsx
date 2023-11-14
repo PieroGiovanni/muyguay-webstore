@@ -3,16 +3,17 @@ import { VerProductsButton } from "../../components/Buttons/VerProductsButton";
 import { CategoriesAccess } from "../../components/CategoriesAccess";
 import { Showcase } from "../../components/Showcase";
 import {
-  getFilteredProducts,
+  getFeaturedProducts,
+  getNewProducts,
   getProductCategories,
-  getProducts,
 } from "../api/queries";
 
 export default async function Home() {
-  const products = await getFilteredProducts("");
   const categories = await getProductCategories();
+  const featuredProducts = await getFeaturedProducts();
+  const newProducts = await getNewProducts(8);
 
-  return products ? (
+  return featuredProducts && newProducts ? (
     <>
       <div className="flex flex-col bg-[url('/4.webp')] sm:bg-[url('/3.webp')] w-full h-[100svh] bg-cover pt-0 overflow-x-hidden">
         {/* Button for the bottom left quarter (desktop) */}
@@ -33,7 +34,10 @@ export default async function Home() {
       </div>
 
       <div className="flex bg-white">
-        <Showcase products={products} />
+        <Showcase
+          featuredProducts={featuredProducts}
+          newProducts={newProducts}
+        />
       </div>
       <div className="pt-4">
         <CategoriesAccess categories={categories} />

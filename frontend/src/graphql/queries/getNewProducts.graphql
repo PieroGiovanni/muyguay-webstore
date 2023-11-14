@@ -1,0 +1,5 @@
+query GetNewProducts($quantity: Int!) {
+  getNewProducts(quantity: $quantity) {
+    ...ProductProps
+  }
+}

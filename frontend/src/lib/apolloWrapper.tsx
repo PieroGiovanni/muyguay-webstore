@@ -7,6 +7,7 @@ import {
   NextSSRInMemoryCache,
   SSRMultipartLink,
 } from "@apollo/experimental-nextjs-app-support/ssr";
+import { PaginatedProducts } from "../graphql/generated/graphql";
 
 function makeClient() {
   const httpLink = new HttpLink({
@@ -14,7 +15,29 @@ function makeClient() {
   });
 
   return new NextSSRApolloClient({
-    cache: new NextSSRInMemoryCache(),
+    cache: new NextSSRInMemoryCache({
+      typePolicies: {
+        Query: {
+          fields: {
+            getFilteredProducts: {
+              keyArgs: ["query", "categoryId", "orderBy"],
+              merge(
+                existing: PaginatedProducts | undefined,
+                incoming: PaginatedProducts
+              ): PaginatedProducts {
+                return {
+                  ...incoming,
+                  products: [
+                    ...(existing?.products || []),
+                    ...incoming.products,
+                  ],
+                };
+              },
+            },
+          },
+        },
+      },
+    }),
     link:
       typeof window === "undefined"
         ? ApolloLink.from([

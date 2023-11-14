@@ -36,6 +36,7 @@ export const FilterButton = ({ categories }: FilterButtonProps) => {
     } else {
       params.delete("categoryId");
     }
+
     replace(`${pathname}?${params.toString()}`);
   };
 
@@ -46,6 +47,7 @@ export const FilterButton = ({ categories }: FilterButtonProps) => {
     } else {
       params.delete("orderByDate");
     }
+
     replace(`${pathname}?${params.toString()}`);
   };
 
@@ -100,7 +102,7 @@ export const FilterButton = ({ categories }: FilterButtonProps) => {
               <AccordionContent>
                 <RadioGroup
                   defaultValue={
-                    searchParams.get("orderByPrice")?.toString() || "new"
+                    searchParams.get("orderBy")?.toString() || "new"
                   }
                   onValueChange={(value) => {
                     handleOrderBy(value);
