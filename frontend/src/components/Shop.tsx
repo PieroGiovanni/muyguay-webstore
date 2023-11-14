@@ -14,6 +14,7 @@ import { Product } from "./Product";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Suspense, useCallback, useEffect, useRef } from "react";
+import { Loading } from "./Loading";
 
 interface ShopProps {
   categories: readonly ProductCategoryPropsFragment[];
@@ -72,6 +73,8 @@ export const Shop = ({ categories, searchParams }: ShopProps) => {
         }
       },
       {
+        root: null,
+        rootMargin: "100px",
         threshold: 1,
       }
     );
@@ -113,10 +116,15 @@ export const Shop = ({ categories, searchParams }: ShopProps) => {
             <Product key={p.id} product={p} />
           ))}
         </div>
-        {data.getFilteredProducts.hasMore ? (
-          <div className="h-[1px]" ref={loadMoreRef} />
-        ) : null}
       </Suspense>
+      {data.getFilteredProducts.hasMore ? (
+        <div
+          className="w-full h-24 flex relativejustify-center items-center"
+          ref={loadMoreRef}
+        >
+          <Loading />
+        </div>
+      ) : null}
     </>
   ) : null;
 };
