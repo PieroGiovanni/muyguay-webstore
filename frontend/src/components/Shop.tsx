@@ -36,7 +36,7 @@ export const Shop = ({ categories, searchParams }: ShopProps) => {
       : undefined;
   const orderBy = searchParams?.orderBy;
 
-  const limit = 8;
+  const limit = 28;
 
   const { data, fetchMore } = useSuspenseQuery(GetFilteredProductsDocument, {
     variables: {
