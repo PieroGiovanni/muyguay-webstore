@@ -18,7 +18,7 @@ export default async function Home() {
       <div className="flex flex-col bg-[url('/4.webp')] sm:bg-[url('/3.webp')] w-full h-[100svh] bg-cover pt-0 overflow-x-hidden">
         {/* Button for the bottom left quarter (desktop) */}
         <div className="hidden md:flex sm:flex-col absolute  left-0 w-1/2 h-screen items-center justify-center gap-10">
-          <p className="text-5xl text-justify pl-10 ">
+          <p className="text-5xl pl-10 ">
             Eleva tu resplandor con nuestra colección de belleza y estilo.
           </p>
           <VerProductsButton />
