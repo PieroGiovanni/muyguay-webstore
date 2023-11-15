@@ -1,7 +1,8 @@
 "use client";
 
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { Suspense, useCallback, useEffect, useRef } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { getFragmentData } from "../graphql/generated";
 import {
@@ -10,11 +11,9 @@ import {
   ProductPropsFragmentDoc,
 } from "../graphql/generated/graphql";
 import { FilterButton } from "./Buttons/FilterButton";
+import { Loading } from "./Loading";
 import { Product } from "./Product";
 import { Input } from "./ui/input";
-import { Button } from "./ui/button";
-import { Suspense, useCallback, useEffect, useRef } from "react";
-import { Loading } from "./Loading";
 
 interface ShopProps {
   categories: readonly ProductCategoryPropsFragment[];
@@ -37,7 +36,7 @@ export const Shop = ({ categories, searchParams }: ShopProps) => {
       : undefined;
   const orderBy = searchParams?.orderBy;
 
-  const limit = 28;
+  const limit = 8;
 
   const { data, fetchMore } = useSuspenseQuery(GetFilteredProductsDocument, {
     variables: {
@@ -100,7 +99,7 @@ export const Shop = ({ categories, searchParams }: ShopProps) => {
     replace(`${pathname}?${params.toString()}`);
   }, 700);
 
-  return data && categories ? (
+  return (
     <>
       <div className="flex w-full gap-2 items-center px-4">
         <p>Buscar: </p>
@@ -116,15 +115,15 @@ export const Shop = ({ categories, searchParams }: ShopProps) => {
             <Product key={p.id} product={p} />
           ))}
         </div>
+        {data.getFilteredProducts.hasMore ? (
+          <div
+            className="pt-5 w-full h-10 flex relative justify-center items-center"
+            ref={loadMoreRef}
+          >
+            <Loading size="sm" />
+          </div>
+        ) : null}
       </Suspense>
-      {data.getFilteredProducts.hasMore ? (
-        <div
-          className="w-full h-24 flex relative justify-center items-center"
-          ref={loadMoreRef}
-        >
-          <Loading />
-        </div>
-      ) : null}
     </>
-  ) : null;
+  );
 };

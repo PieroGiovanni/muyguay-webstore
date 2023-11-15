@@ -65,7 +65,6 @@ export const getFilteredProducts = async (
       limit,
       cursor,
     },
-    partialRefetch: true,
   });
 
   return {
