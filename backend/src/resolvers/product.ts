@@ -87,19 +87,19 @@ export class ProductResolver {
       const realLimit = Math.min(50, limit);
       const realLimitPlusOne = realLimit + 1;
 
-      let sortingOptions = {};
+      let sortingOptions = [];
       switch (orderBy) {
         case "old":
-          sortingOptions = { id: "asc" };
+          sortingOptions = [{ id: "asc" }];
           break;
         case "less-expensive":
-          sortingOptions = { price: "asc" };
+          sortingOptions = [{ price: "asc" }, { id: "desc" }];
           break;
         case "most-expensive":
-          sortingOptions = { price: "desc" };
+          sortingOptions = [{ price: "desc" }, { id: "desc" }];
           break;
         default:
-          sortingOptions = { id: "desc" };
+          sortingOptions = [{ id: "desc" }];
       }
 
       const findManyArgs: any = {
@@ -110,7 +110,7 @@ export class ProductResolver {
           },
           productCategoryId: categoryId,
         },
-        orderBy: [sortingOptions],
+        orderBy: sortingOptions,
 
         take: realLimitPlusOne,
       };
@@ -121,7 +121,7 @@ export class ProductResolver {
         };
         findManyArgs.skip = 1;
       }
-      console.log(findManyArgs);
+
       const products = await prisma.product.findMany(findManyArgs);
 
       return {
