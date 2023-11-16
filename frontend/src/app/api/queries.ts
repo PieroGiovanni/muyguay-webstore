@@ -61,7 +61,7 @@ export const fetchFilteredProducts = async ({
   orderBy?: string;
   cursor?: number;
 }) => {
-  const limit = 8;
+  const limit = 28;
 
   const { data } = await getClient().query({
     query: GetFilteredProductsDocument,

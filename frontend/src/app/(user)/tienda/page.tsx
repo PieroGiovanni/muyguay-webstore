@@ -2,6 +2,7 @@ import { FilterButton } from "../../../components/Buttons/FilterButton";
 import { SearchProduct } from "../../../components/SearchProduct";
 import { ProductList } from "../../../components/ProductList";
 import { fetchFilteredProducts, getProductCategories } from "../../api/queries";
+import { Suspense } from "react";
 
 interface PageProps {
   searchParams?: {
@@ -26,7 +27,9 @@ const Page = async ({ searchParams }: PageProps) => {
         <SearchProduct />
         <FilterButton categories={categories} />
       </div>
-      <ProductList categories={categories} initailProducts={products} />
+      <Suspense>
+        <ProductList initailProducts={products} />
+      </Suspense>
     </div>
   ) : null;
 };

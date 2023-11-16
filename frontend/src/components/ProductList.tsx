@@ -13,8 +13,6 @@ import { Product } from "./Product";
 import { useSearchParams } from "next/navigation";
 
 interface ProductListProps {
-  categories: readonly ProductCategoryPropsFragment[];
-
   initailProducts: {
     products: readonly ProductPropsFragment[];
     hasMore: boolean;
