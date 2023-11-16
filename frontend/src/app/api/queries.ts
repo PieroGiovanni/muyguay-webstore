@@ -1,4 +1,5 @@
-import { ApolloError } from "@apollo/client";
+"use server";
+
 import { getFragmentData } from "../../graphql/generated/fragment-masking";
 import {
   BrandPropsFragment,
@@ -49,21 +50,37 @@ export const getProducts = async (): Promise<
   return getFragmentData(ProductPropsFragmentDoc, data.getProducts);
 };
 
-export const getFilteredProducts = async (
-  limit: number,
-  query?: string,
-  categoryId?: number,
-  orderBy?: string,
-  cursor?: number
-) => {
+export const fetchFilteredProducts = async ({
+  query,
+  categoryId,
+  orderBy,
+  cursor,
+}: {
+  query?: string;
+  categoryId?: string;
+  orderBy?: string;
+  cursor?: number;
+}) => {
+  const limit = 28;
+
   const { data } = await getClient().query({
     query: GetFilteredProductsDocument,
     variables: {
       query,
-      categoryId,
+      categoryId:
+        categoryId && !isNaN(parseInt(categoryId))
+          ? parseInt(categoryId)
+          : undefined,
       orderBy,
       limit,
       cursor,
+    },
+    context: {
+      fetchOptions: {
+        next: {
+          tags: ["filteredProducts"],
+        },
+      },
     },
   });
 

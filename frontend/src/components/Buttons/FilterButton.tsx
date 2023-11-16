@@ -1,3 +1,5 @@
+"use client";
+
 import { SlidersHorizontal } from "lucide-react";
 import { capitalizeFirstLetter } from "../../app/utils/stringUtils";
 import { ProductCategoryPropsFragment } from "../../graphql/generated/graphql";
@@ -17,7 +19,7 @@ import {
 } from "../ui/dropdown-menu";
 import { Label } from "../ui/label";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
-import { useEffect, useState } from "react";
+
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface FilterButtonProps {
@@ -28,9 +30,9 @@ export const FilterButton = ({ categories }: FilterButtonProps) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
+  const params = new URLSearchParams(searchParams);
 
   const handleCategoryChange = (id: string) => {
-    const params = new URLSearchParams(searchParams);
     if (id !== "all" && id) {
       params.set("categoryId", id);
     } else {
@@ -41,7 +43,6 @@ export const FilterButton = ({ categories }: FilterButtonProps) => {
   };
 
   const handleOrderBy = (order: string) => {
-    const params = new URLSearchParams(searchParams);
     if (order) {
       params.set("orderBy", order);
     } else {
