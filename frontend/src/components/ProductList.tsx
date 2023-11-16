@@ -37,6 +37,10 @@ export const ProductList = ({ initailProducts }: ProductListProps) => {
     }
   }, [products]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const loadMore = useCallback(async () => {
     const newProducts = await fetchFilteredProducts({
       query: searchParams.get("query") || undefined,
