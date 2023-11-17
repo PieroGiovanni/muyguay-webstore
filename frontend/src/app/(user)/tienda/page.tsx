@@ -3,9 +3,15 @@ import { ProductList } from "../../../components/ProductList";
 import { SearchProduct } from "../../../components/SearchProduct";
 import { getProductCategories } from "../../api/queries";
 
-interface PageProps {}
+interface PageProps {
+  searchParams: {
+    query?: string;
+    categoryId?: string;
+    orderBy?: string;
+  };
+}
 
-const Page = async ({}: PageProps) => {
+const Page = async ({ searchParams }: PageProps) => {
   const categories = await getProductCategories();
 
   return (
@@ -15,7 +21,7 @@ const Page = async ({}: PageProps) => {
         <p>Filtrar:</p>
         <FilterButton categories={categories} />
       </div>
-      <ProductList />
+      <ProductList searchParams={searchParams} />
     </div>
   );
 };

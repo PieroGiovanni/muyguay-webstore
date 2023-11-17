@@ -5,10 +5,25 @@ import "../../styles/globals.css";
 import { AuthProvider } from "../prodivers/AuthProvider";
 import { BagContextProvider } from "../context/bagContext";
 import { inter } from "../ui/fonts";
+import { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
+  metadataBase: new URL("https://muyguay.shop"),
   title: "Muy Guay",
-  description: "Tienda de Belleza y Estilo",
+  openGraph: {
+    description: "Tienda de Belleza y Estilo",
+    url: "https://muyguay.shop",
+    siteName: "Muy Guay",
+    images: [
+      {
+        url: "https://muyguay.shop/3.webp",
+        width: 800,
+        height: 450,
+      },
+    ],
+    locale: "es_ES",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

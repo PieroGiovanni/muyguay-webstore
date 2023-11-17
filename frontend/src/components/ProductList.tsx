@@ -4,7 +4,6 @@ import { Suspense, useCallback, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
-import { useSearchParams } from "next/navigation";
 import { getFragmentData } from "../graphql/generated";
 import {
   GetFilteredProductsDocument,
@@ -13,27 +12,29 @@ import {
 import { Loading } from "./Loading";
 import { Product } from "./Product";
 
-interface ProductListProps {}
+interface ProductListProps {
+  searchParams: {
+    query?: string;
+    categoryId?: string;
+    orderBy?: string;
+  };
+}
 
-export const ProductList = ({}: ProductListProps) => {
+export const ProductList = ({ searchParams }: ProductListProps) => {
   const [loadMoreRef, inview] = useInView();
   const [cursor, setCursor] = useState<number | undefined>(undefined);
 
-  const searchParams = useSearchParams();
-
   const limit = process.env.NODE_ENV === "development" ? 8 : 28;
-
-  const categoryId = searchParams.get("categoryId");
 
   const { data, fetchMore } = useSuspenseQuery(GetFilteredProductsDocument, {
     variables: {
       limit,
-      query: searchParams.get("query") || undefined,
+      query: searchParams.query,
       categoryId:
-        categoryId && !isNaN(parseInt(categoryId))
-          ? parseInt(categoryId)
+        searchParams.categoryId && !isNaN(parseInt(searchParams.categoryId))
+          ? parseInt(searchParams.categoryId)
           : undefined,
-      orderBy: searchParams.get("orderBy") || undefined,
+      orderBy: searchParams.orderBy,
     },
   });
 
