@@ -16,14 +16,14 @@ export default function Error({
 
   return (
     <div className="mt-20">
-      <h2>Something went wrong!</h2>
+      <h2>Ups! Ocurrió un Error</h2>
       <button
         onClick={
           // Attempt to recover by trying to re-render the segment
           () => reset()
         }
       >
-        Try again
+        Vuelve a intentarlo
       </button>
     </div>
   );

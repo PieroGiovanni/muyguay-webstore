@@ -13,8 +13,6 @@ import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Label } from "../ui/label";
@@ -61,15 +59,7 @@ export const FilterButton = ({ categories }: FilterButtonProps) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="text-xs">
-          <DropdownMenuLabel className="text-sm">
-            Filtrar productos
-          </DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <Accordion
-            type="multiple"
-            defaultValue={["category", "orderBy"]}
-            className="w-[40vw]"
-          >
+          <Accordion type="multiple" defaultValue={["category", "orderBy"]}>
             <AccordionItem value="category" className="w-full">
               <AccordionTrigger>Elegir Categoría</AccordionTrigger>
               <AccordionContent>
@@ -110,7 +100,7 @@ export const FilterButton = ({ categories }: FilterButtonProps) => {
                   }}
                 >
                   <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="new" id="new " />
+                    <RadioGroupItem value="new" id="new" />
                     <Label htmlFor="new">Lo más nuevo</Label>
                   </div>
                   <div className="flex items-center space-x-2">
