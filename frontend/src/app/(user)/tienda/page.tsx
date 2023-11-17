@@ -17,7 +17,7 @@ const Page = async ({ searchParams }: PageProps) => {
   return (
     <div className="pt-20 pb-5">
       <div className="flex w-full gap-2 items-center px-4">
-        <SearchProduct searchParams={searchParams} />
+        <SearchProduct />
         <p>Filtrar:</p>
         <FilterButton categories={categories} />
       </div>
