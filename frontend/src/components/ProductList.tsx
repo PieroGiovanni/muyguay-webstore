@@ -1,7 +1,5 @@
 "use client";
 
-export const dynamic = "force-dynamic";
-
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 

@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { FilterButton } from "../../../components/Buttons/FilterButton";
 import { ProductList } from "../../../components/ProductList";
 import { SearchProduct } from "../../../components/SearchProduct";
