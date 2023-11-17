@@ -6,11 +6,9 @@ import {
   BrandPropsFragmentDoc,
   GetBrandsDocument,
   GetFeaturedProductsDocument,
-  GetFilteredProductsDocument,
   GetNewProductsDocument,
   GetProductCategoriesDocument,
   GetProductDocument,
-  GetProductsDocument,
   GetUserByEmailDocument,
   ProductCategoryPropsFragment,
   ProductCategoryPropsFragmentDoc,
@@ -32,65 +30,6 @@ export const getUserByEmail = async (
   });
 
   return getFragmentData(RegularUserInfoFragmentDoc, data.getUserByEmail);
-};
-
-export const getProducts = async (): Promise<
-  readonly ProductPropsFragment[]
-> => {
-  const { data } = await getClient().query({
-    query: GetProductsDocument,
-    context: {
-      fetchOptions: {
-        next: {
-          tags: ["products"],
-        },
-      },
-    },
-  });
-  return getFragmentData(ProductPropsFragmentDoc, data.getProducts);
-};
-
-export const fetchFilteredProducts = async ({
-  query,
-  categoryId,
-  orderBy,
-  cursor,
-}: {
-  query?: string;
-  categoryId?: string;
-  orderBy?: string;
-  cursor?: number;
-}) => {
-  const limit = 28;
-
-  const { data } = await getClient().query({
-    query: GetFilteredProductsDocument,
-    variables: {
-      query,
-      categoryId:
-        categoryId && !isNaN(parseInt(categoryId))
-          ? parseInt(categoryId)
-          : undefined,
-      orderBy,
-      limit,
-      cursor,
-    },
-    context: {
-      fetchOptions: {
-        next: {
-          tags: ["filteredProducts"],
-        },
-      },
-    },
-  });
-
-  return {
-    products: getFragmentData(
-      ProductPropsFragmentDoc,
-      data.getFilteredProducts.products
-    ),
-    hasMore: data.getFilteredProducts.hasMore,
-  };
 };
 
 export const getProduct = async (id: number): Promise<ProductPropsFragment> => {

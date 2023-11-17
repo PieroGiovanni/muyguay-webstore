@@ -1,36 +1,22 @@
 import { FilterButton } from "../../../components/Buttons/FilterButton";
-import { SearchProduct } from "../../../components/SearchProduct";
 import { ProductList } from "../../../components/ProductList";
-import { fetchFilteredProducts, getProductCategories } from "../../api/queries";
-import { Suspense } from "react";
+import { SearchProduct } from "../../../components/SearchProduct";
+import { getProductCategories } from "../../api/queries";
 
-interface PageProps {
-  searchParams?: {
-    query?: string;
-    categoryId?: string;
-    orderBy?: string;
-  };
-}
+interface PageProps {}
 
-const Page = async ({ searchParams }: PageProps) => {
+const Page = async ({}: PageProps) => {
   const categories = await getProductCategories();
 
-  const products = await fetchFilteredProducts({
-    query: searchParams?.query,
-    categoryId: searchParams?.categoryId,
-    orderBy: searchParams?.orderBy,
-  });
-
-  return categories ? (
+  return (
     <div className="pt-20 pb-5">
       <div className="flex w-full gap-2 items-center px-4">
         <SearchProduct />
+        <p>Filtrar:</p>
         <FilterButton categories={categories} />
       </div>
-      <Suspense>
-        <ProductList initailProducts={products} />
-      </Suspense>
+      <ProductList />
     </div>
-  ) : null;
+  );
 };
 export default Page;
