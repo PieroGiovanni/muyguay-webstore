@@ -18,3 +18,5 @@ export const ProductImage = ({ productPublicId }: ProductImageProps) => {
     </div>
   );
 };
+
+export default ProductImage;

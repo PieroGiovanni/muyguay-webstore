@@ -2,7 +2,7 @@ query GetFilteredProducts(
   $limit: Int!
   $cursor: Int
   $orderBy: String
-  $categoryId: Int
+  $categoryId: String
   $query: String
 ) {
   getFilteredProducts(

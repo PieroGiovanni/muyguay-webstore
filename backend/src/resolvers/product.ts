@@ -18,6 +18,8 @@ import {
   Image,
 } from "@generated/type-graphql";
 import { prisma } from "..";
+import { DefaultArgs } from "@prisma/client/runtime/library";
+import { Prisma } from "@prisma/client";
 
 @InputType()
 export class ProductInput {
@@ -61,13 +63,7 @@ class PaginatedProducts {
 export class ProductResolver {
   @Query(() => [Product])
   async getProducts() {
-    return await prisma.product.findMany({
-      orderBy: [
-        {
-          id: "desc",
-        },
-      ],
-    });
+    return await prisma.product.findMany();
   }
 
   @Query(() => PaginatedProducts)
@@ -76,18 +72,16 @@ export class ProductResolver {
     limit: number,
     @Arg("query", () => String, { nullable: true })
     query?: string,
-    @Arg("categoryId", () => Int, { nullable: true })
-    categoryId?: number,
+    @Arg("categoryId", () => String, { nullable: true })
+    categoryId?: string,
     @Arg("orderBy", () => String, { nullable: true })
     orderBy?: string,
     @Arg("cursor", () => Int, { nullable: true })
     cursor?: number | null
   ): Promise<PaginatedProducts> {
     try {
-      const realLimit = Math.min(50, limit);
-      const realLimitPlusOne = realLimit + 1;
+      let sortingOptions: Prisma.ProductOrderByWithRelationInput[];
 
-      let sortingOptions = [];
       switch (orderBy) {
         case "old":
           sortingOptions = [{ id: "asc" }];
@@ -102,17 +96,44 @@ export class ProductResolver {
           sortingOptions = [{ id: "desc" }];
       }
 
-      const findManyArgs: any = {
+      let realLimit = limit;
+
+      const parsedCategoryId =
+        categoryId && !isNaN(parseInt(categoryId))
+          ? parseInt(categoryId)
+          : undefined;
+
+      const count = await prisma.product.count({
+        where: {
+          stock: { stockQuantity: { gt: 0 } },
+          name: {
+            contains: query,
+            mode: "insensitive",
+          },
+          productCategoryId: parsedCategoryId,
+        },
+      });
+
+      while (count > 4 && count % realLimit <= 4) {
+        realLimit += 4;
+      }
+
+      const findManyArgs: Prisma.ProductFindManyArgs<DefaultArgs> = {
         where: {
           name: {
             contains: query,
             mode: "insensitive",
           },
-          productCategoryId: categoryId,
+          productCategoryId: parsedCategoryId,
+          stock: {
+            stockQuantity: {
+              gt: 0,
+            },
+          },
         },
         orderBy: sortingOptions,
 
-        take: realLimitPlusOne,
+        take: realLimit + 1,
       };
 
       if (cursor) {
@@ -126,7 +147,7 @@ export class ProductResolver {
 
       return {
         products: products.slice(0, realLimit),
-        hasMore: products.length === realLimitPlusOne,
+        hasMore: products.length === realLimit + 1,
       };
     } catch (error) {
       console.error("Error in getFilteredProducts:", error);
@@ -151,6 +172,11 @@ export class ProductResolver {
     return await prisma.product.findMany({
       where: {
         isFeatured: true,
+        stock: {
+          stockQuantity: {
+            gt: 0,
+          },
+        },
       },
     });
   }
@@ -161,6 +187,13 @@ export class ProductResolver {
     quantity: number
   ): Promise<readonly Product[]> {
     return await prisma.product.findMany({
+      where: {
+        stock: {
+          stockQuantity: {
+            gt: 0,
+          },
+        },
+      },
       orderBy: {
         updatedAt: "desc",
       },
@@ -214,7 +247,7 @@ export class ProductResolver {
     @Arg("id", () => Int) id: number,
     @Arg("productInput", () => ProductInput) productInput: ProductInput
   ) {
-    if (productInput.stock) {
+    if (productInput.stock !== undefined) {
       await prisma.stock.update({
         data: {
           stockQuantity: productInput.stock,

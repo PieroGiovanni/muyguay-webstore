@@ -124,3 +124,5 @@ export const FilterButton = ({ categories }: FilterButtonProps) => {
     </div>
   );
 };
+
+export default FilterButton;

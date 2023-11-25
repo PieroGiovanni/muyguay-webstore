@@ -32,7 +32,7 @@ const documents = {
     "mutation UpdateUser($input: UpdateInput!) {\n  updateUser(input: $input) {\n    ...UserProps\n  }\n}": types.UpdateUserDocument,
     "query GetBrands {\n  getBrands {\n    ...BrandProps\n  }\n}": types.GetBrandsDocument,
     "query GetFeaturedProducts {\n  getFeaturedProducts {\n    ...ProductProps\n  }\n}": types.GetFeaturedProductsDocument,
-    "query GetFilteredProducts($limit: Int!, $cursor: Int, $orderBy: String, $categoryId: Int, $query: String) {\n  getFilteredProducts(\n    limit: $limit\n    cursor: $cursor\n    orderBy: $orderBy\n    categoryId: $categoryId\n    query: $query\n  ) {\n    hasMore\n    products {\n      ...ProductProps\n    }\n  }\n}": types.GetFilteredProductsDocument,
+    "query GetFilteredProducts($limit: Int!, $cursor: Int, $orderBy: String, $categoryId: String, $query: String) {\n  getFilteredProducts(\n    limit: $limit\n    cursor: $cursor\n    orderBy: $orderBy\n    categoryId: $categoryId\n    query: $query\n  ) {\n    hasMore\n    products {\n      ...ProductProps\n    }\n  }\n}": types.GetFilteredProductsDocument,
     "query GetImages {\n  getImages {\n    id\n    productId\n    colorId\n    imageUrl\n    createdAt\n    updatedAt\n    product {\n      name\n      price\n    }\n  }\n}": types.GetImagesDocument,
     "query GetNewProducts($quantity: Int!) {\n  getNewProducts(quantity: $quantity) {\n    ...ProductProps\n  }\n}": types.GetNewProductsDocument,
     "query GetOrders {\n  getOrders {\n    ...OrderProps\n  }\n}": types.GetOrdersDocument,
@@ -139,7 +139,7 @@ export function graphql(source: "query GetFeaturedProducts {\n  getFeaturedProdu
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "query GetFilteredProducts($limit: Int!, $cursor: Int, $orderBy: String, $categoryId: Int, $query: String) {\n  getFilteredProducts(\n    limit: $limit\n    cursor: $cursor\n    orderBy: $orderBy\n    categoryId: $categoryId\n    query: $query\n  ) {\n    hasMore\n    products {\n      ...ProductProps\n    }\n  }\n}"): (typeof documents)["query GetFilteredProducts($limit: Int!, $cursor: Int, $orderBy: String, $categoryId: Int, $query: String) {\n  getFilteredProducts(\n    limit: $limit\n    cursor: $cursor\n    orderBy: $orderBy\n    categoryId: $categoryId\n    query: $query\n  ) {\n    hasMore\n    products {\n      ...ProductProps\n    }\n  }\n}"];
+export function graphql(source: "query GetFilteredProducts($limit: Int!, $cursor: Int, $orderBy: String, $categoryId: String, $query: String) {\n  getFilteredProducts(\n    limit: $limit\n    cursor: $cursor\n    orderBy: $orderBy\n    categoryId: $categoryId\n    query: $query\n  ) {\n    hasMore\n    products {\n      ...ProductProps\n    }\n  }\n}"): (typeof documents)["query GetFilteredProducts($limit: Int!, $cursor: Int, $orderBy: String, $categoryId: String, $query: String) {\n  getFilteredProducts(\n    limit: $limit\n    cursor: $cursor\n    orderBy: $orderBy\n    categoryId: $categoryId\n    query: $query\n  ) {\n    hasMore\n    products {\n      ...ProductProps\n    }\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

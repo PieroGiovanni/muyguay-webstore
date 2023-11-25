@@ -2,12 +2,14 @@ import Link from "next/link";
 import { ProductPropsFragment } from "../graphql/generated/graphql";
 import { Card } from "./ui/card";
 import { Label } from "./ui/label";
-import { Suspense, useState } from "react";
-import { Loading } from "./Loading";
+import { Suspense, lazy, useState } from "react";
+import { LoadingSpinner } from "./LoadingSpinner";
 import { CldImage } from "next-cloudinary";
 import { extractPublicId } from "cloudinary-build-url";
 import { AddToBag } from "../app/utils/addToBag";
 import { useBagContext } from "../app/context/bagContext";
+
+// const CldImage = lazy(() => import("./CldImage"));
 
 interface ProductProps {
   product: ProductPropsFragment;
@@ -27,7 +29,7 @@ export const Product = ({ product }: ProductProps) => {
           <div className="relative w-full aspect-square">
             {!isImageLoaded && (
               <div className="w-full h-full flex justify-center items-center">
-                <Loading />
+                <LoadingSpinner />
               </div>
             )}
             <Suspense>
@@ -87,3 +89,5 @@ export const Product = ({ product }: ProductProps) => {
     </div>
   );
 };
+
+export default Product;
