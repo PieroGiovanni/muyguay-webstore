@@ -1,10 +1,7 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 
-const action = async () => {
-  revalidateTag("products");
-  revalidateTag("filteredProducts");
+export const RevalidateData = async () => {
+  revalidatePath("/");
 };
-
-export default action;

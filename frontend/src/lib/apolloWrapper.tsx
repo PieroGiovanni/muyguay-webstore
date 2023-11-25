@@ -20,17 +20,29 @@ function makeClient() {
         Query: {
           fields: {
             getFilteredProducts: {
-              keyArgs: ["query", "categoryId", "orderBy"],
+              keyArgs: ["query", "categoryId", "orderBy", "limit"],
               merge(
-                existing: PaginatedProducts | undefined,
-                incoming: PaginatedProducts
-              ): PaginatedProducts {
+                existing: PaginatedProducts,
+                incoming: PaginatedProducts,
+                { readField }
+              ) {
+                const mergedProducts = existing
+                  ? existing.products.slice(0)
+                  : [];
+
+                const existingIdSet = new Set(
+                  mergedProducts.map((product) => {
+                    return readField("id", product);
+                  })
+                );
+
+                const filteredIncomingProducts = incoming.products.filter(
+                  (product) => !existingIdSet.has(readField("id", product))
+                );
+
                 return {
                   ...incoming,
-                  products: [
-                    ...(existing?.products || []),
-                    ...incoming.products,
-                  ],
+                  products: [...mergedProducts, ...filteredIncomingProducts],
                 };
               },
             },
@@ -38,6 +50,7 @@ function makeClient() {
         },
       },
     }),
+    connectToDevTools: true,
     link:
       typeof window === "undefined"
         ? ApolloLink.from([

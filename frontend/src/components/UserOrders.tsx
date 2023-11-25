@@ -11,7 +11,7 @@ import {
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import { getDateFromTimteStamp } from "../app/utils/dateUtils";
 import { getFragmentData } from "../graphql/generated/fragment-masking";
-import { Loading } from "./Loading";
+import { LoadingSpinner } from "./LoadingSpinner";
 import {
   Accordion,
   AccordionContent,
@@ -121,7 +121,7 @@ export const UserOrders = ({}: userOrdersProps) => {
     <div className="mt-20 flex justify-center">No tienes pedidos</div>
   ) : (
     <div className="w-full h-[50vh] flex justify-center items-end">
-      <Loading />
+      <LoadingSpinner />
     </div>
   );
 };

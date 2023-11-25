@@ -30,3 +30,5 @@ export const SearchProduct = ({}: SearchProductProps) => {
     </>
   );
 };
+
+export default SearchProduct;

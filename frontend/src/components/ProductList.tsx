@@ -1,7 +1,13 @@
 "use client";
 
-import { Suspense, useCallback, useEffect, useState } from "react";
-import { useInView } from "react-intersection-observer";
+import {
+  Suspense,
+  startTransition,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import { getFragmentData } from "../graphql/generated";
@@ -9,32 +15,27 @@ import {
   GetFilteredProductsDocument,
   ProductPropsFragmentDoc,
 } from "../graphql/generated/graphql";
-import { Loading } from "./Loading";
+import { LoadingSpinner } from "./LoadingSpinner";
 import { Product } from "./Product";
 
 interface ProductListProps {
-  searchParams: {
-    query?: string;
-    categoryId?: string;
-    orderBy?: string;
+  variables: {
+    limit: number;
+    query?: string | undefined;
+    categoryId?: string | undefined;
+    orderBy?: string | undefined;
   };
 }
 
-export const ProductList = ({ searchParams }: ProductListProps) => {
-  const [loadMoreRef, inview] = useInView();
+export const ProductList = ({ variables }: ProductListProps) => {
   const [cursor, setCursor] = useState<number | undefined>(undefined);
-
-  const limit = process.env.NODE_ENV === "development" ? 8 : 28;
 
   const { data, fetchMore } = useSuspenseQuery(GetFilteredProductsDocument, {
     variables: {
-      limit,
-      query: searchParams.query,
-      categoryId:
-        searchParams.categoryId && !isNaN(parseInt(searchParams.categoryId))
-          ? parseInt(searchParams.categoryId)
-          : undefined,
-      orderBy: searchParams.orderBy,
+      limit: variables.limit,
+      query: variables.query,
+      categoryId: variables.categoryId,
+      orderBy: variables.orderBy,
     },
   });
 
@@ -48,34 +49,60 @@ export const ProductList = ({ searchParams }: ProductListProps) => {
   }, [products]);
 
   const loadMore = useCallback(() => {
-    fetchMore({
-      variables: {
-        cursor: cursor,
-      },
+    startTransition(() => {
+      fetchMore({
+        variables: {
+          cursor,
+        },
+      });
     });
   }, [cursor, fetchMore]);
 
+  const loadMoreRef = useRef(null);
+
   useEffect(() => {
-    if (inview) loadMore();
-  }, [inview, loadMore]);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const first = entries[0];
+        if (first.isIntersecting) {
+          loadMore();
+        }
+      },
+      {
+        root: null,
+        rootMargin: "100px",
+        threshold: 1,
+      }
+    );
+    const currentRef = loadMoreRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, [loadMoreRef, loadMore]);
 
   return (
-    <>
-      <Suspense>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 px-4 pt-4">
-          {products.map((p) => (
-            <Product key={p.id} product={p} />
-          ))}
+    <Suspense>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 px-4 pt-4">
+        {products.map((p) => (
+          <Product key={p.id} product={p} />
+        ))}
+      </div>
+      {data.getFilteredProducts.hasMore ? (
+        <div
+          className="pt-5 w-full h-10 flex relative justify-center items-center"
+          ref={loadMoreRef}
+        >
+          <LoadingSpinner size="sm" />
         </div>
-        {data.getFilteredProducts.hasMore ? (
-          <div
-            className="pt-5 w-full h-10 flex relative justify-center items-center"
-            ref={loadMoreRef}
-          >
-            <Loading size="sm" />
-          </div>
-        ) : null}
-      </Suspense>
-    </>
+      ) : null}
+    </Suspense>
   );
 };
+
+export default ProductList;

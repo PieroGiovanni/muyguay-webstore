@@ -1,9 +1,9 @@
-interface LoadingProps {
+interface LoadingSpinnerProps {
   size?: "xs" | "sm" | "m" | "lg";
   color?: string;
 }
 
-export const Loading = ({ size, color }: LoadingProps) => {
+export const LoadingSpinner = ({ size, color }: LoadingSpinnerProps) => {
   let spinnerSize;
   switch (size) {
     case "xs":

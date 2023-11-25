@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Loading } from "./Loading";
+import { LoadingSpinner } from "./LoadingSpinner";
 import { CldImage } from "next-cloudinary";
 import { ProductPropsFragment } from "../graphql/generated/graphql";
 import { extractPublicId } from "cloudinary-build-url";
@@ -18,7 +18,7 @@ export const ShopImage = ({ product }: ShopImageProps) => {
     <div className="relative h-[90%] bg-blue-700">
       {isImageLoading && (
         <div className="w-full h-full flex justify-center items-center">
-          <Loading />
+          <LoadingSpinner />
         </div>
       )}
 

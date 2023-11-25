@@ -6,9 +6,11 @@ import {
   BrandPropsFragmentDoc,
   GetBrandsDocument,
   GetFeaturedProductsDocument,
+  GetFilteredProductsDocument,
   GetNewProductsDocument,
   GetProductCategoriesDocument,
   GetProductDocument,
+  GetProductsDocument,
   GetUserByEmailDocument,
   ProductCategoryPropsFragment,
   ProductCategoryPropsFragmentDoc,
@@ -81,4 +83,34 @@ export const getNewProducts = async (
     },
   });
   return getFragmentData(ProductPropsFragmentDoc, data.getNewProducts);
+};
+
+export const fetchFilteredProducts = async ({
+  query,
+  categoryId,
+  orderBy,
+  cursor,
+}: {
+  query?: string;
+  categoryId?: string;
+  orderBy?: string;
+  cursor?: number;
+}) => {
+  const { data } = await getClient().query({
+    query: GetFilteredProductsDocument,
+    variables: {
+      limit: 8,
+      query,
+      categoryId,
+      orderBy,
+      cursor,
+    },
+  });
+
+  return data;
+};
+
+export const getProducts = async () => {
+  const { data } = await getClient().query({ query: GetProductsDocument });
+  return data;
 };

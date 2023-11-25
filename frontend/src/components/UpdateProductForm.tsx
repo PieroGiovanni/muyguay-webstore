@@ -29,7 +29,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Textarea } from "./ui/textarea";
-import action from "../app/utils/actions";
+import { RevalidateData } from "../app/utils/actions";
 
 interface UpdateProductFormProps {
   productId: number;
@@ -96,7 +96,7 @@ export const UpdateProductForm = ({ productId }: UpdateProductFormProps) => {
         },
       },
     });
-    action();
+    RevalidateData();
   };
 
   return product && productCategories && brands ? (
