@@ -4,6 +4,8 @@ import { Suspense, lazy } from "react";
 import { getProductCategories } from "../../api/queries";
 import { PrefetchQuery } from "../../../components/QueryComponents/PrefetchQuery";
 import { GetFilteredProductsDocument } from "../../../graphql/generated/graphql";
+import { LoadingSkeleton } from "../../../components/LoadingSkeleton";
+import { LoadingSpinner } from "../../../components/LoadingSpinner";
 
 const FilterButton = lazy(
   () => import("../../../components/Buttons/FilterButton")
@@ -25,17 +27,17 @@ const Page = async ({ searchParams }: PageProps) => {
   const categories = await getProductCategories();
   let variables = {
     ...searchParams,
-    limit: process.env.NODE_ENV === "development" ? 8 : 28,
+    limit: 28,
   };
 
   return (
     <div className="pt-20 pb-5">
-      <Suspense>
-        <div className="flex w-full gap-2 items-center px-4">
-          <SearchProduct />
-          <p>Filtrar:</p>
-          <FilterButton categories={categories} />
-        </div>
+      <div className="flex w-full gap-2 items-center px-4">
+        <SearchProduct />
+        <p>Filtrar:</p>
+        <FilterButton categories={categories} />
+      </div>
+      <Suspense fallback={<LoadingSpinner />}>
         <PrefetchQuery
           variables={variables}
           query={GetFilteredProductsDocument}

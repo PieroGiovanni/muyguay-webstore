@@ -66,11 +66,11 @@ export const AddProductForm = ({
 }: AddProductFormProps) => {
   const [addProduct] = useMutation(CreateProductDocument);
 
-  const [imageUrl, setImageUrl] = useState();
+  const [imagesUrl, setImagesUrl] = useState<string[]>([]);
   const [resetImage, setResetImage] = useState(false);
 
-  const handleImageUrl = (imageUrl: any) => {
-    setImageUrl(imageUrl);
+  const handleImagesUrl = (imageUrl: string[]) => {
+    setImagesUrl(imageUrl);
     setResetImage(false);
   };
 
@@ -91,7 +91,7 @@ export const AddProductForm = ({
   const router = useRouter();
 
   const saveChanges = async (data: z.infer<typeof FormSchema>) => {
-    if (imageUrl === undefined) {
+    if (!imagesUrl) {
       toast({
         title: "Agregar Imagen",
       });
@@ -109,7 +109,7 @@ export const AddProductForm = ({
           tags: parseStringToArray(data.tags),
           isFeatured: data.featured,
           stock: data.stock,
-          imageUrl,
+          imagesUrl,
         },
       },
     });
@@ -118,7 +118,7 @@ export const AddProductForm = ({
       toast({
         title: "Producto Agregado",
       });
-      setImageUrl(undefined);
+      setImagesUrl([]);
       form.reset();
       setResetImage(true);
       RevalidateData();
@@ -312,7 +312,10 @@ export const AddProductForm = ({
               )}
             />
           </div>
-          <UploadWidget onImageUrl={handleImageUrl} resetImage={resetImage} />
+          <UploadWidget
+            handleImagesUrl={handleImagesUrl}
+            resetImage={resetImage}
+          />
           <div className="flex justify-center">
             <Button className="w-32" type="submit">
               Guardar

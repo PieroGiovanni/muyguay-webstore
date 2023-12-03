@@ -6,8 +6,8 @@ import { BackButton } from "../../../../components/Buttons/BackButton";
 import { Card } from "../../../../components/ui/card";
 import { Label } from "../../../../components/ui/label";
 import { getProduct } from "../../../api/queries";
-
-const ProductImage = lazy(() => import("../../../../components/ProductImage"));
+import { ProductGallery } from "../../../../components/ProductGallery";
+import { LoadingSpinner } from "../../../../components/LoadingSpinner";
 
 interface pageProps {
   params: { id: string };
@@ -17,30 +17,28 @@ const Page = async ({ params }: pageProps) => {
   const product = await getProduct(parseInt(params.id));
 
   return (
-    <div className="pt-16 flex flex-col space-y-5 items-center">
-      <Suspense>
-        <Card className="p-5 flex flex-col gap-5">
-          <ProductImage
-            productPublicId={extractPublicId(product.images[0].imageUrl!)}
-          />
-          <div className="flex gap-x-5 text-xl">
-            <Label className="text-xl font-bold">
+    <Suspense fallback={<LoadingSpinner />}>
+      <div className="pt-16 w-[100%] flex md:flex-row flex-col justify-center gap-5">
+        <ProductGallery product={product} />
+        <div className="flex md:mt-20 flex-col gap-5 md:basis-2/6">
+          <div className="flex gap-x-5 text-xl items-center">
+            <Label className="basis-4/5 text-xl font-bold text-center">
               {product.name.toUpperCase()}
             </Label>
-            <Label className="text-xl">S/. {product.price}</Label>
+            <Label className="basis-1/5 text-xl">S/. {product.price}</Label>
           </div>
-          <div className="whitespace-pre-line">
+          <div className="whitespace-pre-line pl-3">
             {product.description
               ? product.description
               : "descripción del producto"}
           </div>
-          <div className="flex justify-around">
+          <div className="flex relative bottom-0 justify-center gap-5 md:gap-10">
             <AddToBagButton product={product} />
             <BackButton />
           </div>
-        </Card>
-      </Suspense>
-    </div>
+        </div>
+      </div>
+    </Suspense>
   );
 };
 

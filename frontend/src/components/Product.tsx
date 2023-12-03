@@ -9,8 +9,6 @@ import { extractPublicId } from "cloudinary-build-url";
 import { AddToBag } from "../app/utils/addToBag";
 import { useBagContext } from "../app/context/bagContext";
 
-// const CldImage = lazy(() => import("./CldImage"));
-
 interface ProductProps {
   product: ProductPropsFragment;
 }
@@ -18,6 +16,8 @@ interface ProductProps {
 export const Product = ({ product }: ProductProps) => {
   const { bagProducts, setBagProducts } = useBagContext();
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+
+  const createHandleLoad = () => () => setIsImageLoaded(true);
 
   return (
     <div className="relative w-full">
@@ -27,36 +27,31 @@ export const Product = ({ product }: ProductProps) => {
             {product.name}
           </Label>
           <div className="relative w-full aspect-square">
-            {!isImageLoaded && (
-              <div className="w-full h-full flex justify-center items-center">
-                <LoadingSpinner />
-              </div>
-            )}
-            <Suspense>
-              <CldImage
-                src={
-                  product.images[0].imageUrl
-                    ? extractPublicId(product.images[0].imageUrl!)
-                    : "/image-not-found.webp"
-                }
-                alt={product.name}
-                onLoad={() => setIsImageLoaded(true)}
-                fill
-                sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 33vw"
-              />
-            </Suspense>
+            {!isImageLoaded && <LoadingSpinner />}
+
+            <CldImage
+              src={
+                product.images[0].imageUrl
+                  ? extractPublicId(product.images[0].imageUrl!)
+                  : "/image-not-found.webp"
+              }
+              alt={product.name}
+              onLoad={createHandleLoad}
+              fill
+              sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 33vw"
+            />
           </div>
           <Label className="flex text-lg ml-2 font-bold">
             S/. {product.price}
           </Label>
         </Card>
       </Link>
+      {/* ShoppingBag Button*/}
       <div className="absolute bottom-1 right-1">
         <button
           className="rounded-full relative border-2 border-black w-10 h-10 md:w-[65px] md:h-[65px] items-center flex justify-center bg-white"
           onClick={() => AddToBag(product, bagProducts, setBagProducts)}
         >
-          {/* <ShoppingBag /> */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

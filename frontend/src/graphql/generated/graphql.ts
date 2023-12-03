@@ -227,7 +227,7 @@ export type ProductColor = {
 export type ProductInput = {
   brandId?: InputMaybe<Scalars['Int']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
-  imageUrl?: InputMaybe<Scalars['String']['input']>;
+  imagesUrl?: InputMaybe<Array<Scalars['String']['input']>>;
   isFeatured?: InputMaybe<Scalars['Boolean']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   price?: InputMaybe<Scalars['Float']['input']>;
