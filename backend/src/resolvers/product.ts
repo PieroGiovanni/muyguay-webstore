@@ -104,21 +104,6 @@ export class ProductResolver {
           ? parseInt(categoryId)
           : undefined;
 
-      const count = await prisma.product.count({
-        where: {
-          stock: { stockQuantity: { gt: 0 } },
-          name: {
-            contains: query,
-            mode: "insensitive",
-          },
-          productCategoryId: parsedCategoryId,
-        },
-      });
-
-      while (count > 4 && count % realLimit <= 4) {
-        realLimit += 4;
-      }
-
       const findManyArgs: Prisma.ProductFindManyArgs<DefaultArgs> = {
         where: {
           name: {

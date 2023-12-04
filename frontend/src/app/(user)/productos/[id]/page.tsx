@@ -18,11 +18,11 @@ const Page = async ({ params }: pageProps) => {
 
   return (
     <Suspense fallback={<LoadingSpinner />}>
-      <div className="pt-16 w-[100%] flex md:flex-row flex-col justify-center gap-5">
+      <div className="pt-[58px] w-[100%] md:h-[100vh] flex md:flex-row flex-col justify-center gap-5 items-center">
         <ProductGallery product={product} />
-        <div className="flex md:mt-20 flex-col gap-5 md:basis-2/6">
+        <div className="flex flex-col gap-5 md:basis-2/6">
           <div className="flex gap-x-5 text-xl items-center">
-            <Label className="basis-4/5 text-xl font-bold text-center">
+            <Label className="basis-4/5 md:text-xl text-lg font-bold text-center">
               {product.name.toUpperCase()}
             </Label>
             <Label className="basis-1/5 text-xl">S/. {product.price}</Label>

@@ -37,7 +37,13 @@ const Page = async ({ searchParams }: PageProps) => {
         <p>Filtrar:</p>
         <FilterButton categories={categories} />
       </div>
-      <Suspense fallback={<LoadingSpinner />}>
+      <Suspense
+        fallback={
+          <div className="mt-20">
+            <LoadingSpinner size="lg" />
+          </div>
+        }
+      >
         <PrefetchQuery
           variables={variables}
           query={GetFilteredProductsDocument}

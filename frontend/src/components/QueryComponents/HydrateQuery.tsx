@@ -35,7 +35,6 @@ export const HydrateQuery = ({
       variables,
       data,
     });
-    console.log("hydrated");
   }
 
   return children;

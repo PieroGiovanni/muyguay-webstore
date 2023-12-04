@@ -19,7 +19,7 @@ export const ProductGallery = ({ product }: ProductGalleryProps) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [isThumbnailLoaded, setIsThumbnailLoaded] = useState(false);
   return (
-    <Card className="p-5 flex flex-col gap-5">
+    <Card className="p-5 flex flex-col gap-3">
       <div className="md:w-[30vw] w-[90vw] relative aspect-square">
         {!isImageLoaded && <LoadingSpinner />}
         <CldImage
@@ -32,7 +32,7 @@ export const ProductGallery = ({ product }: ProductGalleryProps) => {
       </div>
 
       {product.images.length > 1 ? (
-        <div className="flex gap-2">
+        <div className="flex gap-3">
           {product.images.map((image) => {
             let isSelected =
               selectedImage === extractPublicId(image.imageUrl!)
