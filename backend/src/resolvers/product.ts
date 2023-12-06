@@ -164,6 +164,9 @@ export class ProductResolver {
           },
         },
       },
+      orderBy: {
+        id: "desc",
+      },
     });
   }
 
@@ -301,7 +304,7 @@ export class ProductResolver {
   }
 
   @Mutation(() => Boolean)
-  async deleteProduct(@Arg("id") id: number): Promise<boolean> {
+  async deleteProduct(@Arg("id", () => Int) id: number): Promise<boolean> {
     try {
       await prisma.orderItem.deleteMany({
         where: { productId: id },

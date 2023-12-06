@@ -1,18 +1,13 @@
+import { Upload } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
-import Image from "next/image";
-import { Upload } from "lucide-react";
-import { Label } from "./ui/label";
 
 interface UploadWidgetProps {
-  handleImagesUrl: (imageUrl: any) => void;
+  handleImagesUrl: (imagesUrl: string[]) => void;
   resetImage?: boolean;
 }
 
-export const UploadWidget = ({
-  handleImagesUrl,
-  resetImage,
-}: UploadWidgetProps) => {
+export const UploadWidget = ({ handleImagesUrl }: UploadWidgetProps) => {
   const [loaded, setLoaded] = useState(false);
   const [images, setImages] = useState<string[]>([]);
 
@@ -34,8 +29,6 @@ export const UploadWidget = ({
     }
 
     if (result && result.event === "success") {
-      console.log(result);
-      console.log("success", result);
       setImages((prevImages) =>
         prevImages
           ? [...prevImages, result.info.secure_url]
@@ -65,33 +58,9 @@ export const UploadWidget = ({
     );
   };
 
-  useEffect(() => {
-    if (resetImage) {
-      setImages([]);
-    }
-  }, [resetImage]);
-
   return (
-    <div>
-      <div className="flex items-center gap-2">
-        <Label>Subir Imagen: </Label>
-        <Button type="button" onClick={uploadWidget}>
-          <Upload />
-        </Button>
-      </div>
-      {images.length > 0 ? (
-        <div className="flex flex-row gap-2 mt-2">
-          {images.map((image) => (
-            <Image
-              key={image}
-              src={image}
-              alt="uploaded using the upload widget"
-              width={200}
-              height={200}
-            />
-          ))}
-        </div>
-      ) : null}
-    </div>
+    <Button type="button" onClick={uploadWidget}>
+      <Upload />
+    </Button>
   );
 };

@@ -22,11 +22,11 @@ export const CategoriesAccess = ({ categories }: CategoriesAccessProps) => {
           .sort((a, b) => a.id - b.id)
           .map((c) => (
             <Button
-              className="h-20 md:text-xl"
+              className="h-20 md:text-xl bg-secondary"
               onClick={() => handleCategory(c.id)}
               key={c.id}
             >
-              {c.name}
+              {c.name.toUpperCase()}
             </Button>
           ))}
       </div>

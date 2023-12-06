@@ -8,7 +8,9 @@ const Page = async ({}: PageProps) => {
   const productCategories = await getProductCategories();
 
   return (
-    <AddProductForm brands={brands} productCategories={productCategories} />
+    <div className="flex justify-center">
+      <AddProductForm brands={brands} categories={productCategories} />
+    </div>
   );
 };
 
