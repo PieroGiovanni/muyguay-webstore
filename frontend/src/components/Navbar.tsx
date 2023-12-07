@@ -19,7 +19,7 @@ export const Navbar = ({}: NavbarProps) => {
             width={150}
             height={40}
             priority
-          ></Image>
+          />
         </Link>
 
         {/* Shopping Cart Icon */}

@@ -26,6 +26,7 @@ const documents = {
     "mutation AddProductImage($imageInput: ImageInput!) {\n  addProductImage(imageInput: $imageInput) {\n    productId\n    imageUrl\n  }\n}": types.AddProductImageDocument,
     "mutation CreateOrder($input: OrderInput!) {\n  createOrder(input: $input) {\n    id\n    userId\n    paymentStatus\n    shippingStatus\n    products {\n      id\n      quantity\n    }\n    updatedAt\n    createdAt\n  }\n}": types.CreateOrderDocument,
     "mutation CreateProduct($productInput: ProductInput!) {\n  createProduct(productInput: $productInput) {\n    ...ProductProps\n  }\n}": types.CreateProductDocument,
+    "mutation DeleteProduct($id: Int!) {\n  deleteProduct(id: $id)\n}": types.DeleteProductDocument,
     "mutation Register($input: UserInput!) {\n  register(input: $input) {\n    ...RegularUserResponse\n  }\n}": types.RegisterDocument,
     "mutation UpdateOrder($input: UpdateOrderInput!) {\n  updateOrder(input: $input) {\n    ...OrderProps\n  }\n}": types.UpdateOrderDocument,
     "mutation UpdateProduct($productInput: ProductInput!, $id: Int!) {\n  updateProduct(productInput: $productInput, id: $id) {\n    ...ProductProps\n  }\n}": types.UpdateProductDocument,
@@ -112,6 +113,10 @@ export function graphql(source: "mutation CreateOrder($input: OrderInput!) {\n  
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "mutation CreateProduct($productInput: ProductInput!) {\n  createProduct(productInput: $productInput) {\n    ...ProductProps\n  }\n}"): (typeof documents)["mutation CreateProduct($productInput: ProductInput!) {\n  createProduct(productInput: $productInput) {\n    ...ProductProps\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "mutation DeleteProduct($id: Int!) {\n  deleteProduct(id: $id)\n}"): (typeof documents)["mutation DeleteProduct($id: Int!) {\n  deleteProduct(id: $id)\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -3,13 +3,14 @@
 import { useMutation } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { parseStringToArray } from "../app/utils/stringUtils";
 import {
   BrandPropsFragment,
   CreateProductDocument,
+  GetProductsDataDocument,
   ProductCategoryPropsFragment,
 } from "../graphql/generated/graphql";
 import { LoadingSkeleton } from "./LoadingSkeleton";
@@ -37,17 +38,22 @@ import { Textarea } from "./ui/textarea";
 import { toast } from "./ui/use-toast";
 import Link from "next/link";
 import { RevalidateData } from "../app/utils/actions";
+import { LoadingSpinner } from "./LoadingSpinner";
+import { ImagesUploader } from "./ImagesUploader";
+import { Card } from "./ui/card";
 
 interface AddProductFormProps {
   brands: readonly BrandPropsFragment[];
-  productCategories: readonly ProductCategoryPropsFragment[];
+  categories: readonly ProductCategoryPropsFragment[];
 }
 
 const FormSchema = z.object({
   name: z.string().nonempty({ message: "ingresar nombre del producto" }),
-  productCategory: z
+  //categoryId is string to prevent Select Component Errors when submitting
+  categoryId: z
     .string({ required_error: "elegir categoría" })
     .nonempty({ message: "elegir categoría" }),
+
   price: z.coerce
     .number({ invalid_type_error: "ingresar precio" })
     .positive({ message: "ingresar precio" }),
@@ -60,19 +66,10 @@ const FormSchema = z.object({
   featured: z.boolean(),
 });
 
-export const AddProductForm = ({
-  brands,
-  productCategories,
-}: AddProductFormProps) => {
+export const AddProductForm = ({ brands, categories }: AddProductFormProps) => {
   const [addProduct] = useMutation(CreateProductDocument);
 
-  const [imageUrl, setImageUrl] = useState();
-  const [resetImage, setResetImage] = useState(false);
-
-  const handleImageUrl = (imageUrl: any) => {
-    setImageUrl(imageUrl);
-    setResetImage(false);
-  };
+  const [images, setImages] = useState<string[]>([]);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -82,16 +79,14 @@ export const AddProductForm = ({
       description: "",
       stock: 1,
       tags: "",
-      productCategory: "",
       brandId: 1,
       featured: false,
+      categoryId: "",
     },
   });
 
-  const router = useRouter();
-
   const saveChanges = async (data: z.infer<typeof FormSchema>) => {
-    if (imageUrl === undefined) {
+    if (!images.length) {
       toast({
         title: "Agregar Imagen",
       });
@@ -103,32 +98,33 @@ export const AddProductForm = ({
         productInput: {
           name: data.name,
           price: data.price,
-          productCategoryId: parseInt(data.productCategory),
+          productCategoryId: parseInt(data.categoryId),
           description: data.description,
           brandId: data.brandId,
           tags: parseStringToArray(data.tags),
           isFeatured: data.featured,
           stock: data.stock,
-          imageUrl,
+          imagesUrl: images,
         },
       },
+      refetchQueries: [{ query: GetProductsDataDocument }],
     });
 
     if (newProdcut) {
       toast({
         title: "Producto Agregado",
       });
-      setImageUrl(undefined);
+      setImages([]);
       form.reset();
-      setResetImage(true);
       RevalidateData();
     }
   };
 
-  return productCategories && brands ? (
+  return categories && brands ? (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(saveChanges)}>
-        <div className="flex flex-col gap-5 m-5">
+        <Card className="flex flex-col gap-2 px-5 py-3 md:w-[35vw] w-[100vw]">
+          <p className="font-bold text-lg text-center">AGREGAR PRODUCTO</p>
           <div className="flex flex-row gap-4">
             <div className="flex flex-col justify-start gap-3 basis-3/4">
               <FormField
@@ -177,7 +173,7 @@ export const AddProductForm = ({
               )}
             />
           </div>
-          <div className="flex flex-row gap-1">
+          <div className="flex flex-row gap-1 items-center">
             <FormField
               control={form.control}
               name="featured"
@@ -189,19 +185,25 @@ export const AddProductForm = ({
                         field.onChange(e === "featured" ? true : false);
                       }}
                       value={field.value ? "featured" : "notFeatured"}
-                      className="flex flex-row basis-2/3"
+                      className="flex items-center basis-2/3"
                     >
-                      <FormItem className="flex items-center space-x-2">
-                        <FormControl>
-                          <RadioGroupItem value="featured" />
-                        </FormControl>
-                        <FormLabel className="font-normal">Destacado</FormLabel>
+                      <FormItem>
+                        <div className="flex items-center gap-2">
+                          <FormControl>
+                            <RadioGroupItem value="featured" />
+                          </FormControl>
+                          <FormLabel className="text-center">
+                            Destacado
+                          </FormLabel>
+                        </div>
                       </FormItem>
-                      <FormItem className="flex items-center space-x-2">
-                        <FormControl>
-                          <RadioGroupItem value="notFeatured" />
-                        </FormControl>
-                        <FormLabel>No Destacado</FormLabel>
+                      <FormItem>
+                        <div className="flex items-center gap-2">
+                          <FormControl>
+                            <RadioGroupItem value="notFeatured" />
+                          </FormControl>
+                          <FormLabel>No Destacado</FormLabel>
+                        </div>
                       </FormItem>
                     </RadioGroup>
                   </FormControl>
@@ -228,12 +230,10 @@ export const AddProductForm = ({
             <div className="flex flex-col justify-start gap-3 basis-1/2">
               <FormField
                 control={form.control}
-                name="productCategory"
+                name="categoryId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-start">
-                      Categoría de Producto
-                    </FormLabel>
+                    <FormLabel className="text-start">Categoría</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
@@ -241,13 +241,13 @@ export const AddProductForm = ({
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Categoría de Producto" />
+                          <SelectValue placeholder="Categoría" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent className="h-auto">
-                        {productCategories.map((pt) => (
-                          <SelectItem key={pt.id} value={pt.id.toString()}>
-                            {pt.name}
+                        {categories.map((c) => (
+                          <SelectItem key={c.id} value={c.id.toString()}>
+                            {c.name}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -267,9 +267,6 @@ export const AddProductForm = ({
                     <Select
                       onValueChange={(e) => field.onChange(parseInt(e))}
                       value={field.value.toString()}
-                      // defaultValue={
-                      //   brands.find((b) => b.id === field.value)?.name
-                      // }
                     >
                       <FormControl>
                         <SelectTrigger>
@@ -312,8 +309,11 @@ export const AddProductForm = ({
               )}
             />
           </div>
-          <UploadWidget onImageUrl={handleImageUrl} resetImage={resetImage} />
-          <div className="flex justify-center">
+          <div>
+            <FormLabel>Imagénes</FormLabel>
+            <ImagesUploader images={images} setImages={setImages} />
+          </div>
+          <div className="flex justify-center gap-2">
             <Button className="w-32" type="submit">
               Guardar
             </Button>
@@ -321,10 +321,10 @@ export const AddProductForm = ({
               <Button>Cancelar</Button>
             </Link>
           </div>
-        </div>
+        </Card>
       </form>
     </Form>
   ) : (
-    <LoadingSkeleton />
+    <LoadingSpinner size="lg" />
   );
 };

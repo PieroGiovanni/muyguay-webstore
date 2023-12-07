@@ -25,6 +25,7 @@ import { Prisma } from "@prisma/client";
 export class ProductInput {
   @Field(() => Int, { nullable: true })
   brandId?: number;
+
   @Field(() => Int, { nullable: true })
   productCategoryId?: number;
 
@@ -46,8 +47,8 @@ export class ProductInput {
   @Field(() => Int, { nullable: true })
   stock?: number;
 
-  @Field(() => String, { nullable: true })
-  imageUrl?: string;
+  @Field(() => [String], { nullable: true })
+  imagesUrl?: string[];
 }
 
 @ObjectType()
@@ -102,21 +103,6 @@ export class ProductResolver {
         categoryId && !isNaN(parseInt(categoryId))
           ? parseInt(categoryId)
           : undefined;
-
-      const count = await prisma.product.count({
-        where: {
-          stock: { stockQuantity: { gt: 0 } },
-          name: {
-            contains: query,
-            mode: "insensitive",
-          },
-          productCategoryId: parsedCategoryId,
-        },
-      });
-
-      while (count > 4 && count % realLimit <= 4) {
-        realLimit += 4;
-      }
 
       const findManyArgs: Prisma.ProductFindManyArgs<DefaultArgs> = {
         where: {
@@ -177,6 +163,9 @@ export class ProductResolver {
             gt: 0,
           },
         },
+      },
+      orderBy: {
+        id: "desc",
       },
     });
   }
@@ -284,8 +273,8 @@ export class ProductResolver {
           name: productInput.name!,
           price: productInput.price!,
           description: productInput.description,
-          brandId: productInput.brandId as number,
-          productCategoryId: productInput.productCategoryId as number,
+          brandId: productInput.brandId!,
+          productCategoryId: productInput.productCategoryId!,
           tags: productInput.tags,
           isFeatured: productInput.isFeatured,
         },
@@ -298,11 +287,13 @@ export class ProductResolver {
         },
       });
 
-      await prisma.image.create({
-        data: {
-          productId: product.id,
-          imageUrl: productInput.imageUrl,
-        },
+      productInput.imagesUrl!.forEach(async (imageUrl) => {
+        await prisma.image.create({
+          data: {
+            productId: product.id,
+            imageUrl: imageUrl,
+          },
+        });
       });
 
       return product;
@@ -313,7 +304,7 @@ export class ProductResolver {
   }
 
   @Mutation(() => Boolean)
-  async deleteProduct(@Arg("id") id: number): Promise<boolean> {
+  async deleteProduct(@Arg("id", () => Int) id: number): Promise<boolean> {
     try {
       await prisma.orderItem.deleteMany({
         where: { productId: id },

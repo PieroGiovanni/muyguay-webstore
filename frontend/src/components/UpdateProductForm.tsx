@@ -1,22 +1,32 @@
+"use client";
+
 import { useMutation } from "@apollo/client";
-import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
-import { DialogClose } from "@radix-ui/react-dialog";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 import {
-  convertArrayToString,
-  parseStringToArray,
-} from "../app/utils/stringUtils";
-import { getFragmentData } from "../graphql/generated";
-import {
-  BrandPropsFragmentDoc,
-  GetBrandsDocument,
-  GetProductCategoriesDocument,
-  GetProductDocument,
-  ProductCategoryPropsFragmentDoc,
-  ProductPropsFragmentDoc,
+  BrandPropsFragment,
+  ProductCategoryPropsFragment,
+  ProductPropsFragment,
   UpdateProductDocument,
 } from "../graphql/generated/graphql";
-import { LoadingSkeleton } from "./LoadingSkeleton";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "./ui/form";
+import { toast } from "./ui/use-toast";
+
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { RevalidateData } from "../app/utils/actions";
+import { parseStringToArray } from "../app/utils/stringUtils";
+import { ImagesUploader } from "./ImagesUploader";
+import { LoadingSpinner } from "./LoadingSpinner";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
@@ -29,185 +39,302 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Textarea } from "./ui/textarea";
-import { RevalidateData } from "../app/utils/actions";
+import { Card } from "./ui/card";
 
 interface UpdateProductFormProps {
-  productId: number;
+  categories: readonly ProductCategoryPropsFragment[];
+  product: ProductPropsFragment;
+  brands: readonly BrandPropsFragment[];
 }
 
-export const UpdateProductForm = ({ productId }: UpdateProductFormProps) => {
-  const { data: productData } = useSuspenseQuery(GetProductDocument, {
-    variables: { id: productId },
-  });
+const FormSchema = z.object({
+  name: z.string().nonempty({ message: "ingresar nombre del producto" }),
+  categoryId: z.number({ required_error: "elegir categoría" }),
+  price: z.coerce
+    .number({ invalid_type_error: "ingresar precio" })
+    .positive({ message: "ingresar precio" }),
+  description: z.string(),
+  stock: z.coerce
+    .number({ invalid_type_error: "Ingresar stock" })
+    .positive({ message: "ingresar stock" }),
+  tags: z.string(),
+  brandId: z.number(),
+  featured: z.boolean(),
+});
 
-  const { data: productCategoryData } = useSuspenseQuery(
-    GetProductCategoriesDocument
-  );
-
-  const { data: brandData } = useSuspenseQuery(GetBrandsDocument);
-
+export const UpdateProductForm = ({
+  product,
+  categories,
+  brands,
+}: UpdateProductFormProps) => {
   const [updateProduct] = useMutation(UpdateProductDocument);
 
-  const product = getFragmentData(
-    ProductPropsFragmentDoc,
-    productData?.getProduct
+  const [images, setImages] = useState<string[]>(
+    product.images.map((i) => i.imageUrl!)
   );
 
-  const productCategories = getFragmentData(
-    ProductCategoryPropsFragmentDoc,
-    productCategoryData?.getProductCategories
-  );
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      name: product.name,
+      price: product.price,
+      description: product.description as string,
+      stock: product.stock,
+      tags: product.tags.join(",").toString(),
+      categoryId: product.productCategoryId,
+      brandId: product.brandId,
+      featured: product.isFeatured,
+    },
+  });
 
-  const brands = getFragmentData(BrandPropsFragmentDoc, brandData?.getBrands);
-
-  const [nameInput, setNameInput] = useState<string>();
-  const [descriptionInput, setDescriptionInput] = useState<string | null>();
-  const [isFeatured, setIsFeatured] = useState<boolean>();
-  const [priceInput, setPriceInput] = useState<number>();
-  const [productCategoryId, setProductCategoryId] = useState<number>();
-  const [brandId, setBrandId] = useState<number>();
-  const [tags, setTags] = useState<string[]>();
-  const [stock, setStock] = useState<number>();
+  const router = useRouter();
 
   useEffect(() => {
-    setNameInput(product?.name);
-    setDescriptionInput(product?.description);
-    setIsFeatured(product?.isFeatured);
-    setBrandId(product?.brandId);
-    setPriceInput(product?.price);
-    setProductCategoryId(product?.productCategoryId);
-    setTags(product?.tags);
-    setStock(product?.stock);
-  }, [product]);
+    console.log("images", images);
+  }, [images]);
 
-  const saveChanges = async () => {
-    await updateProduct({
+  const saveChanges = async (data: z.infer<typeof FormSchema>) => {
+    if (!images.length) {
+      toast({
+        title: "Agregar almenos una imagen",
+      });
+      return;
+    }
+
+    const updatedProduct = await updateProduct({
       variables: {
-        id: productId,
+        id: product.id,
         productInput: {
-          brandId: brandId,
-          description: descriptionInput,
-          isFeatured: isFeatured,
-          name: nameInput,
-          price: priceInput,
-          productCategoryId: productCategoryId,
-          stock: stock,
-          tags: tags,
+          name: data.name,
+          price: data.price,
+          productCategoryId: data.categoryId,
+          description: data.description,
+          brandId: data.brandId,
+          tags: parseStringToArray(data.tags),
+          isFeatured: data.featured,
+          stock: data.stock,
+          imagesUrl: images,
         },
       },
     });
-    RevalidateData();
+
+    if (updatedProduct) {
+      toast({
+        title: "Producto Actualizado",
+        duration: 1000,
+      });
+      await RevalidateData();
+    }
+    router.refresh();
   };
 
-  return product && productCategories && brands ? (
-    <div className="flex flex-col gap-5">
-      <div className="flex flex-row gap-4">
-        <div className="flex flex-col justify-start gap-3 basis-3/4">
-          <Label className="text-start">Nombre</Label>
-          <Input
-            defaultValue={product.name}
-            onChange={(e) => setNameInput(e.target.value)}
-          />
-        </div>
+  return categories && brands ? (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(saveChanges)}>
+        <Card className="flex flex-col gap-2 px-5 py-3 md:w-[35vw] w-[100vw]">
+          <h1 className="font-bold text-center">
+            EDITAR PRODUCTO {product.id}
+          </h1>
+          <div className="flex flex-row gap-4">
+            <div className="flex flex-col justify-start gap-3 basis-3/4">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-start">Nombre</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Nombre del Producto" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-        <div className="flex flex-col justify-start gap-3 basis-1/4">
-          <Label className="text-start">Precio</Label>
-          <div className="flex flex-row items-center gap-1">
-            <Label className="text-start">S/. </Label>
-            <Input
-              defaultValue={product.price}
-              type="number"
-              onChange={(e) => setPriceInput(parseFloat(e.target.value))}
+            <div className="flex flex-col justify-start gap-3 basis-1/4">
+              <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-start">Precio</FormLabel>
+                    <div className="flex flex-row items-center gap-1">
+                      <Label className="text-start">S/. </Label>
+                      <FormControl>
+                        <Input type="number" {...field} />
+                      </FormControl>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+          <div className="flex flex-col justify-start gap-3">
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <Label className="text-start">Description</Label>
+                  <Textarea placeholder={"Agregar descriptción"} {...field} />
+                </FormItem>
+              )}
             />
           </div>
-        </div>
-      </div>
-      <div className="flex flex-col justify-start gap-3">
-        <Label className="text-start">Description</Label>
-        <Textarea
-          defaultValue={product.description as string}
-          placeholder={product.description ? "" : "Agregar descriptción"}
-          onChange={(e) => setDescriptionInput(e.target.value)}
-        />
-      </div>
-      <div className="flex flex-row gap-1">
-        <RadioGroup
-          defaultValue={product.isFeatured ? "featured" : "notFeatured"}
-          className="flex flex-row basis-2/3"
-          onValueChange={(e) => setIsFeatured(e === "featured" ? true : false)}
-        >
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="featured" id="featured" />
-            <Label htmlFor="featured">Destacado</Label>
+          <div className="flex flex-row gap-1 items-center">
+            <FormField
+              control={form.control}
+              name="featured"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={(e) => {
+                        field.onChange(e === "featured" ? true : false);
+                      }}
+                      value={field.value ? "featured" : "notFeatured"}
+                      className="flex items-center basis-2/3"
+                    >
+                      <FormItem>
+                        <div className="flex items-center gap-2">
+                          <FormControl>
+                            <RadioGroupItem value="featured" />
+                          </FormControl>
+                          <FormLabel className="text-center">
+                            Destacado
+                          </FormLabel>
+                        </div>
+                      </FormItem>
+                      <FormItem>
+                        <div className="flex items-center gap-2">
+                          <FormControl>
+                            <RadioGroupItem value="notFeatured" />
+                          </FormControl>
+                          <FormLabel>No Destacado</FormLabel>
+                        </div>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex flex-row items-center gap-2 basis-1/3 justify-center">
+              <FormField
+                control={form.control}
+                name="stock"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Stock</FormLabel>
+                    <FormControl>
+                      <Input type="number" className="w-14" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="notFeatured" id="notFeatured" />
-            <Label htmlFor="notFeatured">No Destacado</Label>
+          <div className="flex flex-row gap-3">
+            <div className="flex flex-col justify-start gap-3 basis-1/2">
+              <FormField
+                control={form.control}
+                name="categoryId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-start">Categoría</FormLabel>
+                    <Select
+                      onValueChange={(e) => field.onChange(parseInt(e))}
+                      // defaultValue={field.value}
+                      value={field.value.toString()}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Categoría" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent className="h-auto">
+                        {categories.map((c) => (
+                          <SelectItem key={c.id} value={c.id.toString()}>
+                            {c.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="flex flex-col justify-start gap-3 basis-1/2">
+              <FormField
+                control={form.control}
+                name="brandId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-start">Marca</FormLabel>
+                    <Select
+                      onValueChange={(e) => field.onChange(parseInt(e))}
+                      value={field.value.toString()}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue
+                            placeholder={brands.find((b) => b.id === 1)?.name}
+                          />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {brands.map((brand) => (
+                          <SelectItem
+                            key={brand.id}
+                            value={brand.id.toString()}
+                          >
+                            {brand.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
-        </RadioGroup>
-        <div className="flex flex-row items-center gap-2 basis-1/3 justify-center">
-          <Label>Stock</Label>
-          <Input
-            type="number"
-            className="w-14"
-            defaultValue={product.stock}
-            onChange={(e) => setStock(parseInt(e.target.value))}
-          />
-        </div>
-      </div>
-      <div className="flex flex-row gap-3">
-        <div className="flex flex-col justify-start gap-3 basis-1/2">
-          <Label className="text-start">Categoría de Producto</Label>
-          <Select onValueChange={(e) => setProductCategoryId(parseInt(e))}>
-            <SelectTrigger className="">
-              <SelectValue placeholder={product.productCategory.name} />
-            </SelectTrigger>
-            <SelectContent className="h-auto">
-              {productCategories.map((pt) => (
-                <SelectItem key={pt.id} value={pt.id.toString()}>
-                  {pt.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="flex flex-col justify-start gap-3 basis-1/2">
-          <Label className="text-start">Marca</Label>
-          <Select onValueChange={(e) => setBrandId(parseInt(e))}>
-            <SelectTrigger className="">
-              <SelectValue placeholder={product.brand.name} />
-            </SelectTrigger>
-            <SelectContent>
-              {brands.map((brand) => (
-                <SelectItem key={brand.id} value={brand.id.toString()}>
-                  {brand.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-      <div className="flex flex-col justify-start gap-3">
-        <Label className="text-start">Etiquetas</Label>
-        <Textarea
-          className="h-5"
-          defaultValue={convertArrayToString(product.tags)}
-          placeholder={product.tags.length > 1 ? "" : "Agregar etiquetas"}
-          onChange={(e) => setTags(parseStringToArray(e.target.value))}
-        />
-      </div>
-      <div className="flex justify-center">
-        <DialogClose asChild>
-          <Button className="w-32" onClick={saveChanges}>
-            Guardar
-          </Button>
-        </DialogClose>
-        <DialogClose asChild>
-          <Button>Cancelar</Button>
-        </DialogClose>
-      </div>
-    </div>
+          <div className="flex flex-col justify-start gap-3">
+            <FormField
+              control={form.control}
+              name="tags"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-start">Etiquetas</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      className="h-5"
+                      placeholder="Agregar etiquetas"
+                      {...field}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </div>
+          <div>
+            <FormLabel>Imagénes</FormLabel>
+            <ImagesUploader images={images} setImages={setImages} />
+          </div>
+          <div className="flex justify-center gap-2">
+            <Button className="w-32" type="submit">
+              Guardar
+            </Button>
+            <Link href="/admin">
+              <Button>Cancelar</Button>
+            </Link>
+          </div>
+        </Card>
+      </form>
+    </Form>
   ) : (
-    <LoadingSkeleton />
+    <LoadingSpinner size="lg" />
   );
 };

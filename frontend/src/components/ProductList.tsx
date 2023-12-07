@@ -7,12 +7,14 @@ import {
   useEffect,
   useRef,
   useState,
+  useTransition,
 } from "react";
 
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import { getFragmentData } from "../graphql/generated";
 import {
   GetFilteredProductsDocument,
+  ProductPropsFragment,
   ProductPropsFragmentDoc,
 } from "../graphql/generated/graphql";
 import { LoadingSpinner } from "./LoadingSpinner";
@@ -29,6 +31,8 @@ interface ProductListProps {
 
 export const ProductList = ({ variables }: ProductListProps) => {
   const [cursor, setCursor] = useState<number | undefined>(undefined);
+  const [products, setProducts] = useState<ProductPropsFragment[]>([]);
+  const [hasMore, setHasMore] = useState<boolean>();
 
   const { data, fetchMore } = useSuspenseQuery(GetFilteredProductsDocument, {
     variables: {
@@ -39,14 +43,17 @@ export const ProductList = ({ variables }: ProductListProps) => {
     },
   });
 
-  const products = getFragmentData(
-    ProductPropsFragmentDoc,
-    data.getFilteredProducts.products
-  );
-
   useEffect(() => {
-    products.length ? setCursor(products[products.length - 1].id) : undefined;
-  }, [products]);
+    let products = getFragmentData(
+      ProductPropsFragmentDoc,
+      data.getFilteredProducts.products
+    );
+    startTransition(() => {
+      products.length ? setCursor(products[products.length - 1].id) : undefined;
+      setHasMore(data.getFilteredProducts.hasMore);
+      setProducts([...products]);
+    });
+  }, [data]);
 
   const loadMore = useCallback(() => {
     startTransition(() => {
@@ -70,7 +77,7 @@ export const ProductList = ({ variables }: ProductListProps) => {
       },
       {
         root: null,
-        rootMargin: "100px",
+        rootMargin: "300px",
         threshold: 1,
       }
     );
@@ -87,13 +94,13 @@ export const ProductList = ({ variables }: ProductListProps) => {
   }, [loadMoreRef, loadMore]);
 
   return (
-    <Suspense>
+    <Suspense fallback={<LoadingSpinner />}>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 px-4 pt-4">
         {products.map((p) => (
           <Product key={p.id} product={p} />
         ))}
       </div>
-      {data.getFilteredProducts.hasMore ? (
+      {hasMore ? (
         <div
           className="pt-5 w-full h-10 flex relative justify-center items-center"
           ref={loadMoreRef}

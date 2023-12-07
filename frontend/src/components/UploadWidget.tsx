@@ -1,17 +1,15 @@
+import { Upload } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
-import Image from "next/image";
-import { Upload } from "lucide-react";
-import { Label } from "./ui/label";
 
 interface UploadWidgetProps {
-  onImageUrl: (imageUrl: any) => void;
+  handleImagesUrl: (imagesUrl: string[]) => void;
   resetImage?: boolean;
 }
 
-export const UploadWidget = ({ onImageUrl, resetImage }: UploadWidgetProps) => {
+export const UploadWidget = ({ handleImagesUrl }: UploadWidgetProps) => {
   const [loaded, setLoaded] = useState(false);
-  const [uploadedImage, setUploadedImage] = useState();
+  const [images, setImages] = useState<string[]>([]);
 
   useEffect(() => {
     const cldScript = document.getElementById("cloudinaryUploadWidgetScript");
@@ -31,12 +29,17 @@ export const UploadWidget = ({ onImageUrl, resetImage }: UploadWidgetProps) => {
     }
 
     if (result && result.event === "success") {
-      console.log(result);
-      console.log("success", result);
-      setUploadedImage(result.info.secure_url);
-      onImageUrl(result.info.secure_url);
+      setImages((prevImages) =>
+        prevImages
+          ? [...prevImages, result.info.secure_url]
+          : [result.info.secure_url]
+      );
     }
   };
+
+  useEffect(() => {
+    handleImagesUrl(images);
+  }, [images, handleImagesUrl]);
 
   const uploadWidget = () => {
     //@ts-ignore
@@ -44,37 +47,20 @@ export const UploadWidget = ({ onImageUrl, resetImage }: UploadWidgetProps) => {
       {
         cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
         uploadPreset: process.env.NEXT_PUBLIC_CLOUDINARY_PRESET,
+        public_id: crypto.randomUUID(),
         sources: ["local", "url"],
         maxImageWidth: 1280,
         maxImageHeight: 1280,
         folder: "muyguay",
+        multiple: true,
       },
       proccessResults
     );
   };
 
-  useEffect(() => {
-    if (resetImage) {
-      setUploadedImage(undefined);
-    }
-  }, [resetImage]);
-
   return (
-    <div>
-      <div className="flex items-center gap-2">
-        <Label>Subir Imagen: </Label>
-        <Button type="button" onClick={uploadWidget}>
-          <Upload />
-        </Button>
-      </div>
-      {uploadedImage ? (
-        <Image
-          src={uploadedImage}
-          alt="uploaded using the upload widget"
-          width={200}
-          height={200}
-        />
-      ) : null}
-    </div>
+    <Button type="button" onClick={uploadWidget}>
+      <Upload />
+    </Button>
   );
 };

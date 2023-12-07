@@ -25,13 +25,15 @@ export const LoadingSpinner = ({ size, color }: LoadingSpinnerProps) => {
   }
 
   return (
-    <div
-      className={`inline-block animate-spin rounded-full border-solid ${spinnerColor} border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite] ${spinnerSize}`}
-      role="status"
-    >
-      {/* <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+    <div className="w-full h-full flex justify-center items-center">
+      <div
+        className={`inline-block animate-spin rounded-full border-solid ${spinnerColor} border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite] ${spinnerSize}`}
+        role="status"
+      >
+        {/* <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
         Cargando...
       </span> */}
+      </div>
     </div>
   );
 };

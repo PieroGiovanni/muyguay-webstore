@@ -17,7 +17,7 @@ export const AdminNavBar = ({}: AdminNavBarProps) => {
   }
 
   return (
-    <nav className="flex items-enter justify-between ">
+    <nav className="flex items-enter justify-between border-b-[1px] border-black ">
       <AdminHamburgerButton />
       <Link href="/admin" className="ml-2 text-3xl font-semibold">
         Menu Principal

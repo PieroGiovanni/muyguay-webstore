@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { DataTableComponent } from "../../../../components/DataTableComponent";
 
 interface PageProps {}
