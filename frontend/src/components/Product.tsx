@@ -28,7 +28,6 @@ export const Product = ({ product }: ProductProps) => {
           </Label>
           <div className="relative w-full aspect-square">
             {!isImageLoaded && <LoadingSpinner />}
-
             <CldImage
               src={
                 product.images[0].imageUrl
@@ -40,6 +39,32 @@ export const Product = ({ product }: ProductProps) => {
               fill
               sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 33vw"
             />
+            {product.images.length > 1 && (
+              <div className="flex flex-col w-full absolute left-0 top-0 bottom-0 justify-center">
+                {
+                  <Suspense fallback={<LoadingSpinner size="sm" />}>
+                    {product.images.slice(1, 3).map((image) => (
+                      <div
+                        key={image.imageUrl}
+                        className="w-[20%] aspect-square relative border-gray-100 border-2 rounded-sm"
+                      >
+                        <CldImage
+                          src={extractPublicId(image.imageUrl!)}
+                          alt={product.name}
+                          fill
+                          sizes="(max-width: 768px) 10vw, (max-width: 1200px) 5vw, 6.6vw"
+                        />
+                      </div>
+                    ))}
+                    {product.images.length > 3 && (
+                      <div className="w-[20%] aspect-square relative justify-center flex items-center bg-white font-bold text-xl border-2 border-gray-100 rounded-sm">
+                        {product.images.length - 3}+
+                      </div>
+                    )}
+                  </Suspense>
+                }
+              </div>
+            )}
           </div>
           <Label className="flex text-lg ml-2 font-bold">
             S/. {product.price}

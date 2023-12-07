@@ -2,7 +2,7 @@
 
 import { extractPublicId } from "cloudinary-build-url";
 import { CldImage } from "next-cloudinary";
-import { startTransition, useState } from "react";
+import { Suspense, startTransition, useState } from "react";
 import { ProductPropsFragment } from "../graphql/generated/graphql";
 import { Card } from "./ui/card";
 import { LoadingSpinner } from "./LoadingSpinner";
@@ -21,6 +21,7 @@ export const ProductGallery = ({ product }: ProductGalleryProps) => {
   const handleOnClick = (url: string) => () => {
     startTransition(() => {
       setselectedImage(extractPublicId(url));
+      setIsImageLoaded(false);
     });
   };
 
@@ -38,11 +39,11 @@ export const ProductGallery = ({ product }: ProductGalleryProps) => {
       </div>
 
       {product.images.length > 1 ? (
-        <div className="flex gap-3 overflow-y-visible shrink-0">
+        <div className="flex gap-3 overflow-y-visible shrink-0 justify-center">
           {product.images.map((image) => {
             let isSelected =
               selectedImage === extractPublicId(image.imageUrl!)
-                ? "outline outline-offset-1 outline-3 outline-black"
+                ? "ring-offset-2 ring-2 ring-black"
                 : "";
             return (
               <div
