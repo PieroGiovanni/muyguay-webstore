@@ -56,7 +56,8 @@ const FormSchema = z.object({
   description: z.string(),
   stock: z.coerce
     .number({ invalid_type_error: "Ingresar stock" })
-    .positive({ message: "ingresar stock" }),
+    // .positive({ message: "ingresar stock" }),
+    .gte(0, { message: "ingresar stock" }),
   tags: z.string(),
   brandId: z.number(),
   featured: z.boolean(),
@@ -125,7 +126,7 @@ export const UpdateProductForm = ({
       });
       await RevalidateData();
     }
-    router.refresh();
+    router.push("/admin/productos");
   };
 
   return categories && brands ? (
@@ -328,7 +329,7 @@ export const UpdateProductForm = ({
               Guardar
             </Button>
             <Link href="/admin">
-              <Button>Cancelar</Button>
+              <Button onClick={() => router.back()}>Cancelar</Button>
             </Link>
           </div>
         </Card>
