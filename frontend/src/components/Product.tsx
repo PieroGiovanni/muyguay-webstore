@@ -43,23 +43,37 @@ export const Product = ({ product }: ProductProps) => {
               <div className="flex flex-col w-full absolute left-0 top-0 bottom-0 justify-center">
                 {
                   <Suspense fallback={<LoadingSpinner size="sm" />}>
-                    {product.images.slice(1, 3).map((image) => (
+                    {product.images.slice(1, 3).map((image, index) => (
                       <div
                         key={image.imageUrl}
                         className="w-[20%] aspect-square relative border-gray-100 border-2 rounded-sm"
                       >
                         <CldImage
                           src={extractPublicId(image.imageUrl!)}
-                          alt={product.name}
+                          alt={product.name + "-" + index}
                           fill
                           sizes="(max-width: 768px) 10vw, (max-width: 1200px) 5vw, 6.6vw"
                         />
                       </div>
                     ))}
-                    {product.images.length > 3 && (
-                      <div className="w-[20%] aspect-square relative justify-center flex items-center bg-white font-bold text-xl border-2 border-gray-100 rounded-sm">
-                        {product.images.length - 3}+
+                    {product.images.length === 3 ? (
+                      <div
+                        key={product.images[2].imageUrl}
+                        className="w-[20%] aspect-square relative border-gray-100 border-2 rounded-sm"
+                      >
+                        <CldImage
+                          src={extractPublicId(product.images[2].imageUrl!)}
+                          alt={product.name + "-3"}
+                          fill
+                          sizes="(max-width: 768px) 10vw, (max-width: 1200px) 5vw, 6.6vw"
+                        />
                       </div>
+                    ) : (
+                      product.images.length > 3 && (
+                        <div className="w-[20%] aspect-square relative justify-center flex items-center bg-white font-bold text-xl border-2 border-gray-100 rounded-sm">
+                          {product.images.length - 3}+
+                        </div>
+                      )
                     )}
                   </Suspense>
                 }

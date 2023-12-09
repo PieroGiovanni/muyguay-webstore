@@ -1,13 +1,16 @@
 import { Upload } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Button } from "./ui/button";
 
 interface UploadWidgetProps {
   handleImagesUrl: (imagesUrl: string[]) => void;
-  resetImage?: boolean;
+  setAreImagesUpdated?: Dispatch<SetStateAction<boolean>>;
 }
 
-export const UploadWidget = ({ handleImagesUrl }: UploadWidgetProps) => {
+export const UploadWidget = ({
+  handleImagesUrl,
+  setAreImagesUpdated,
+}: UploadWidgetProps) => {
   const [loaded, setLoaded] = useState(false);
   const [images, setImages] = useState<string[]>([]);
 
@@ -34,6 +37,7 @@ export const UploadWidget = ({ handleImagesUrl }: UploadWidgetProps) => {
           ? [...prevImages, result.info.secure_url]
           : [result.info.secure_url]
       );
+      if (setAreImagesUpdated) setAreImagesUpdated(true);
     }
   };
 

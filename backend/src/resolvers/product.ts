@@ -235,32 +235,56 @@ export class ProductResolver {
   async updateProduct(
     @Arg("id", () => Int) id: number,
     @Arg("productInput", () => ProductInput) productInput: ProductInput
-  ) {
-    if (productInput.stock !== undefined) {
-      await prisma.stock.update({
-        data: {
-          stockQuantity: productInput.stock,
-        },
-        where: {
-          productId: id,
-        },
-      });
-    }
+  ): Promise<Product> {
+    try {
+      return prisma.$transaction(async (tx) => {
+        if (productInput.stock !== undefined) {
+          await tx.stock.update({
+            data: {
+              stockQuantity: productInput.stock,
+            },
+            where: {
+              productId: id,
+            },
+          });
+        }
 
-    return await prisma.product.update({
-      data: {
-        brandId: productInput.brandId,
-        description: productInput.description,
-        isFeatured: productInput.isFeatured,
-        name: productInput.name,
-        price: productInput.price,
-        tags: productInput.tags,
-        productCategoryId: productInput.productCategoryId,
-      },
-      where: {
-        id: id,
-      },
-    });
+        if (productInput.imagesUrl !== undefined) {
+          await tx.image.deleteMany({
+            where: {
+              productId: id,
+            },
+          });
+
+          productInput.imagesUrl.forEach(async (imageUrl) => {
+            await tx.image.create({
+              data: {
+                productId: id,
+                imageUrl: imageUrl,
+              },
+            });
+          });
+        }
+
+        return await prisma.product.update({
+          data: {
+            brandId: productInput.brandId,
+            description: productInput.description,
+            isFeatured: productInput.isFeatured,
+            name: productInput.name,
+            price: productInput.price,
+            tags: productInput.tags,
+            productCategoryId: productInput.productCategoryId,
+          },
+          where: {
+            id: id,
+          },
+        });
+      });
+    } catch (error) {
+      console.log("there was an error updating the product");
+      throw error;
+    }
   }
 
   @Mutation(() => Product)
@@ -268,35 +292,37 @@ export class ProductResolver {
     @Arg("productInput", () => ProductInput) productInput: ProductInput
   ): Promise<Product> {
     try {
-      const product = await prisma.product.create({
-        data: {
-          name: productInput.name!,
-          price: productInput.price!,
-          description: productInput.description,
-          brandId: productInput.brandId!,
-          productCategoryId: productInput.productCategoryId!,
-          tags: productInput.tags,
-          isFeatured: productInput.isFeatured,
-        },
-      });
-
-      await prisma.stock.create({
-        data: {
-          productId: product.id,
-          stockQuantity: productInput.stock,
-        },
-      });
-
-      productInput.imagesUrl!.forEach(async (imageUrl) => {
-        await prisma.image.create({
+      return prisma.$transaction(async (tx) => {
+        const product = await tx.product.create({
           data: {
-            productId: product.id,
-            imageUrl: imageUrl,
+            name: productInput.name!,
+            price: productInput.price!,
+            description: productInput.description,
+            brandId: productInput.brandId!,
+            productCategoryId: productInput.productCategoryId!,
+            tags: productInput.tags,
+            isFeatured: productInput.isFeatured,
           },
         });
-      });
 
-      return product;
+        await tx.stock.create({
+          data: {
+            productId: product.id,
+            stockQuantity: productInput.stock,
+          },
+        });
+
+        productInput.imagesUrl!.forEach(async (imageUrl) => {
+          await tx.image.create({
+            data: {
+              productId: product.id,
+              imageUrl: imageUrl,
+            },
+          });
+        });
+
+        return product;
+      });
     } catch (error) {
       console.log("there was an error with product creation");
       throw error;
@@ -306,25 +332,27 @@ export class ProductResolver {
   @Mutation(() => Boolean)
   async deleteProduct(@Arg("id", () => Int) id: number): Promise<boolean> {
     try {
-      await prisma.orderItem.deleteMany({
-        where: { productId: id },
-      });
+      return prisma.$transaction(async (tx) => {
+        await tx.orderItem.deleteMany({
+          where: { productId: id },
+        });
 
-      await prisma.image.deleteMany({
-        where: { productId: id },
-      });
+        await tx.image.deleteMany({
+          where: { productId: id },
+        });
 
-      await prisma.stock.delete({
-        where: { productId: id },
-      });
+        await tx.stock.delete({
+          where: { productId: id },
+        });
 
-      await prisma.product.delete({
-        where: { id },
-      });
+        await tx.product.delete({
+          where: { id },
+        });
 
-      return true;
+        return true;
+      });
     } catch (error) {
-      console.log("There was an error with product deletion");
+      console.log("There was an error deleting the product");
       throw error;
     }
   }
