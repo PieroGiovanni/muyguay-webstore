@@ -184,7 +184,7 @@ export class ProductResolver {
         },
       },
       orderBy: {
-        updatedAt: "desc",
+        createdAt: "desc",
       },
       take: quantity,
     });

@@ -56,22 +56,22 @@ export const Product = ({ product }: ProductProps) => {
                         />
                       </div>
                     ))}
-                    {product.images.length === 3 ? (
+                    {product.images.length === 4 ? (
                       <div
-                        key={product.images[2].imageUrl}
+                        key={product.images[3].imageUrl}
                         className="w-[20%] aspect-square relative border-gray-100 border-2 rounded-sm"
                       >
                         <CldImage
-                          src={extractPublicId(product.images[2].imageUrl!)}
+                          src={extractPublicId(product.images[3].imageUrl!)}
                           alt={product.name + "-3"}
                           fill
                           sizes="(max-width: 768px) 10vw, (max-width: 1200px) 5vw, 6.6vw"
                         />
                       </div>
                     ) : (
-                      product.images.length > 3 && (
+                      product.images.length > 4 && (
                         <div className="w-[20%] aspect-square relative justify-center flex items-center bg-white font-bold text-xl border-2 border-gray-100 rounded-sm">
-                          {product.images.length - 2}+
+                          {product.images.length - 3}+
                         </div>
                       )
                     )}
