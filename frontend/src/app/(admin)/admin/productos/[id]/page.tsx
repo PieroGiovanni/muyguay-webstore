@@ -10,13 +10,12 @@ interface PageProps {
 }
 
 const Page = async ({ params }: PageProps) => {
-  const product = await getProduct(parseInt(params.id));
   const categories = await getProductCategories();
   const brands = await getBrands();
   return (
     <div className="flex justify-center">
       <UpdateProductForm
-        product={product}
+        productId={parseInt(params.id)}
         categories={categories}
         brands={brands}
       />

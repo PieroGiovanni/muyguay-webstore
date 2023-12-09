@@ -7,8 +7,10 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import {
   BrandPropsFragment,
+  GetProductDocument,
   ProductCategoryPropsFragment,
   ProductPropsFragment,
+  ProductPropsFragmentDoc,
   UpdateProductDocument,
 } from "../graphql/generated/graphql";
 import {
@@ -40,10 +42,12 @@ import {
 } from "./ui/select";
 import { Textarea } from "./ui/textarea";
 import { Card } from "./ui/card";
+import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
+import { getFragmentData } from "../graphql/generated";
 
 interface UpdateProductFormProps {
   categories: readonly ProductCategoryPropsFragment[];
-  product: ProductPropsFragment;
+  productId: number;
   brands: readonly BrandPropsFragment[];
 }
 
@@ -56,7 +60,6 @@ const FormSchema = z.object({
   description: z.string(),
   stock: z.coerce
     .number({ invalid_type_error: "Ingresar stock" })
-    // .positive({ message: "ingresar stock" }),
     .gte(0, { message: "ingresar stock" }),
   tags: z.string(),
   brandId: z.number(),
@@ -64,15 +67,22 @@ const FormSchema = z.object({
 });
 
 export const UpdateProductForm = ({
-  product,
+  productId,
   categories,
   brands,
 }: UpdateProductFormProps) => {
   const [updateProduct] = useMutation(UpdateProductDocument);
+  const [areImagesUpdated, setAreImagesUpdated] = useState(false);
 
-  const [images, setImages] = useState<string[]>(
-    product.images.map((i) => i.imageUrl!)
-  );
+  const { data } = useSuspenseQuery(GetProductDocument, {
+    variables: { id: productId },
+  });
+
+  const product = getFragmentData(ProductPropsFragmentDoc, data.getProduct);
+
+  const productImages = product.images.map((i) => i.imageUrl!);
+
+  const [images, setImages] = useState<string[]>(productImages);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -89,10 +99,6 @@ export const UpdateProductForm = ({
   });
 
   const router = useRouter();
-
-  useEffect(() => {
-    console.log("images", images);
-  }, [images]);
 
   const saveChanges = async (data: z.infer<typeof FormSchema>) => {
     if (!images.length) {
@@ -114,7 +120,7 @@ export const UpdateProductForm = ({
           tags: parseStringToArray(data.tags),
           isFeatured: data.featured,
           stock: data.stock,
-          imagesUrl: images,
+          imagesUrl: areImagesUpdated ? images : undefined,
         },
       },
     });
@@ -322,7 +328,11 @@ export const UpdateProductForm = ({
           </div>
           <div>
             <FormLabel>Imagénes</FormLabel>
-            <ImagesUploader images={images} setImages={setImages} />
+            <ImagesUploader
+              images={images}
+              setImages={setImages}
+              setAreImagesUpdated={setAreImagesUpdated}
+            />
           </div>
           <div className="flex justify-center gap-2">
             <Button className="w-32" type="submit">

@@ -1,17 +1,23 @@
 import { CldImage } from "next-cloudinary";
 import { Card } from "./ui/card";
 import { extractPublicId } from "cloudinary-build-url";
-import { Dispatch, SetStateAction, useCallback } from "react";
+import { Dispatch, SetStateAction, useCallback, useEffect } from "react";
 import { UploadWidget } from "./UploadWidget";
 
 interface ImagesUploaderProps {
   images: string[];
   setImages: Dispatch<SetStateAction<string[]>>;
+  setAreImagesUpdated?: Dispatch<SetStateAction<boolean>>;
 }
 
-export const ImagesUploader = ({ images, setImages }: ImagesUploaderProps) => {
+export const ImagesUploader = ({
+  images,
+  setImages,
+  setAreImagesUpdated,
+}: ImagesUploaderProps) => {
   const handleDeleteImage = (image: string) => () => {
     setImages((prevImages) => prevImages.filter((pi) => pi !== image));
+    if (setAreImagesUpdated) setAreImagesUpdated(true);
   };
 
   const handleUploadImage = useCallback(
@@ -24,6 +30,9 @@ export const ImagesUploader = ({ images, setImages }: ImagesUploaderProps) => {
     },
     [setImages]
   );
+
+  // useEffect(() => {}, [images, setAreImagesUpdated]);
+
   return (
     <div className="flex md:flex-row flex-col items-center gap-2">
       <Card className="flex h-[70px] w-[100%] gap-2 md:basis-[95%] overflow-x-auto">
@@ -46,9 +55,13 @@ export const ImagesUploader = ({ images, setImages }: ImagesUploaderProps) => {
             </button>
           </div>
         ))}
+        .
       </Card>
 
-      <UploadWidget handleImagesUrl={handleUploadImage} />
+      <UploadWidget
+        handleImagesUrl={handleUploadImage}
+        setAreImagesUpdated={setAreImagesUpdated}
+      />
     </div>
   );
 };
