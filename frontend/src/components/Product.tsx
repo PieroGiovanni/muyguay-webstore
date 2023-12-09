@@ -71,7 +71,7 @@ export const Product = ({ product }: ProductProps) => {
                     ) : (
                       product.images.length > 3 && (
                         <div className="w-[20%] aspect-square relative justify-center flex items-center bg-white font-bold text-xl border-2 border-gray-100 rounded-sm">
-                          {product.images.length - 3}+
+                          {product.images.length - 2}+
                         </div>
                       )
                     )}
