@@ -30,7 +30,7 @@ export const Product = ({ product }: ProductProps) => {
             {!isImageLoaded && <LoadingSpinner />}
             <CldImage
               src={
-                product.images[0].imageUrl
+                product.images
                   ? extractPublicId(product.images[0].imageUrl!)
                   : "/image-not-found.webp"
               }
