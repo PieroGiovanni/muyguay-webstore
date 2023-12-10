@@ -312,14 +312,20 @@ export class ProductResolver {
           },
         });
 
-        productInput.imagesUrl!.forEach(async (imageUrl) => {
-          await tx.image.create({
-            data: {
-              productId: product.id,
-              imageUrl: imageUrl,
-            },
-          });
-        });
+        if (productInput.imagesUrl) {
+          await Promise.all(
+            productInput.imagesUrl.map((imageUrl) => {
+              return tx.image.create({
+                data: {
+                  productId: product.id,
+                  imageUrl: imageUrl,
+                },
+              });
+            })
+          );
+        } else {
+          throw new Error("No image uploaded");
+        }
 
         return product;
       });
