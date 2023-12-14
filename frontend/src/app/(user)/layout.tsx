@@ -12,16 +12,9 @@ export const metadata: Metadata = {
   title: "Muy Guay",
   description: "Tienda de Belleza y Estilo",
   openGraph: {
+    title: "Muy Guay",
     description: "Tienda de Belleza y Estilo",
     url: "https://muyguay.shop",
-    siteName: "Muy Guay",
-    images: [
-      {
-        url: "https://muyguay.shop/3.webp",
-        width: 800,
-        height: 450,
-      },
-    ],
     locale: "es_ES",
     type: "website",
   },

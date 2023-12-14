@@ -8,9 +8,26 @@ import { Label } from "../../../../components/ui/label";
 import { getProduct } from "../../../api/queries";
 import { ProductGallery } from "../../../../components/ProductGallery";
 import { LoadingSpinner } from "../../../../components/LoadingSpinner";
+import { Metadata, ResolvingMetadata } from "next";
 
 interface pageProps {
   params: { id: string };
+}
+
+export async function generateMetadata({
+  params,
+}: pageProps): Promise<Metadata> {
+  const product = await getProduct(parseInt(params.id));
+
+  return {
+    title: product.name,
+    openGraph: {
+      images: product.images[0].imageUrl!,
+      title: product.name,
+      description: "S/. " + product.price,
+      siteName: "Muy Guay",
+    },
+  };
 }
 
 const Page = async ({ params }: pageProps) => {
