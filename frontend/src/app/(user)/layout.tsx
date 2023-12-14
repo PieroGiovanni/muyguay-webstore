@@ -29,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <meta property="fb:app_id" content="102800284637480" />
+        <meta property="fb:app_id" content="102800284637480" key="fb:app_id" />
       </head>
       <body className={`${inter.className} font-sans`}>
         <ApolloWrapper>
