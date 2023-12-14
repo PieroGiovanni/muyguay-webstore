@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://muyguay.shop"),
   title: "Muy Guay",
   description: "Tienda de Belleza y Estilo",
+  appLinks: {},
   openGraph: {
     title: "Muy Guay",
     description: "Tienda de Belleza y Estilo",
@@ -27,6 +28,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <meta property="fb:app_id" content="102800284637480" />
+      </head>
       <body className={`${inter.className} font-sans`}>
         <ApolloWrapper>
           <BagContextProvider>
