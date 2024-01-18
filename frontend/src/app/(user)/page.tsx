@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { ScrollDownButton } from "../../components/Buttons/ScrollDownButton";
 import { VerProductsButton } from "../../components/Buttons/VerProductsButton";
 import { CategoriesAccess } from "../../components/CategoriesAccess";
